@@ -1,0 +1,46 @@
+spring:
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+    jpa:
+        database: mysql
+        database-platform: org.hibernate.dialect.MySQLDialect
+        open-in-view: false
+
+        properties:
+            hibernate:
+                default_batch_fetch_size: 100
+
+# JWT
+jwt:
+    secret: ${JWT.SECRET}
+    token:
+        access:
+            header: Authorization
+        refresh:
+            expiration: 604800000 # 7? (1000L(ms -> s) * 60L(s -> m) * 60L(m -> h) * 24L(h -> d) * 7L(d -> w))
+            header: AuthorizationRefresh
+
+server:
+    port: ${SERVER.PORT}
+    error:
+        include-message: always
+        include-binding-errors: always
+        include-stacktrace: on_param
+        include-exception: true
+
+# p6spy
+logging:
+    file:
+        path: ./logs
+    logback:
+        rollingpolicy:
+            max-file-size: 50MB
+            max-history: 10
+# p6spy
+
+aws:
+    paramstore:
+        enabled: true
+        prefix: /CheckItOut
+        name: WAS
+        profileSeparator: _
