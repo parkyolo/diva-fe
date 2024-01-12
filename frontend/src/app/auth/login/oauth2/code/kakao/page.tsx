@@ -6,16 +6,17 @@ import { useEffect } from 'react';
 
 const KakaoLogin = () => {
   // const router = useRouter();
-  // const searchParams = useSearchParams();
-  // const code = searchParams.get('code');
+
   // console.log('code: ', code);
   console.log('kakaologin 진입');
 
   const loginHandler = async () => {
+    const searchParams = useSearchParams();
+    const code = searchParams.get('code');
     try {
       // console.log('useEffect 진입');
       let result;
-      await fetch(`http://localhost:9090/auth/login/oauth2/authorization/kakao`)
+      await fetch(`auth/login/oauth2/authorization/kakao?code=${code}`)
         .then((res) => {
           if (res.ok) return res.json();
           // throw new Error('카카오 로그인 에러 발생');
