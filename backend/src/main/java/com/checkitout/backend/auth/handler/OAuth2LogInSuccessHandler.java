@@ -56,14 +56,11 @@ public class OAuth2LogInSuccessHandler implements AuthenticationSuccessHandler {
         try {
             Member member = memberRepository.findNotDeletedByEmail(email).orElseThrow(() -> new NoSuchMemberException(SUCH.getMessage() + MEMBER.getMessage() + NOT_EXISTS.getMessage()));
 
-            // JWT를 발급한다.
-            String[] accessTokenAndRefreshToken = jwtService.issueJwts(email, member);
-
             // access token, refresh token을 헤더에 실어서 보낸다.
             response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
-            response.setHeader(ACCESS_TOKEN_HEADER, BEARER + accessTokenAndRefreshToken[0]);
-            response.setHeader(REFRESH_TOKEN_HEADER, BEARER + accessTokenAndRefreshToken[1]);
+            response.setHeader(ACCESS_TOKEN_HEADER, BEARER + request.getAttribute("accessToken"));
+            response.setHeader(REFRESH_TOKEN_HEADER, BEARER + request.getAttribute("refreshToken"));
 
             response.getWriter().write(objectMapper.writeValueAsString(Response.builder()
                     .status(SUCCESS.getStatus())

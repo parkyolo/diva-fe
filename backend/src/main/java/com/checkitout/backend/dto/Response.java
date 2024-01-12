@@ -1,12 +1,13 @@
 package com.checkitout.backend.dto;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@NoArgsConstructor(access = PROTECTED, force = true)
 public class Response {
     private final String status;
     private final String data;
