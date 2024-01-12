@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryQueryDsl {
     Optional<Member> findNotDeletedById(long id);
     Optional<Member> findNotDeletedByEmail(String email);
-    Optional<Member> findNotDeletedByEmailWithRefreshToken(String email);
+//    Optional<Member> findNotDeletedByEmailWithRefreshToken(String email);
 //    Optional<Member> findNotDeletedByEmailWithSubscription(String email);
 //    Optional<Member> findNotDeletedByEmailWithDeviceToken(String email);
 //    Optional<Member> findNotDeletedByEmailWithSubscriptionAndDeviceToken(String email);

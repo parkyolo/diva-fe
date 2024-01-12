@@ -4,7 +4,6 @@ import com.checkitout.backend.auth.entity.OAuth2;
 import com.checkitout.backend.dto.MemberFindDto;
 import com.checkitout.backend.enumstorage.role.MemberRole;
 import com.checkitout.backend.enumstorage.status.MemberStatus;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -49,10 +48,10 @@ public class Member extends BaseEntity {
 //    @OneToMany(mappedBy = "member")
 //    private Set<DeviceToken> deviceTokens = new HashSet<>();
 
-    @JsonManagedReference
-    @NotNull
-    @OneToMany(mappedBy = "member")
-    private Set<RefreshToken> refreshTokens = new HashSet<>();
+//    @JsonManagedReference
+//    @NotNull
+//    @OneToMany(mappedBy = "member")
+//    private Set<RefreshToken> refreshTokens = new HashSet<>();
 
     @JsonManagedReference
     @NotNull
@@ -85,13 +84,13 @@ public class Member extends BaseEntity {
         oAuth2s.add(oAuth2);
     }
 
-    public void addRefreshToken(RefreshToken refreshToken) {
-        this.refreshTokens.add(refreshToken);
-    }
+//    public void addRefreshToken(RefreshToken refreshToken) {
+//        this.refreshTokens.add(refreshToken);
+//    }
 
-    public boolean removeRefreshToken(RefreshToken refreshToken) {
-        return this.refreshTokens.remove(refreshToken);
-    }
+//    public boolean removeRefreshToken(RefreshToken refreshToken) {
+//        return this.refreshTokens.remove(refreshToken);
+//    }
 
 //    public void addDeviceToken(DeviceToken deviceToken) {
 //        deviceTokens.add(deviceToken);

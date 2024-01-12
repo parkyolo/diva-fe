@@ -6,7 +6,7 @@ import java.util.Optional;
 public interface MemberRepositoryQueryDsl {
     Optional<Member> findNotDeletedById(long id);
     Optional<Member> findNotDeletedByEmail(String email);
-    Optional<Member> findNotDeletedByEmailWithRefreshToken(String email);
+//    Optional<Member> findNotDeletedByEmailWithRefreshToken(String email);
 //    Optional<Member> findNotDeletedByEmailWithSubscription(String email);
 //    Optional<Member> findNotDeletedByEmailWithDeviceToken(String email);
 //    Optional<Member> findNotDeletedByEmailWithSubscriptionAndDeviceToken(String email);

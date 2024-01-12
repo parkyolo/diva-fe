@@ -39,18 +39,18 @@ public class MemberRepositoryImpl implements MemberRepositoryQueryDsl {
         );
     }
 
-    @Override
-    public Optional<Member> findNotDeletedByEmailWithRefreshToken(String email) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-
-        return Optional.ofNullable(
-                queryFactory
-                        .selectFrom(member)
-                        .where(member.email.eq(email)
-                                .and(member.status.ne(MemberStatus.DELETED)))
-                        .leftJoin(member.refreshTokens).fetchJoin()
-                        .fetchOne());
-    }
+//    @Override
+//    public Optional<Member> findNotDeletedByEmailWithRefreshToken(String email) {
+//        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+//
+//        return Optional.ofNullable(
+//                queryFactory
+//                        .selectFrom(member)
+//                        .where(member.email.eq(email)
+//                                .and(member.status.ne(MemberStatus.DELETED)))
+//                        .leftJoin(member.refreshTokens).fetchJoin()
+//                        .fetchOne());
+//    }
 
 //    @Override
 //    public Optional<Member> findNotDeletedByEmailWithSubscription(String email) {

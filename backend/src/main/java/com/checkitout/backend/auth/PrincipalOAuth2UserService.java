@@ -8,13 +8,20 @@ import static com.checkitout.backend.auth.enumstorage.messages.error.oauth2.OAut
 import static com.checkitout.backend.auth.enumstorage.messages.error.oauth2.OAuth2ErrorMessage.NO_PROVIDER_ID;
 import static com.checkitout.backend.auth.enumstorage.messages.error.oauth2.OAuth2ErrorMessage.NO_SUCH_OAUTH_2;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.checkitout.backend.auth.entity.OAuth2;
+import com.checkitout.backend.auth.entity.Token;
 import com.checkitout.backend.auth.exception.oauth2.NoSuchOAuth2Exception;
+import com.checkitout.backend.auth.repository.TokenRepository;
+import com.checkitout.backend.auth.service.JwtService;
 import com.checkitout.backend.auth.userdetail.PrincipalUserDetails;
 import com.checkitout.backend.entity.Member;
 import com.checkitout.backend.repository.MemberRepository;
-import com.checkitout.backend.repository.OAuth2Repository;
+import com.checkitout.backend.auth.repository.OAuth2Repository;
 import com.checkitout.backend.util.RandomNickname;
+
+import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,8 +37,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
+    private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private final OAuth2Repository oAuth2Repository;
+    private final TokenRepository tokenRepository;
     private final HttpServletRequest request;
 
     /**
@@ -66,8 +75,23 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
 
         try {
             // registrationId와 providerId로 OAuth2를 찾는다.
-            OAuth2 oAuth2 = oAuth2Repository.findByRegistrationIdAndProviderId(registrationId, providerId)
+            OAuth2 oAuth2 = oAuth2Repository.findByRegistrationIdAndProviderIdWithToken(registrationId, providerId)
                     .orElseThrow(() -> new NoSuchOAuth2Exception(NO_SUCH_OAUTH_2.getMessage()));
+
+            String[] jwts = jwtService.issueJwts(email);
+
+            Token token = Token.builder()
+                    .resourceAccessToken(userRequest.getAccessToken().getTokenValue())
+                    .refreshToken(jwts[1])
+                    .oAuth2(oAuth2)
+                    .build();
+
+            oAuth2Repository.save(oAuth2);
+            tokenRepository.save(token);
+
+            // request에 accessToken, refreshToken을 저장해둔다.
+            request.setAttribute("accessToken", jwts[0]);
+            request.setAttribute("refreshToken", jwts[1]);
 
             // 있으면, 연관된 Member를 찾는다.
             Member member = oAuth2.getMember();
@@ -88,14 +112,28 @@ public class PrincipalOAuth2UserService extends DefaultOAuth2UserService {
                 .member(member)
                 .registrationId(registrationId)
                 .providerId(providerId)
-                .accessToken(userRequest.getAccessToken().getTokenValue())
                 .build();
+
+            String[] jwts = jwtService.issueJwts(email);
+
+            Token token = Token.builder()
+                    .resourceAccessToken(userRequest.getAccessToken().getTokenValue())
+                    .refreshToken(jwts[1])
+                    .oAuth2(oAuth2)
+                    .build();
 
             // Member를 저장한다.
             memberRepository.save(member);
 
             // OAuth2를 저장한다.
             oAuth2Repository.save(oAuth2);
+
+            // Token을 저장한다.
+            tokenRepository.save(token);
+
+            // request에 accessToken, refreshToken을 저장해둔다.
+            request.setAttribute("accessToken", jwts[0]);
+            request.setAttribute("refreshToken", jwts[1]);
 
             // PrincipalDetails를 리턴한다.
             return new PrincipalUserDetails(member, oAuth2User.getAttributes());

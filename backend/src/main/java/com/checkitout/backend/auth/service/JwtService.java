@@ -3,12 +3,11 @@ package com.checkitout.backend.auth.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.checkitout.backend.auth.entity.Token;
 import com.checkitout.backend.auth.exception.InvalidAccessTokenException;
 import com.checkitout.backend.auth.exception.InvalidRefreshTokenException;
 import com.checkitout.backend.auth.exception.NoSuchRefreshTokenInDBException;
-import com.checkitout.backend.auth.repository.refreshtoken.RefreshTokenRepository;
-import com.checkitout.backend.entity.Member;
-import com.checkitout.backend.entity.RefreshToken;
+import com.checkitout.backend.auth.repository.TokenRepository;
 import com.checkitout.backend.exception.NoSuchDeviceTokenException;
 import com.checkitout.backend.exception.NoSuchMemberException;
 import com.checkitout.backend.repository.MemberRepository;
@@ -21,6 +20,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
 import java.util.Optional;
 
@@ -36,7 +40,7 @@ import static com.checkitout.backend.enumstorage.messages.Messages.NOT_FOUND;
 @Slf4j
 public class JwtService {
     private final MemberRepository memberRepository;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final TokenRepository tokenRepository;
 //    private final DeviceTokenRepository deviceTokenRepository;
 
     @Value("${jwt.secret}")
@@ -55,16 +59,17 @@ public class JwtService {
     public static final String BEARER = "Bearer ";
 
     // access token, refresh token을 발급, DB에 저장한다.
-    @Transactional
-    public String[] issueJwts(String email, Member member) {
-//            , DeviceToken deviceToken) {
+//    @Transactional
+    public String[] issueJwts(String email) {
+//        , Member member
+//        , DeviceToken deviceToken) {
         // refresh token을 발급한다.
         String newRefreshToken = JWT.create()
             .withIssuer("LetMeKnow")
             .withSubject("refreshToken")
             .withIssuedAt(new Date(System.currentTimeMillis()))
             .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenExpiration))
-            .withClaim("email", member.getEmail())
+            .withClaim("email", email)
             .withClaim("issuedTime", System.currentTimeMillis())
             .sign(Algorithm.HMAC512(secret));
 
@@ -76,16 +81,16 @@ public class JwtService {
         // DeviceToken과 연관된 refreshToken이 DB에 없으면,
 //        else {
             // 새로 발급한 refreshToken을 DB에 저장
-            RefreshToken newRefreshTokenEntity = RefreshToken.builder()
-                .member(member)
-                .refreshToken(newRefreshToken)
+//            RefreshToken newRefreshTokenEntity = RefreshToken.builder()
+//                .member(member)
+//                .refreshToken(newRefreshToken)
 //                .deviceToken(deviceToken)
-                .build();
+//                .build();
 
-            refreshTokenRepository.save(newRefreshTokenEntity);
+//            refreshTokenRepository.save(newRefreshTokenEntity);
 //        }
 
-        memberRepository.save(member);
+//        memberRepository.save(member);
 
         // access token을 발급한다.
         String newAccessToken = JWT.create()
@@ -129,11 +134,11 @@ public class JwtService {
 //            });
 
         // Refresh Token 조회
-        RefreshToken refreshTokenEntity = refreshTokenRepository.findByRefreshToken(refreshToken)
+        Token tokenEntity = tokenRepository.findByRefreshToken(refreshToken)
                 .orElseThrow(() -> new NoSuchRefreshTokenInDBException(REFRESH_TOKEN.getMessage() + NOT_FOUND.getMessage()));
 
         // RefreshToken이 있지만, 유저가 보낸 Refresh Token와 다르면, 이미 사용된 Refresh Token이므로
-        if (!refreshTokenEntity.getRefreshToken().equals(refreshToken)) {
+        if (!tokenEntity.getRefreshToken().equals(refreshToken)) {
             // 해당 DeviceToken을 구독 해제
 //            subscriptionService.unsubscribeFromAllTopics(deviceTokenEntity.getDeviceToken(), deviceTokenEntity.getMember());
 
@@ -141,8 +146,16 @@ public class JwtService {
 //            // DeviceToken도 삭제
 //            deviceTokenRepository.delete(deviceTokenEntity);
 
-            // 해당 Refresh Token을 DB에서 삭제
-            refreshTokenRepository.delete(refreshTokenEntity);
+            try {
+                // 로그아웃 요청 보내고
+                requestLogOut(tokenEntity);
+            }
+            catch (IOException e) {
+                log.error(e.getMessage());
+            }
+
+            // 해당 TokenEntity를 DB에서 삭제
+            tokenRepository.delete(tokenEntity);
 
             // 예외 발생
             throw new JWTVerificationException(REFRESH_TOKEN.getMessage() + INVALID.getMessage());
@@ -170,23 +183,23 @@ public class JwtService {
             .sign(Algorithm.HMAC512(secret));
 
         // 해당 refreshToken을 업데이트한다.
-        refreshTokenEntity.updateRefreshToken(newRefreshToken);
-        refreshTokenRepository.save(refreshTokenEntity);
+        tokenEntity.updateRefreshToken(newRefreshToken);
+        tokenRepository.save(tokenEntity);
 
         return new String[]{newAccessToken, newRefreshToken};
     }
 
-    // refreshToken을 삭제한다.
-    // 검증 안하고 그냥 삭제해도 될 듯? - 해시된 비번들만 들어있으니까
-    @Transactional
-    public void deleteRefreshToken(String refreshToken) throws JWTVerificationException {
-        // refreshToken을 삭제한다.
-        refreshTokenRepository.deleteByRefreshToken(refreshToken);
-    }
+//    // refreshToken을 삭제한다.
+//    // 검증 안하고 그냥 삭제해도 될 듯? - 해시된 비번들만 들어있으니까
+//    @Transactional
+//    public void deleteRefreshToken(String refreshToken) throws JWTVerificationException {
+//        // refreshToken을 삭제한다.
+//        refreshTokenRepository.deleteByRefreshToken(refreshToken);
+//    }
 
     public String extractAccessToken(HttpServletRequest request) throws IllegalArgumentException {
         String accessToken = Optional.ofNullable(request.getHeader(ACCESS_TOKEN_HEADER))
-            .orElseThrow(() -> new IllegalArgumentException(new StringBuffer().append(ACCESS_TOKEN.getMessage()).append(NOT_FOUND.getMessage()).toString()))
+            .orElseThrow(() -> new IllegalArgumentException(ACCESS_TOKEN.getMessage() + NOT_FOUND.getMessage()))
             .replace(BEARER, "");
 
         if (accessToken.isBlank()) {
@@ -222,13 +235,12 @@ public class JwtService {
 
     public String extractRefreshToken(HttpServletRequest request) throws IllegalArgumentException {
         String refreshToken = Optional.ofNullable(request.getHeader(REFRESH_TOKEN_HEADER))
-            .orElseThrow(() -> new IllegalArgumentException(new StringBuffer().append(REFRESH_TOKEN.getMessage()).append(NOT_FOUND.getMessage()).toString()))
+            .orElseThrow(() -> new IllegalArgumentException(REFRESH_TOKEN.getMessage() + NOT_FOUND.getMessage()))
             .replace(BEARER, "");
 
         // refreshToken 값 검증
         if (refreshToken.isBlank()) {
-            throw new IllegalArgumentException(
-                REFRESH_TOKEN.getMessage() + NOT_FOUND.getMessage());
+            throw new IllegalArgumentException(REFRESH_TOKEN.getMessage() + NOT_FOUND.getMessage());
         }
 
         return refreshToken;
@@ -270,5 +282,26 @@ public class JwtService {
      */
     public void setRefreshTokenOnHeader(HttpServletResponse response, String token) {
         response.setHeader(REFRESH_TOKEN_HEADER, BEARER + token);
+    }
+
+    public void requestLogOut(Token tokenEntity) throws IOException {
+        URL url = new URL("https://kapi.kakao.com/v1/user/logout");
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
+        connection.setRequestProperty("Authorization", "Bearer " + tokenEntity.getResourceAccessToken());
+        connection.setDoOutput(true);
+
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        StringBuffer stringBuffer = new StringBuffer();
+        String inputLine;
+
+        while ((inputLine = bufferedReader.readLine()) != null)  {
+            stringBuffer.append(inputLine);
+        }
+        bufferedReader.close();
+
+        String response = stringBuffer.toString();
+        System.out.println(response);
     }
 }

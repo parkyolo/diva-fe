@@ -13,6 +13,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 import static com.checkitout.backend.enumstorage.response.Status.FAIL;
+import static com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility.ANY;
+import static com.fasterxml.jackson.annotation.PropertyAccessor.FIELD;
 import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 
 @Component
@@ -25,6 +27,7 @@ public class OAuth2LogInFailureHandler implements AuthenticationFailureHandler {
         response.setStatus(SC_BAD_REQUEST);
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
+        objectMapper.setVisibility(FIELD, ANY);
         response.getWriter().write(objectMapper.writeValueAsString(Response.builder()
                 .status(FAIL.getStatus())
                 .message(exception.getMessage())
