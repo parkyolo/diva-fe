@@ -30,13 +30,17 @@ public class CorsConfig {
         config.setAllowedHeaders(List.of("Authorization", "AuthorizationRefresh, DeviceToken"));
         config.setExposedHeaders(List.of("Authorization", "AuthorizationRefresh, DeviceToken"));
 
-        String withPort = allowedOrigin;
+        String httpDomainWithPort = allowedOrigin;
+        String httpsDomain = allowedOrigin.replace("http", "https");
+        String frontEndServer = allowedOrigin;
         if (activeProfile.equals(LOCAL.getProfile())) {
-            withPort += ":" + port;
+            httpDomainWithPort += ":" + port;
+
+            // 프론트엔드 서버
+            frontEndServer += ":3000";
         }
 
-        String domain = allowedOrigin.replace("http", "https");
-        config.setAllowedOrigins(List.of(withPort, domain));
+        config.setAllowedOrigins(List.of(httpDomainWithPort, httpsDomain, frontEndServer));
         config.setAllowedMethods(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
