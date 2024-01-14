@@ -6,17 +6,16 @@ import { useEffect } from 'react';
 
 const KakaoLogin = () => {
   // const router = useRouter();
-
-  // console.log('code: ', code);
-  console.log('kakaologin 진입');
+  // console.log('kakaologin 진입');
 
   const loginHandler = async () => {
     const searchParams = useSearchParams();
     const code = searchParams.get('code');
     try {
-      // console.log('useEffect 진입');
       let result;
-      await fetch(`auth/login/oauth2/authorization/kakao?code=${code}`)
+      await fetch(
+        `http://localhost:9090/auth/login/oauth2/code/kakao?code=${code}`,
+      )
         .then((res) => {
           if (res.ok) return res.json();
           // throw new Error('카카오 로그인 에러 발생');
@@ -29,16 +28,17 @@ const KakaoLogin = () => {
           console.log(data);
           //   const { accessToken, refreshToken } = data;
           result = data;
-          // // 로그인 성공, 이미 회원가입한 사용자
-          // if (refreshToken) {
-
-          // }
-          // // 로그인 성공, 회원가입 되지 않은 사용자
-          // else if (naverAccessToken) {
-
-          // }
-          // // 로그인 실패
-          // else {}
+          /*
+          // 로그인 성공
+          if (accessToken) {
+            localStorage.setItem('accessToken', accessToken);
+            router.push('/');
+            window.location.replace('/');
+            console.log('로그인 성공');
+          }
+          // 로그인 실패
+          else {}
+          */
         });
       return NextResponse.json({ data: result });
     } catch (e) {
