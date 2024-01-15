@@ -1,7 +1,6 @@
 package com.checkitout.backend.auth.handler;
 
 import com.checkitout.backend.auth.service.JwtService;
-import com.checkitout.backend.auth.userdetail.PrincipalUserDetails;
 import com.checkitout.backend.dto.Response;
 import com.checkitout.backend.entity.Member;
 import com.checkitout.backend.enumstorage.messages.Messages;
@@ -29,7 +28,7 @@ import static jakarta.servlet.http.HttpServletResponse.SC_GONE;
 
 @Component
 @RequiredArgsConstructor
-public class OAuth2LogInSuccessHandler implements AuthenticationSuccessHandler {
+public class MemberLogInSuccessHandler implements AuthenticationSuccessHandler {
     private final JwtService jwtService;
 
     private final MemberRepository memberRepository;

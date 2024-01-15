@@ -18,6 +18,9 @@ import static lombok.AccessLevel.PROTECTED;
 
 @Getter
 @Entity
+@Table(uniqueConstraints = {
+    @UniqueConstraint(name = "UNIQUE_OAUTH2", columnNames = {"REGISTRATION_ID", "PROVIDER_ID"})
+})
 @NoArgsConstructor(access = PROTECTED)
 public class OAuth2 {
     @Id
@@ -32,10 +35,12 @@ public class OAuth2 {
 
     // 우리가 정한 OAuth2.0 provider의 이름(Ex. kakao, naver)
     @NotBlank
+    @Column(name = "REGISTRATION_ID")
     private String registrationId;
 
     // OAuth2.0 provider에서 제공하는 유저의 고유 Id
     @NotNull
+    @Column(name = "PROVIDER_ID")
     private Long providerId;
 
     // OAuth2.0 provider에서 제공하는 AccessToken와 JWT Refresh Token
