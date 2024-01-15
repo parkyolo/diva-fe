@@ -39,6 +39,7 @@ import static com.checkitout.backend.enumstorage.messages.Messages.NOT_FOUND;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtService {
+    private final OAuthService oauthService;
     private final MemberRepository memberRepository;
     private final TokenRepository tokenRepository;
 //    private final DeviceTokenRepository deviceTokenRepository;
@@ -148,7 +149,7 @@ public class JwtService {
 
             try {
                 // 로그아웃 요청 보내고
-                requestLogOut(tokenEntity);
+                oauthService.requestLogOut(tokenEntity);
             }
             catch (IOException e) {
                 log.error(e.getMessage());
@@ -282,26 +283,5 @@ public class JwtService {
      */
     public void setRefreshTokenOnHeader(HttpServletResponse response, String token) {
         response.setHeader(REFRESH_TOKEN_HEADER, BEARER + token);
-    }
-
-    public void requestLogOut(Token tokenEntity) throws IOException {
-        URL url = new URL("https://kapi.kakao.com/v1/user/logout");
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-type", "application/x-www-form-urlencoded");
-        connection.setRequestProperty("Authorization", "Bearer " + tokenEntity.getResourceAccessToken());
-        connection.setDoOutput(true);
-
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-        StringBuffer stringBuffer = new StringBuffer();
-        String inputLine;
-
-        while ((inputLine = bufferedReader.readLine()) != null)  {
-            stringBuffer.append(inputLine);
-        }
-        bufferedReader.close();
-
-        String response = stringBuffer.toString();
-        System.out.println(response);
     }
 }
