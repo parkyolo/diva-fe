@@ -1,23 +1,27 @@
 package com.checkitout.backend.auth.service;
 
+import static com.checkitout.backend.auth.enumstorage.messages.error.oauth2.OAuth2ErrorMessage.NO_SUCH_OAUTH_2;
+
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.checkitout.backend.auth.dto.KakaoOAuthResponse;
+import com.checkitout.backend.auth.entity.OAuth2;
+import com.checkitout.backend.auth.entity.Token;
 import com.checkitout.backend.auth.exception.NoSuchRefreshTokenInDBException;
+import com.checkitout.backend.auth.exception.oauth2.NoSuchOAuth2Exception;
+import com.checkitout.backend.auth.repository.OAuth2Repository;
 import com.checkitout.backend.auth.repository.TokenRepository;
+import com.checkitout.backend.dto.MemberFindDto;
 import com.checkitout.backend.entity.Member;
 import com.checkitout.backend.exception.NoSuchMemberException;
 import com.checkitout.backend.repository.MemberRepository;
+import com.checkitout.backend.util.RandomNickname;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
-
-import static com.checkitout.backend.enumstorage.messages.MemberMessages.MEMBER;
-import static com.checkitout.backend.enumstorage.messages.Messages.NOT_EXISTS;
-import static com.checkitout.backend.enumstorage.messages.Messages.SUCH;
 
 @Service
 @Slf4j
@@ -25,12 +29,83 @@ import static com.checkitout.backend.enumstorage.messages.Messages.SUCH;
 @RequiredArgsConstructor
 public class AuthService {
     private final JwtService jwtService;
+    private final OAuthService oauthService;
 //    private final DeviceTokenService deviceTokenService;
 //    private final SubscriptionService subscriptionService;
 
 //    private final DeviceTokenRepository deviceTokenRepository;
     private final TokenRepository tokenRepository;
     private final MemberRepository memberRepository;
+    private final OAuth2Repository oAuth2Repository;
+
+    @Transactional
+    public MemberFindDto signIn(KakaoOAuthResponse kakaoOAuthResponse, HttpServletResponse response) {
+        try {
+            // registrationId와 providerId로 OAuth2를 찾는다.
+            OAuth2 oAuth2 = oAuth2Repository.findByRegistrationIdAndProviderIdWithToken(kakaoOAuthResponse.getRegistrationId(), kakaoOAuthResponse.getProviderId())
+                .orElseThrow(() -> new NoSuchOAuth2Exception(NO_SUCH_OAUTH_2.getMessage()));
+
+            // 있으면, 연관된 Member를 찾는다.
+            Member member = oAuth2.getMember();
+
+            String[] jwts = jwtService.issueJwts(member.getEmail());
+
+            Token token = Token.builder()
+                .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())
+                .resourceRefreshToken(kakaoOAuthResponse.getResourceRefreshToken())
+                .scope(kakaoOAuthResponse.getScope())
+                .refreshToken(jwts[1])
+                .oAuth2(oAuth2)
+                .build();
+
+            oAuth2Repository.save(oAuth2);
+            tokenRepository.save(token);
+
+            setHeader(response, jwts);
+
+            // member를 리턴한다.
+            return member.toMemberFindDto();
+        }
+        // OAuth2가 없다는건, 처음 로그인하는 회원이라는 뜻이다.
+        catch (NoSuchOAuth2Exception exception) {
+            // Member를 생성한다.
+            Member member = Member.builder()
+                .email(kakaoOAuthResponse.getEmail())
+                .nickname(RandomNickname.getRandomNickname())
+                .build();
+
+            // OAuth2를 생성한다.
+            OAuth2 oAuth2 = OAuth2.builder()
+                .member(member)
+                .registrationId(kakaoOAuthResponse.getRegistrationId())
+                .providerId(kakaoOAuthResponse.getProviderId())
+                .build();
+
+            String[] jwts = jwtService.issueJwts(kakaoOAuthResponse.getEmail());
+
+            Token token = Token.builder()
+                .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())
+                .resourceRefreshToken(kakaoOAuthResponse.getResourceRefreshToken())
+                .scope(kakaoOAuthResponse.getScope())
+                .refreshToken(jwts[1])
+                .oAuth2(oAuth2)
+                .build();
+
+            // Member를 저장한다.
+            memberRepository.save(member);
+
+            // OAuth2를 저장한다.
+            oAuth2Repository.save(oAuth2);
+
+            // Token을 저장한다.
+            tokenRepository.save(token);
+
+            setHeader(response, jwts);
+
+            // member를 리턴한다.
+            return member.toMemberFindDto();
+        }
+    }
 
 //    @Transactional
 //    public String[] whenMemberSignIn_IssueJwts_StoreDeviceToken_SubscribeToAllTopics(String email) throws NoSuchMemberException
@@ -94,7 +169,7 @@ public class AuthService {
 
                     try {
                         // 로그아웃 요청 보내고
-                        jwtService.requestLogOut(tokenEntity);
+                        oauthService.requestLogOut(tokenEntity);
                     }
                     catch (IOException e) {
                         log.error(e.getMessage());
@@ -125,5 +200,10 @@ public class AuthService {
         // ToDo: null 해도 되는지 테스트
         // Header에서 Refresh Token 삭제
         response.setHeader(JwtService.REFRESH_TOKEN_HEADER, null);
+    }
+
+    private void setHeader(HttpServletResponse response, String[] jwts) {
+        response.setHeader(JwtService.ACCESS_TOKEN_HEADER, JwtService.BEARER + jwts[0]);
+        response.setHeader(JwtService.REFRESH_TOKEN_HEADER, JwtService.BEARER + jwts[1]);
     }
 }

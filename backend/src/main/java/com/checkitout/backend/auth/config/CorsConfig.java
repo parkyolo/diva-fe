@@ -3,6 +3,7 @@ package com.checkitout.backend.auth.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -10,6 +11,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
 import static com.checkitout.backend.auth.enumstorage.profile.SpringProfile.LOCAL;
+import static org.springframework.http.HttpMethod.*;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.OPTIONS;
 
 @Configuration
 public class CorsConfig {
@@ -25,7 +30,7 @@ public class CorsConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true); // Whether user credentials are supported.
+//        config.setAllowCredentials(true); // Whether user credentials are supported.
 
         config.setAllowedHeaders(List.of("Authorization", "AuthorizationRefresh, DeviceToken"));
         config.setExposedHeaders(List.of("Authorization", "AuthorizationRefresh, DeviceToken"));
@@ -40,8 +45,11 @@ public class CorsConfig {
             frontEndServer += ":3000";
         }
 
-        config.setAllowedOrigins(List.of(httpDomainWithPort, httpsDomain, frontEndServer));
-        config.setAllowedMethods(List.of("*"));
+        config.addAllowedOrigin(httpDomainWithPort);
+        config.addAllowedOrigin(httpsDomain);
+        config.addAllowedOrigin(frontEndServer);
+
+        config.setAllowedMethods(List.of(GET.name(), POST.name(), PUT.name(), PATCH.name(), DELETE.name(), OPTIONS.name()));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);

@@ -1,16 +1,18 @@
 package com.checkitout.backend.auth.config;
 
-import com.checkitout.backend.auth.PrincipalOAuth2UserService;
 import com.checkitout.backend.auth.filter.AuthenticationProcessFilter;
 import com.checkitout.backend.auth.handler.JwtLogoutHandler;
-import com.checkitout.backend.auth.handler.OAuth2LogInFailureHandler;
-import com.checkitout.backend.auth.handler.OAuth2LogInSuccessHandler;
+import com.checkitout.backend.auth.handler.MemberLogInFailureHandler;
+import com.checkitout.backend.auth.handler.MemberLogInSuccessHandler;
 import com.checkitout.backend.auth.service.JwtService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -27,10 +29,9 @@ import static org.apache.http.HttpStatus.SC_OK;
 //@EnableGlobalMethodSecurity(securedEnabled = true) // secured 어노테이션 활성화
 @RequiredArgsConstructor
 public class SecurityConfig {
-    // OAuth 2.0
-    private final PrincipalOAuth2UserService principalOAuth2UserService;
-    private final OAuth2LogInSuccessHandler oAuth2LoginSuccessHandler;
-    private final OAuth2LogInFailureHandler oAuth2LoginFailureHandler;
+//    private final MemberAuthenticationProvider memberAuthenticationProvider;
+    private final MemberLogInSuccessHandler memberLogInSuccessHandler;
+    private final MemberLogInFailureHandler memberLogInFailureHandler;
 
     // JWT
     private final JwtService jwtService;
@@ -39,6 +40,8 @@ public class SecurityConfig {
     private final AuthenticationProcessFilter authenticationProcessFilter;
 
     private final CorsConfig corsConfig;
+
+    private final ObjectMapper objectMapper;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -81,31 +84,8 @@ public class SecurityConfig {
                         AbstractHttpConfigurer::disable // form login 비활성화
                 );
 
-        // OAuth 2.0
+        // 로그아웃
         http
-                .oauth2Login(
-                        oauth2Login -> oauth2Login
-//                                .loginProcessingUrl("/api/login/oauth2/code/*")
-                                .authorizationEndpoint(
-                                        authorizationEndpoint -> authorizationEndpoint
-                                                // 로그인 요청 할 url
-                                                .baseUri("/auth/login/oauth2/authorization")
-                                )
-                                .redirectionEndpoint(
-                                        redirectionEndpoint -> redirectionEndpoint
-                                                .baseUri("/auth/login/oauth2/code/*")
-                                )
-                                .userInfoEndpoint(
-                                        userInfoEndpoint -> userInfoEndpoint
-                                                .userService(principalOAuth2UserService)
-                                )
-                                .successHandler(oAuth2LoginSuccessHandler) // 동의하고 계속하기를 눌렀을 때 Handler 설정
-                                .failureHandler(oAuth2LoginFailureHandler) // 소셜 로그인 실패 시 핸들러 설정
-                )
-//                .authenticationProvider(memberAuthenticationProvider)
-
-
-                //로그아웃
                 .logout(logout ->
                         logout.permitAll()
                                 .logoutUrl("/api/auth/signout/v1")
@@ -125,7 +105,7 @@ public class SecurityConfig {
 
 //    @Bean
 //    public MemberAuthenticationFilter memberAuthenticationFilter() {
-//        return new MemberAuthenticationFilter(authenticationManager(), temporaryMemberRepository, jwtService, memberLogInSuccessHandler, memberLogInFailureHandler);
+//        return new MemberAuthenticationFilter(objectMapper, authenticationManager(), memberLogInSuccessHandler, memberLogInFailureHandler);
 //    }
 
     @Bean
