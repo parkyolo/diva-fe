@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { atom, useAtom } from 'jotai';
 import { userState } from '@/types/user';
 import Link from 'next/link';
@@ -10,6 +10,12 @@ const loginAtom = atom(userState);
 const Login = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [user, setUser] = useAtom(loginAtom);
+
+  useEffect(() => {
+    if (localStorage.getItem('accessToken') !== null) {
+      setIsLogin(true);
+    }
+  }, []);
 
   const logoutClicked = () => {
     setUser({ ...user });
