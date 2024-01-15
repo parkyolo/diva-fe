@@ -19,7 +19,7 @@ import static org.apache.http.HttpStatus.SC_BAD_REQUEST;
 
 @Component
 @RequiredArgsConstructor
-public class OAuth2LogInFailureHandler implements AuthenticationFailureHandler {
+public class MemberLogInFailureHandler implements AuthenticationFailureHandler {
     private final ObjectMapper objectMapper;
 
     @Override
