@@ -22,6 +22,15 @@ const config: Config = {
       sans: ['SpoqaHanSansNeo', 'sans-serif'],
       samlip: ['SDSamliphopangche', 'serif'],
     },
+    fontSize: {
+      sm: '12px',
+      base: '16px',
+      xl: '20px',
+      '2xl': '26px',
+      '3xl': '32px',
+      '4xl': '40px',
+      '5xl': '50px',
+    },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
