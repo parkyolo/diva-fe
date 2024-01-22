@@ -47,6 +47,22 @@
 }
 
 body {
-  max-width: 375px;
+  display: flex;
+  width: 440px;
+  height: 844px;
+  padding: var(--Auto-Number, 0px);
+  flex-direction: column;
+  align-items: center;
+  gap: var(--Auto-Number, 0px);
   margin: 0 auto;
+  border-radius: var(--Auto-Number, 0px);
+
+}
+
+.b{
+  border: black solid 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
