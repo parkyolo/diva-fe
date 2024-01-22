@@ -2,7 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('./reset.css');
+@font-face {
+  font-family: 'SpoqaHanSansNeo';
+  font-weight: 400;
+  src:
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Regular.woff2')
+      format('woff2'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Regular.woff')
+      format('woff'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Regular.ttf')
+      format('truetype');
+}
+@font-face {
+  font-family: 'SpoqaHanSansNeo';
+  font-weight: 500;
+  src:
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Medium.woff2')
+      format('woff2'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Medium.woff')
+      format('woff'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Medium.ttf')
+      format('truetype');
+}
+@font-face {
+  font-family: 'SpoqaHanSansNeo';
+  font-weight: 700;
+  src:
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Bold.woff2')
+      format('woff2'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Bold.woff')
+      format('woff'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Bold.ttf')
+      format('truetype');
+}
+@font-face {
+  font-family: 'SDSamliphopangche';
+  src: url('../../public/fonts/SDSamliphopangcheTTF/SDSamliphopangcheTTFBasic.ttf');
+}
 
 :root {
 }
