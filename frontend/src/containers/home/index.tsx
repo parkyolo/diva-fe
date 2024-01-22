@@ -6,12 +6,7 @@ import { getServerSession } from 'next-auth';
 const Home = async () => {
   const session = await getServerSession(authOptions);
 
-  return (
-    <main>
-      <Header></Header>
-      {!session?.user ? <Content /> : <></>}
-    </main>
-  );
+  return <main>{!session?.user ? <Content /> : <></>}</main>;
 };
 
 export default Home;
