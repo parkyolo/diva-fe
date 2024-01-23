@@ -51,3 +51,19 @@ body {
   justify-content: center;
   align-items: center;
 }
+
+.landing {
+  background: linear-gradient(180deg, #000 0%, #fff 84%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.font-featuring {
+  font-feature-settings: 'clig' off, 'liga' off;
+}
+
+.carousel-container {
+  perspective: 450px;
+  transform-style: preserve-3d ;
+}
