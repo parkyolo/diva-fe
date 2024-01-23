@@ -2,6 +2,7 @@ import Header from '@/components/Header';
 import Content from '@/containers/home/Content';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
+import Landing from './Landing';
 
 const Home = async () => {
   const session = await getServerSession(authOptions);
@@ -9,7 +10,8 @@ const Home = async () => {
   return (
     <main>
       <Header></Header>
-      {!session?.user ? <Content /> : <></>}
+      {/* <Content /> */}
+      {!session?.user ? <Landing /> : <Content />}
     </main>
   );
 };
