@@ -1,12 +1,11 @@
 'use client';
 
 import React from 'react';
-
 interface ClayButtonProps {
-  label: string;
+  children?: React.ReactNode;
   onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
-const ClayButton = ({ label, onClick }: ClayButtonProps) => {
+const ClayButton = ({ onClick, children }: ClayButtonProps) => {
   return (
     <div>
       <button
@@ -15,7 +14,7 @@ const ClayButton = ({ label, onClick }: ClayButtonProps) => {
         font-samlip text-2xl"
         onClick={onClick}
       >
-        <span className="text-white">{label}</span>
+        <span className="text-white">{children}</span>
       </button>
     </div>
   );
