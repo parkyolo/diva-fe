@@ -21,10 +21,10 @@ public class Post extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "post_id", unique = true)
+    @Column(name = "post_id")
     private Long id;
 
-    @Column(name = "content")
+    @Column(name = "content", length = 1000)
     private String content;
 
     @NotNull
