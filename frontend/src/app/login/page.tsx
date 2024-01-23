@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import axios from 'axios';
-import kakaologo from '@/../public/images/kakao_login_medium_narrow.png';
+import kakaologo from '@/../public/images/kakao_login_large_narrow 1.png';
 import Image from 'next/image';
 
 export default function Login() {
