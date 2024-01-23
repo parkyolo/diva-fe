@@ -19,10 +19,10 @@ public class PracticeResult extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "post_id", unique = true)
+    @Column(name = "post_id")
     private Long id;
 
-    @NotBlank
+    @NotNull
     @Column(name = "score")
     private int score;
 
