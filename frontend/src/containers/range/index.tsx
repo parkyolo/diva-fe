@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import Link from 'next/link';
 import RangeBox from './RangeBar';
 import RightArrow from '/public/svgs/right_arrow.svg';
@@ -50,7 +49,7 @@ const Range = () => {
           className="flex justify-between items-center w-full mb-5 bg-blue p-2 pl-5 rounded-xl"
         >
           <p>추천 노래 살펴보기</p>
-          <Image src={RightArrow} alt={'right-arrow'}></Image>
+          <RightArrow />
         </Link>
         <SimilarRangeSinger />
       </section>

@@ -1,7 +1,6 @@
 'use client';
 
 import { convertRange2Num } from '.';
-import Image from 'next/image';
 import BottomARrow from '/public/svgs/bottom_arrow.svg';
 import TopArrow from '/public/svgs/top_arrow.svg';
 import { useState } from 'react';
@@ -22,7 +21,7 @@ const SimilarRangeSinger = () => {
             <div>
               <h5>나와 음역대가 비슷한 가수 보기</h5>
             </div>
-            <Image src={BottomARrow} alt={'bottom-arrow'}></Image>
+            <BottomARrow />
           </div>
         </a>
       </li>
@@ -33,7 +32,7 @@ const SimilarRangeSinger = () => {
             <div>
               <h5>나와 음역대가 비슷한 가수 보기</h5>
             </div>
-            <Image src={TopArrow} alt={'top-arrow'}></Image>
+            <TopArrow />
           </div>
         </a>
       </li>
