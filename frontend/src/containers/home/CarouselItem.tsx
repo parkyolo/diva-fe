@@ -17,13 +17,13 @@ export default function CarouselItem({
 }: CardProps) {
   const [scaled, setScaled] = useState<Boolean>(false);
 
-  const offset = (index - activeIndex) / 4;
+  const offset = (index - activeIndex)/10 ;
   const direction = Math.sign(index - activeIndex);
   const absOffset = Math.abs(offset);
 
   const cssTransformProperties = `
         rotateY(calc(${offset} * 55deg))
-        scaleY(calc(1 +  ${absOffset}  * -0.5))
+        scaleY(calc(1 +  ${absOffset}  * -0.9))
         translateX(calc( ${direction} * -3.5rem))
         translateZ(calc( ${absOffset} * -35rem))
         scale(${scaled && index === activeIndex ? 1.05 : 1})
@@ -33,7 +33,7 @@ export default function CarouselItem({
         ${Math.abs(index - activeIndex) >= 3 ? '0' : '1'}`;
 
   const cssDisplay = `
-        ${Math.abs(index - activeIndex) >= 3 ? 'none' : 'block'},
+        ${Math.abs(index - activeIndex) >= 2 ? 'none' : 'block'},
   `;
 
   return (
