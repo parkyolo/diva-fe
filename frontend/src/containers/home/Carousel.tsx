@@ -13,29 +13,28 @@ interface CarouselProps {
 }
 const Carousel = ({ width, height, items, onClick }: CarouselProps) => {
   const [activeIndex, setActiveIndex] = useState<number>(0);
-  function handlePrevItemBtn() {
+  
+  function handleNextItemBtn() {
     setActiveIndex((prev) => {
-      return prev - 1 >= 0 ? prev - 1 : prev;
+      return prev - 1 >= 0 ? prev - 1 : items.length - 1;
     });
   }
 
-  function handleNextItemBtn() {
+  function handlePrevItemBtn() {
     setActiveIndex((prev) => {
-      return prev + 1 < items.length ? prev + 1 : prev;
+      return prev + 1 < items.length ? prev + 1 : 0;
     });
   }
 
   return (
-    <div className="carousel-container relative h-[280px] w-[280px]">
-      {activeIndex < items.length - 1 && (
-        <button
-          className="carousel-btn-switch-card-left carousel-btn-switch-card left-1/2 top-1/2 translate-x-[-200px] translate-y-[-50%] transform sm:translate-x-[-250px] md:translate-x-[-300px] lg:translate-x-[-350px] absolute z-40 flex h-9 w-9 cursor-pointer items-center justify-center
+    <div className="carousel-container relative h-full aspect-square">
+      <button
+        className="carousel-btn-switch-card-left carousel-btn-switch-card -left-10 top-1/2 translate-y-[-50%]  absolute z-40 flex h-9 w-9 cursor-pointer items-center justify-center
       rounded-full border-2 border-[#302e30] bg-[#181818] text-2xl opacity-75 transition duration-300 hover:opacity-100 md:h-12 md:w-12"
-          onClick={handleNextItemBtn}
-        >
-          <IoIosArrowBack />
-        </button>
-      )}
+        onClick={handlePrevItemBtn}
+      >
+        <IoIosArrowBack />
+      </button>
       {items?.map((item, index) => (
         <CarouselItem
           key={index}
@@ -46,19 +45,17 @@ const Carousel = ({ width, height, items, onClick }: CarouselProps) => {
           {item}
         </CarouselItem>
       ))}
-      {activeIndex > 0 && (
-        <button
-          className="carousel-btn-switch-card-right carousel-btn-switch-card right-1/2 top-1/2 translate-x-[200px] translate-y-[-50%] transform sm:translate-x-[250px] md:translate-x-[300px] lg:translate-x-[350px] absolute z-40 flex h-9 w-9 cursor-pointer items-center justify-center
+      <button
+        className="carousel-btn-switch-card-left carousel-btn-switch-card -right-10 top-1/2 translate-y-[-50%]  absolute z-40 flex h-9 w-9 cursor-pointer items-center justify-center
       rounded-full border-2 border-[#302e30] bg-[#181818] text-2xl opacity-75 transition duration-300 hover:opacity-100 md:h-12 md:w-12"
-          onClick={handlePrevItemBtn}
-        >
-          <IoIosArrowBack
-            style={{
-              transform: 'rotate(180deg)',
-            }}
-          />
-        </button>
-      )}
+        onClick={handleNextItemBtn}
+      >
+        <IoIosArrowBack
+          style={{
+            transform: 'rotate(180deg)',
+          }}
+        />
+      </button>
 
       {/* <CarouselIndicator
         activeIndex={activeIndex}
