@@ -11,7 +11,7 @@ const Header = () => {
   const path: string | null = usePathname();
 
   return (
-    <div>
+    <header>
       {/* home과 mypage 이외엔 모달로 처리하기 때문에 2개의 분기만 생성 */}
       {path !== '/mypage' ? (
         <header className={defaultClassName + 'flex-start'}>
@@ -30,7 +30,7 @@ const Header = () => {
           </Link>
         </header>
       )}
-    </div>
+    </header>
   );
 };
 
