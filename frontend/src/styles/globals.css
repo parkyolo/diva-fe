@@ -52,6 +52,15 @@ body {
   align-items: center;
 }
 
+/* text-base w-full px-7 py-10 overflow-y-scroll basis-full */
+main {
+  font-size: 16px;
+  width: 100%;
+  padding: 2.5rem 1.75rem;
+  overflow-y: scroll;
+  flex-basis: 100%;
+}
+
 .landing {
   background: linear-gradient(180deg, #000 0%, #fff 84%);
   background-clip: text;
@@ -60,10 +69,12 @@ body {
 }
 
 .font-featuring {
-  font-feature-settings: 'clig' off, 'liga' off;
+  font-feature-settings:
+    'clig' off,
+    'liga' off;
 }
 
 .carousel-container {
   perspective: 450px;
-  transform-style: preserve-3d ;
+  transform-style: preserve-3d;
 }
