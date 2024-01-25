@@ -1,4 +1,4 @@
-package com.diva.backend.dto;
+package com.diva.backend.post.dto;
 
 import com.diva.backend.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
@@ -10,20 +10,21 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MemberFindDto {
+public class MemberPostDto extends Member {
+
     @NotNull
     private Long id;
 
     @NotBlank
-    private String email;
-
-    @NotBlank
     private String nickname;
 
+    @NotBlank
+    private String profileImg;
+
     @Builder
-    protected MemberFindDto(Long id, String email, String nickname) {
+    protected MemberPostDto(Long id, String nickname, String profileImg) {
         this.id = id;
         this.nickname = nickname;
-        this.email = email;
+        this.profileImg = profileImg;
     }
 }
