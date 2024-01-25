@@ -3,6 +3,9 @@
 import Content from '@/containers/home/Content';
 import Navigation from '@/components/Navigation';
 import { useState } from 'react';
+import Header from '@/components/Header';
+import MainLogo from '/public/svgs/logo.svg';
+import Link from 'next/link';
 
 const Home = () => {
   const homePage = 0b00;
@@ -21,6 +24,13 @@ const Home = () => {
     <>
       {mode === homePage ? (
         <>
+          <Header
+            LeftComponent={
+              <Link href="/">
+                <MainLogo />
+              </Link>
+            }
+          />
           <Content onModeChange={handleModeChange} />
           <Navigation />
         </>
