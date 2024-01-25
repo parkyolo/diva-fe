@@ -5,6 +5,7 @@ import RangeBox from './RangeBar';
 import RightArrow from '/public/svgs/right_arrow.svg';
 import { useState } from 'react';
 import SimilarRangeSinger from './SimilarRangeSinger';
+import Navigation from '@/components/Navigation';
 
 /**
  * C1:0부터 B7:48까지 숫자로 변환하는 함수
@@ -26,33 +27,36 @@ const Range = () => {
 
   return (
     <>
-      <section className="flex flex-col justify-center items-center w-full">
-        <h1 className="flex flex-col justify-center items-center w-full mb-7">
-          <p>
-            당신의 음역대는{' '}
-            <em className="text-skyblue text-2xl font-bold not-italic">
-              {range[0]}
-              {range[1]}
-            </em>
-            입니다.
-          </p>
+      <main>
+        <section className="flex flex-col justify-center items-center w-full">
+          <h1 className="flex flex-col justify-center items-center w-full mb-7">
+            <p>
+              당신의 음역대는{' '}
+              <em className="text-skyblue text-2xl font-bold not-italic">
+                {range[0]}
+                {range[1]}
+              </em>
+              입니다.
+            </p>
+            <Link
+              href="/range/check"
+              className="text-gray underline underline-offset-4 hover:text-skyblue"
+            >
+              재측정하러가기
+            </Link>
+          </h1>
+          <RangeBox lowRange={range[0]} highRange={range[1]}></RangeBox>
           <Link
-            href="/range/check"
-            className="text-gray underline underline-offset-4 hover:text-skyblue"
+            href="/"
+            className="flex justify-between items-center w-full mb-5 bg-blue p-2 pl-5 rounded-xl"
           >
-            재측정하러가기
+            <p>추천 노래 살펴보기</p>
+            <RightArrow />
           </Link>
-        </h1>
-        <RangeBox lowRange={range[0]} highRange={range[1]}></RangeBox>
-        <Link
-          href="/"
-          className="flex justify-between items-center w-full mb-5 bg-blue p-2 pl-5 rounded-xl"
-        >
-          <p>추천 노래 살펴보기</p>
-          <RightArrow />
-        </Link>
-        <SimilarRangeSinger />
-      </section>
+          <SimilarRangeSinger />
+        </section>
+      </main>
+      <Navigation />
     </>
   );
 };

@@ -1,30 +1,29 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import Link from '../../../node_modules/next/link';
+import Link from 'next/link';
 import FeedIcon from '/public/svgs/nav_feed.svg';
 import HomeIcon from '/public/svgs/nav_home.svg';
 import MyPageIcon from '/public/svgs/nav_mypage.svg';
 import RangeIcon from '/public/svgs/nav_test.svg';
-import config from '../../../tailwind.config';
 
 const Navigation = () => {
-  const path: string = usePathname();
+  const path: string | null = usePathname();
 
   return (
-    <div className="flex justify-around px-5 py-3.5 bg-btn-black">
+    <nav className="flex justify-around px-5 py-3.5 bg-btn-black">
       <Link
         href="/"
         className="flex flex-col items-center [&:hover>span]:text-skyblue [&:hover>svg]:fill-skyblue"
       >
         {path === '/' ? (
           <>
-            <HomeIcon fill={config.theme.colors.skyblue} />
+            <HomeIcon className="fill-skyblue" />
             <span className="text-sm font-samlip text-skyblue">홈</span>
           </>
         ) : (
           <>
-            <HomeIcon fill={config.theme.colors.gray} />
+            <HomeIcon className="fill-gray" />
             <span className="text-sm font-samlip text-gray">홈</span>
           </>
         )}
@@ -35,12 +34,12 @@ const Navigation = () => {
       >
         {path === '/range' ? (
           <>
-            <RangeIcon fill={config.theme.colors.skyblue} />
+            <RangeIcon className="fill-skyblue" />
             <span className="text-sm font-samlip text-skyblue">음역대</span>
           </>
         ) : (
           <>
-            <RangeIcon fill={config.theme.colors.gray} />
+            <RangeIcon className="fill-gray" />
             <span className="text-sm font-samlip text-gray">음역대</span>
           </>
         )}
@@ -51,12 +50,12 @@ const Navigation = () => {
       >
         {path === '/feed' ? (
           <>
-            <FeedIcon fill={config.theme.colors.skyblue} />
+            <FeedIcon className="fill-skyblue" />
             <span className="text-sm font-samlip text-skyblue">피드</span>
           </>
         ) : (
           <>
-            <FeedIcon fill={config.theme.colors.gray} />
+            <FeedIcon className="fill-gray" />
             <span className="text-sm font-samlip text-gray">피드</span>
           </>
         )}
@@ -67,17 +66,17 @@ const Navigation = () => {
       >
         {path === '/mypage' ? (
           <>
-            <MyPageIcon fill={config.theme.colors.skyblue} />
+            <MyPageIcon className="fill-skyblue" />
             <span className="text-sm font-samlip text-skyblue">마이페이지</span>
           </>
         ) : (
           <>
-            <MyPageIcon fill={config.theme.colors.gray} />
+            <MyPageIcon className="fill-gray" />
             <span className="text-sm font-samlip text-gray">마이페이지</span>
           </>
         )}
       </Link>
-    </div>
+    </nav>
   );
 };
 
