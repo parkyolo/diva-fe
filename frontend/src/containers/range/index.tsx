@@ -6,6 +6,8 @@ import RightArrow from '/public/svgs/right_arrow.svg';
 import { useState } from 'react';
 import SimilarRangeSinger from './SimilarRangeSinger';
 import Navigation from '@/components/Navigation';
+import Header from '@/components/Header';
+import MainLogo from '/public/svgs/logo.svg';
 
 /**
  * C1:0부터 B7:48까지 숫자로 변환하는 함수
@@ -27,6 +29,13 @@ const Range = () => {
 
   return (
     <>
+      <Header
+        LeftComponent={
+          <Link href="/">
+            <MainLogo />
+          </Link>
+        }
+      />
       <main>
         <section className="flex flex-col justify-center items-center w-full">
           <h1 className="flex flex-col justify-center items-center w-full mb-7">
