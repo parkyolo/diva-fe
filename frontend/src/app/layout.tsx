@@ -19,7 +19,6 @@ export default async function RootLayout(props: {
     <html>
       <body>
         <div className="relative bg-bg-black basis-full max-w-[600px] min-w-[320px] h-full max-h-[1400px] min-h-[568px] flex flex-col">
-          <Header />
           {!session?.user ? props.landing : props.children}
         </div>
       </body>
