@@ -3,8 +3,9 @@ package com.diva.backend.post.entity;
 import com.diva.backend.entity.BaseEntity;
 import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.entity.Song;
+import com.diva.backend.post.dto.PostResponseDto;
+import com.diva.backend.post.dto.PracticeResultPostDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -41,4 +42,10 @@ public class PracticeResult extends BaseEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public PracticeResultPostDto toPracticeResultPostDto() {
+        return PracticeResultPostDto.builder()
+            .id(this.id)
+            .score(this.score)
+            .build();
+    }
 }
