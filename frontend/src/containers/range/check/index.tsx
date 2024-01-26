@@ -8,8 +8,13 @@ import Loader from '@/containers/range/check/Loader';
 import Link from 'next/link';
 import Timer from '@/containers/range/check/Timer';
 import PitchDetector from '@/containers/range/check/PitchDetector';
+import Header from '@/components/Header';
+import LeftArrow from '/public/svgs/left_arrow.svg';
+import { useRouter } from 'next/navigation';
 
 const RangeCheckPage: React.FC = () => {
+  const router = useRouter();
+
   const GuidePhase = 0b00;
   const RecordingPhase = 0b01;
   const LoadingPhase = 0b10;
@@ -29,43 +34,77 @@ const RangeCheckPage: React.FC = () => {
     }
   }, [currentPhase]);
 
+  // 처음 측정 or 재측정인지 판단
+  const hasUserResult = true;
+
   return (
-    <div className="flex flex-col justify-center items-center h-full">
+    <>
       {currentPhase === GuidePhase && (
         <>
-          <RangeCheckGuide></RangeCheckGuide>
-          <ClayButton
-            onClick={() => {
-              setCurrentPhase(RecordingPhase);
-            }}
-          >
-            테스트 시작하기
-          </ClayButton>
+          {hasUserResult && (
+            <Header
+              LeftComponent={
+                <button
+                  onClick={() => {
+                    router.back();
+                  }}
+                >
+                  <LeftArrow></LeftArrow>
+                </button>
+              }
+            ></Header>
+          )}
+
+          <main className="flex flex-col justify-evenly items-center">
+            <RangeCheckGuide></RangeCheckGuide>
+            <ClayButton
+              onClick={() => {
+                setCurrentPhase(RecordingPhase);
+              }}
+            >
+              테스트 시작하기
+            </ClayButton>
+          </main>
         </>
       )}
 
       {currentPhase === RecordingPhase && (
         <>
-          <Timer></Timer>
-          <PitchDetector></PitchDetector>
-          <VoiceDetector></VoiceDetector>
-          <ClayButton onClick={() => setCurrentPhase(LoadingPhase)}>
-            녹음 중지하기
-          </ClayButton>
+          <Header
+            LeftComponent={
+              <button
+                onClick={() => {
+                  setCurrentPhase(GuidePhase);
+                }}
+              >
+                <LeftArrow></LeftArrow>
+              </button>
+            }
+          ></Header>
+          <main className="flex flex-col justify-evenly items-center">
+            <Timer></Timer>
+            <PitchDetector></PitchDetector>
+            <VoiceDetector></VoiceDetector>
+            <ClayButton onClick={() => setCurrentPhase(LoadingPhase)}>
+              녹음 중지하기
+            </ClayButton>
+          </main>
         </>
       )}
 
       {currentPhase === LoadingPhase && (
         <>
-          <Loader></Loader>
-          {!isResultLoading && (
-            <ClayButton>
-              <Link href="/range">결과 확인하기</Link>
-            </ClayButton>
-          )}
+          <main className="flex flex-col justify-evenly items-center">
+            <Loader></Loader>
+            {!isResultLoading && (
+              <ClayButton>
+                <Link href="/range">결과 확인하기</Link>
+              </ClayButton>
+            )}
+          </main>
         </>
       )}
-    </div>
+    </>
   );
 };
 
