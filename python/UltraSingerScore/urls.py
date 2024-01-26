@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from scores import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('scores/v1', views.calculate_score),
 ]
