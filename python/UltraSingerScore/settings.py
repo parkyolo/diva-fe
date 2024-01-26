@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import boto3
+import json
+ssm = boto3.client('ssm')
+parameters = ssm.get_parameters_by_path("/Score/Django/", Recursive=True, WithDecryption=True)
+print(parameters)
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,8 +37,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'rest_framework',
     'scores',
+
+    # DRF 설정
+    'rest_framework',
+
+    # S3 설정
+    'storages',
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -40,6 +52,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+# AWS Parameter Store에서 가져온 환경변수
+# AWS S3 설정
+AWS_REGION = ''
+AWS_STORAGE_BUCKET_NAME = '' #생성한 버킷 이름
+AWS_ACCESS_KEY_ID = '' #액서스 키 ID
+AWS_SECRET_ACCESS_KEY = '' #액서스 키 PW
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
