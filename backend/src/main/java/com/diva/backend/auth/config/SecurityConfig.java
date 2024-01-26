@@ -56,6 +56,7 @@ public class SecurityConfig {
                         .requestMatchers("/","/css/**","/img/**","/js/**","/favicon.ico", "/error/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/members").permitAll()
                         .anyRequest().authenticated()
                 );
 
