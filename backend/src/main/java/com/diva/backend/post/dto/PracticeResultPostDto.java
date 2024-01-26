@@ -9,11 +9,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PracticeResultPostDto {
+
     @NotNull
     private Long id;
 
+    @NotNull
+    private int score;
+
     @Builder
-    protected PracticeResultPostDto(Long id) {
+    protected PracticeResultPostDto(Long id, int score) {
         this.id = id;
+        this.score = score;
     }
 }

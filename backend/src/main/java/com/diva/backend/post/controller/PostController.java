@@ -1,19 +1,18 @@
 package com.diva.backend.post.controller;
 
 import com.diva.backend.post.dto.PostResponseDto;
+import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
 public class PostController {
-
     private final PostService postService;
 
     @Autowired
@@ -28,13 +27,4 @@ public class PostController {
     public List<PostResponseDto> getPosts(@RequestParam Long pageId) {
         return postService.getPosts(pageId);
     }
-
-    /*
-        게시글 작성
-     */
-//    @PostMapping("/")
-//    public ResponseEntity<Post> createPost(@RequestBody PostResponseDto postResponseDto) {
-//        Post savedPost = postService.savePost(postResponseDto);
-//        return new ResponseEntity<>(savedPost, HttpStatus.CREATED);
-//    }
 }
