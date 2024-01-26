@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+
 public class MemberResponseDto {
 
     private final String nickname;
