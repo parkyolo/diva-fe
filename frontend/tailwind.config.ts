@@ -66,6 +66,9 @@ const config: Config = {
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, #322323 0deg, #293E5B 302.4deg, #322323 360deg)',
       },
+      transitionDelay: {
+        '1000': '1000ms',
+      },
       keyframes: {
         slideup: {
           '0%': { transform: 'translateY(50%)' },
@@ -98,6 +101,22 @@ const config: Config = {
           '10%': { backgroundColor: '#32c5ff' },
           '80%': { height: '90px' },
         },
+        scorebox: {
+          '0%': { width: '0.5rem', height: '5rem', fontSize: '1.5rem' },
+          '100%': { width: '0.25rem', height: '2.5rem', fontSize: '1rem' },
+        },
+        moveleft: {
+          '0%': { transform: 'translateX(80%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        movetop: {
+          '0%': { transform: 'translateY(50%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
+        blink: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
       },
       animation: {
         slideup: 'slideup 0.5s',
@@ -111,6 +130,10 @@ const config: Config = {
         dv6: 'dv6 1.8s ease-out infinite',
         dv7: 'dv7 1.8s ease-out infinite',
         dv8: 'dv8 1.8s ease-out infinite',
+        scorebox: 'scorebox 1s ease-in-out',
+        moveleft: 'moveleft 1s ease-in-out',
+        movetop: 'movetop 1s ease-in-out',
+        blink: 'blink 2s ease-in-out',
       },
     },
   },
