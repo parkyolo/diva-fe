@@ -1,6 +1,7 @@
 .idea/
 .venv
 
+.UltraSingerServer/
 UltraSingerServer/
 
 UltraSingerScore/__pycache__/
