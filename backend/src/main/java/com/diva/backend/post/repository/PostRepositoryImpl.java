@@ -16,6 +16,7 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
 
     @Override
     public List<Post> findAllByPageId(Long pageId) {
+
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         return queryFactory
@@ -25,4 +26,5 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
             .leftJoin(post.likes).fetchJoin()
             .fetch();
     }
+
 }

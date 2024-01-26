@@ -1,5 +1,6 @@
 package com.diva.backend.post.dto;
 
+import com.diva.backend.entity.BaseEntity;
 import com.diva.backend.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,9 +9,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MemberPostDto extends Member {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class MemberPostDto extends BaseEntity {
 
     @NotNull
     private Long id;

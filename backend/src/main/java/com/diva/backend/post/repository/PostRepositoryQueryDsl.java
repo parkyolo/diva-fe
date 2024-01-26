@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface PostRepositoryQueryDsl {
     List<Post> findAllByPageId(Long pageId);
+
 }
