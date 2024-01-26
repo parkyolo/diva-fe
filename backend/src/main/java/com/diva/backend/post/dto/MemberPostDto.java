@@ -1,5 +1,6 @@
-package com.diva.backend.dto;
+package com.diva.backend.post.dto;
 
+import com.diva.backend.entity.BaseEntity;
 import com.diva.backend.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,22 +9,23 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class MemberFindDto {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class MemberPostDto extends BaseEntity {
+
     @NotNull
     private Long id;
 
     @NotBlank
-    private String email;
-
-    @NotBlank
     private String nickname;
 
+    @NotBlank
+    private String profileImg;
+
     @Builder
-    protected MemberFindDto(Long id, String email, String nickname) {
+    protected MemberPostDto(Long id, String nickname, String profileImg) {
         this.id = id;
         this.nickname = nickname;
-        this.email = email;
+        this.profileImg = profileImg;
     }
 }
