@@ -2,6 +2,7 @@
 .venv
 
 UltraSingerServer/
+
 UltraSingerScore/__pycache__/
 
 scores/__pycache__/
