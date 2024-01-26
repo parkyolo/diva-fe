@@ -5,7 +5,9 @@ import Navigation from '@/components/Navigation';
 import { useState } from 'react';
 import Header from '@/components/Header';
 import MainLogo from '/public/svgs/logo.svg';
+import LeftArrow from '/public/svgs/left_arrow.svg';
 import Link from 'next/link';
+import PlayResult from '../play/PlayResult';
 
 const Home = () => {
   const homePage = 0b00;
@@ -13,11 +15,15 @@ const Home = () => {
   const tutorialMode = 0b10;
   const resultPage = 0b11;
 
-  const [mode, setMode] = useState(homePage);
+  const [mode, setMode] = useState(resultPage);
   // const [musicId, setMusicId]
 
   const handleModeChange = (newMode: number) => {
     setMode(newMode);
+  };
+
+  const handleGoBack = () => {
+    setMode(homePage);
   };
 
   return (
@@ -39,7 +45,16 @@ const Home = () => {
       ) : mode === tutorialMode ? (
         <>튜토리얼</>
       ) : (
-        <></>
+        <>
+          <Header
+            LeftComponent={
+              <button onClick={handleGoBack}>
+                <LeftArrow />
+              </button>
+            }
+          />
+          <PlayResult />
+        </>
       )}
     </>
   );
