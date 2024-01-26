@@ -16,9 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from scores import views
+
+from scores.views import calculate_score
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/scores/v1', views.calculate_score),
+    path('api/scores/v1', calculate_score),
 ]
