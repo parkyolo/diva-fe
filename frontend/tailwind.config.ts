@@ -1,5 +1,28 @@
 import type { Config } from 'tailwindcss';
 
+const DETECTION_BAR_SIZE = [
+  [8, 48, 16, 72, 24, 8],
+  [8, 24, 48, 32, 48, 8],
+  [8, 40, 12, 24, 16, 8],
+  [8, 32, 64, 32, 8, 8],
+  [8, 72, 32, 72, 68, 8],
+  [8, 64, 20, 40, 48, 8],
+  [8, 28, 36, 16, 20, 8],
+  [8, 48, 12, 32, 24, 8],
+  [8, 24, 48, 28, 52, 8],
+];
+
+const DetectionBarKeyFrames = DETECTION_BAR_SIZE.map((bar, index) => {
+  return {
+    ['dv' + index]: {
+      '20%': { height: bar[1] },
+      '40%': { height: bar[2] },
+      '60%': { height: bar[3] },
+      '80%': { height: bar[4] },
+    },
+  };
+});
+
 const config: Config = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -31,6 +54,12 @@ const config: Config = {
       '4xl': '40px',
       '5xl': '50px',
     },
+    backgroundSize: {
+      auto: 'auto',
+      cover: 'cover',
+      contain: 'contain',
+      '2x': '200%',
+    },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -42,9 +71,46 @@ const config: Config = {
           '0%': { transform: 'translateY(50%)' },
           '100%': { transform: 'translateY(0)' },
         },
+        wiggle: {
+          '20%': { backgroundImage: 'url("/images/wiggle2.png")' },
+          '40%': { backgroundImage: 'url("/images/wiggle3.png")' },
+          '60%': { backgroundImage: 'url("/images/wiggle4.png")' },
+          '80%': { backgroundImage: 'url("/images/wiggle5.png")' },
+        },
+        ...DetectionBarKeyFrames[0],
+        ...DetectionBarKeyFrames[1],
+        ...DetectionBarKeyFrames[2],
+        ...DetectionBarKeyFrames[3],
+        ...DetectionBarKeyFrames[4],
+        ...DetectionBarKeyFrames[5],
+        ...DetectionBarKeyFrames[6],
+        ...DetectionBarKeyFrames[7],
+        ...DetectionBarKeyFrames[8],
+        loading1: {
+          '10%': { backgroundColor: '#32c5ff' },
+          '40%': { height: '90px' },
+        },
+        loading2: {
+          '10%': { backgroundColor: '#32c5ff' },
+          '60%': { height: '90px' },
+        },
+        loading3: {
+          '10%': { backgroundColor: '#32c5ff' },
+          '80%': { height: '90px' },
+        },
       },
       animation: {
         slideup: 'slideup 0.5s',
+        wiggle: 'wiggle 1.8s ease infinite',
+        dv0: 'dv0 1.8s ease-out infinite',
+        dv1: 'dv1 1.8s ease-out infinite',
+        dv2: 'dv2 1.8s ease-out infinite',
+        dv3: 'dv3 1.8s ease-out infinite',
+        dv4: 'dv4 1.8s ease-out infinite',
+        dv5: 'dv5 1.8s ease-out infinite',
+        dv6: 'dv6 1.8s ease-out infinite',
+        dv7: 'dv7 1.8s ease-out infinite',
+        dv8: 'dv8 1.8s ease-out infinite',
       },
     },
   },
