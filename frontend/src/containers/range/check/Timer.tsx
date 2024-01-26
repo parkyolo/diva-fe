@@ -18,7 +18,7 @@ const Timer: React.FC = () => {
   // }, []);
 
   return (
-    <div className="text-4xl">
+    <div className="text-3xl">
       <span>0</span>
       <span>:</span>
       <span className="text-skyblue">{count}</span>
