@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface ResultRepository extends JpaRepository<PracticeResult, Long> {
-    List<PracticeResult> SaveResult();
+    List<PracticeResult> saveResult();
 }

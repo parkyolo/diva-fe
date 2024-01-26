@@ -23,7 +23,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<PostResponseDto> getPosts(Long pageId) {
         return postRepository.findAllByPageId(pageId).stream()
-                .map((Post::toPostResponseDto))
-                .toList();
+            .map((Post::toPostResponseDto))
+            .toList();
     }
 }

@@ -33,6 +33,7 @@ public class Post extends BaseEntity {
     @Column(name = "content", length = 1000)
     private String content;
 
+    @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
