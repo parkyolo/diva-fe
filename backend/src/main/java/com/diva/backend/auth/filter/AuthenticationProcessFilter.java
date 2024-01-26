@@ -49,7 +49,7 @@ public class AuthenticationProcessFilter extends OncePerRequestFilter {
         try {
             // access token에서 email 검증
             String accessToken = jwtService.extractAccessToken(request);
-            System.out.println("accessToken : " + accessToken);
+            //System.out.println("accessToken : " + accessToken);
             String emailFromAccessToken = jwtService.validateAndExtractEmailFromAccessToken(
                 accessToken);
 
