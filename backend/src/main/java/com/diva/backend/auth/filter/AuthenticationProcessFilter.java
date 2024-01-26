@@ -1,5 +1,10 @@
 package com.diva.backend.auth.filter;
 
+import static com.diva.backend.auth.enumstorage.messages.JwtMessages.ACCESS_TOKEN;
+import static com.diva.backend.enumstorage.messages.Messages.INVALID;
+import static com.diva.backend.enumstorage.response.Status.FAIL;
+import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
+
 import com.diva.backend.auth.exception.InvalidAccessTokenException;
 import com.diva.backend.auth.service.JwtService;
 import com.diva.backend.dto.Response;
@@ -8,16 +13,11 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import java.io.IOException;
-import java.util.List;
-
-import static com.diva.backend.auth.enumstorage.messages.JwtMessages.ACCESS_TOKEN;
-import static com.diva.backend.enumstorage.messages.Messages.INVALID;
-import static com.diva.backend.enumstorage.response.Status.FAIL;
-import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 
 
 /**
@@ -26,17 +26,20 @@ import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 @Component
 @RequiredArgsConstructor
 public class AuthenticationProcessFilter extends OncePerRequestFilter {
+
     private final JwtService jwtService;
     private final ObjectMapper objectMapper;
 
-    private static final List<String> NO_CHECK_URL = List.of("/api/auth", "/auth", "/support, /error", "/css", "/js", "/img", "/favicon.ico");
+    private static final List<String> NO_CHECK_URL = List.of("/api/auth", "/auth",
+        "/support, /error", "/css", "/js", "/img", "/favicon.ico");
 
     /**
-     * "/auth/login"으로 시작하는 URL 요청은 logIn 검증 및 authenticate X
-     * 그 외의 URL 요청은 access token 검증 및 authenticate 수행
+     * "/auth/login"으로 시작하는 URL 요청은 logIn 검증 및 authenticate X 그 외의 URL 요청은 access token 검증 및
+     * authenticate 수행
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
         // 메인 페이지거나, 확인하지 않는 URL이면 바로 다음 필터로 넘어가기
         if (request.getRequestURI().equals("/") || isNoCheckUrl(request.getRequestURI())) {
             filterChain.doFilter(request, response); //
@@ -46,7 +49,9 @@ public class AuthenticationProcessFilter extends OncePerRequestFilter {
         try {
             // access token에서 email 검증
             String accessToken = jwtService.extractAccessToken(request);
-            String emailFromAccessToken = jwtService.validateAndExtractEmailFromAccessToken(accessToken);
+            System.out.println("accessToken : " + accessToken);
+            String emailFromAccessToken = jwtService.validateAndExtractEmailFromAccessToken(
+                accessToken);
 
             // request에 email 담기
             request.setAttribute("email", emailFromAccessToken);
@@ -61,7 +66,8 @@ public class AuthenticationProcessFilter extends OncePerRequestFilter {
         catch (InvalidAccessTokenException | IllegalArgumentException e) {
             // 원래 가려던 곳 상태 저장해주기
             response.setStatus(SC_UNAUTHORIZED);
-            response.setHeader("Location", "/api/auth/reissue/v1?redirectUrl=" + request.getRequestURI());
+            response.setHeader("Location",
+                "/api/auth/reissue/v1?redirectUrl=" + request.getRequestURI());
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(objectMapper.writeValueAsString(Response.builder()
                 .status(FAIL.getStatus())
