@@ -1,13 +1,11 @@
 package com.diva.backend;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BackendApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
-
+public class BackendApplicationTest {
+    @Test
+    void ContextLoads(){};
 }

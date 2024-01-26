@@ -10,7 +10,7 @@ import com.diva.backend.auth.exception.NoSuchRefreshTokenInDBException;
 import com.diva.backend.auth.repository.TokenRepository;
 import com.diva.backend.exception.NoSuchDeviceTokenException;
 import com.diva.backend.exception.NoSuchMemberException;
-import com.diva.backend.repository.MemberRepository;
+import com.diva.backend.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.Getter;
