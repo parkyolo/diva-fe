@@ -32,28 +32,35 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "member_id")
+    private Long id;
+
   @Id
   @GeneratedValue(strategy = IDENTITY)
   @Column(name = "member_id")
   private Long id;
 
-  @NotBlank
-  @Column(name = "member_email", unique = true, length = 30)
-  private String email;
+    @NotBlank
+    @Setter
+    @Column(name = "nickname", length = 30)
+    private String nickname;
 
-  @NotBlank
-  @Column(name = "nickname", length = 30)
-  private String nickname;
+    //@NotBlank
+    @Column(name = "gender", length = 10)
+    private String gender;
 
-  //@NotBlank
-  @Column(name = "gender", length = 10)
-  private String gender;
+    @Setter
+    @Column(name = "profile_img", length = 200)
+    private String profileImg;
 
   @Column(name = "profile_img", length = 200)
   private String profileImg;
@@ -80,17 +87,30 @@ public class Member extends BaseEntity {
   @OneToMany(mappedBy = "member")
   private List<Post> posts = new ArrayList<>();
 
-  @NotNull
-  @OneToMany(mappedBy = "member")
-  private List<Likes> likes = new ArrayList<>();
+    @NotNull
+    @OneToMany(mappedBy = "member")
+    private List<PracticeResult> practiceResults = new ArrayList<>();
 
-  @NotNull
-  @OneToMany(mappedBy = "member")
-  private List<PracticeResult> practiceResults = new ArrayList<>();
+    @NotNull
+    @OneToMany(mappedBy = "member")
+    private List<SavedSong> savedSongs = new ArrayList<>();
 
-  @NotNull
-  @OneToMany(mappedBy = "member")
-  private List<SavedSong> savedSongs = new ArrayList<>();
+//    @NotNull
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "vocal_range_id")
+//    private VocalRange vocalRange;
+
+    @Builder
+    protected Member(Long id, String nickname, String email, String profileImg, String gender) {
+        this.id = id;
+        this.nickname = nickname;
+        this.email = email;
+        this.profileImg = profileImg;
+        this.gender = gender;
+//        this.vocalRange = vocalRange;
+        this.role = MEMBER;
+        this.status = ACTIVE;
+    }
 
 //    @NotNull
 //    @OneToOne(fetch = FetchType.LAZY)
