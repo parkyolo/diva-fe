@@ -13,14 +13,14 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import boto3
 import json
-ssm = boto3.client('ssm')
-parameters = ssm.get_parameters_by_path("/Score/Django/", Recursive=True, WithDecryption=True)
-print(parameters)
 
+ssm = boto3.client('ssm')
+path = "/Score/Django/"
+parameters = ssm.get_parameters_by_path(Path=path, Recursive=True, WithDecryption=True)
+print(parameters)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
@@ -32,7 +32,6 @@ SECRET_KEY = 'django-insecure-u@9_8#=ebzd*-$e1)mi80qu7bf8g-da8tij+n)13@gn_42cj0b
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -55,10 +54,23 @@ INSTALLED_APPS = [
 
 # AWS Parameter Store에서 가져온 환경변수
 # AWS S3 설정
-AWS_REGION = ''
-AWS_STORAGE_BUCKET_NAME = '' #생성한 버킷 이름
-AWS_ACCESS_KEY_ID = '' #액서스 키 ID
-AWS_SECRET_ACCESS_KEY = '' #액서스 키 PW
+AWS_REGION = None
+AWS_STORAGE_BUCKET_NAME = None
+AWS_ACCESS_KEY_ID = None
+AWS_SECRET_ACCESS_KEY = None
+
+for parameter in parameters['Parameters']:
+    name = parameter['Name']
+    value = parameter['Value']
+
+    if name == path + 'AWS_REGION':
+        AWS_REGION = value
+    elif name == path + 'AWS_STORAGE_BUCKET_NAME':
+        AWS_STORAGE_BUCKET_NAME = value
+    elif name == path + 'AWS_ACCESS_KEY_ID':
+        AWS_ACCESS_KEY_ID = value
+    elif name == path + 'AWS_SECRET_ACCESS_KEY':
+        AWS_SECRET_ACCESS_KEY = value
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -90,7 +102,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'UltraSingerScore.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -100,7 +111,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -120,7 +130,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -131,7 +140,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
