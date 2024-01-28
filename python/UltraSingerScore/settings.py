@@ -12,12 +12,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import boto3
-import json
 
 ssm = boto3.client('ssm')
 path = "/Score/Django/"
 parameters = ssm.get_parameters_by_path(Path=path, Recursive=True, WithDecryption=True)
-print(parameters)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
