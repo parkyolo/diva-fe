@@ -14,14 +14,18 @@ import com.diva.backend.enumstorage.status.MemberStatus;
 import com.diva.backend.post.entity.Likes;
 import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
+import com.diva.backend.song.entity.SavedSong;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -52,7 +56,7 @@ public class Member extends BaseEntity {
     @Column(name = "nickname", length = 30)
     private String nickname;
 
-//    @NotBlank
+    //    @NotBlank
     @Column(name = "gender", length = 10)
     private String gender;
 
@@ -95,9 +99,9 @@ public class Member extends BaseEntity {
     private List<SavedSong> savedSongs = new ArrayList<>();
 
 //    @NotNull
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "vocal_range_id")
-//    private VocalRange vocalRange;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vocal_range_id")
+    private VocalRange vocalRange;
 
     @Builder
     protected Member(String email, String nickname) {
@@ -120,10 +124,11 @@ public class Member extends BaseEntity {
 
     //==DTO==//
     public MemberFindDto toMemberFindDto() {
-    return MemberFindDto.builder()
-        .id(id)
-        .email(email)
-        .nickname(nickname)
-        .build();
+        return MemberFindDto.builder()
+            .id(id)
+            .email(email)
+            .nickname(nickname)
+            .build();
     }
+
 }
