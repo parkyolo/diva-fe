@@ -40,6 +40,10 @@
   src: url('../../public/fonts/SDSamliphopangcheTTF/SDSamliphopangcheTTFBasic.ttf');
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: beige;
   height: 100vh;
