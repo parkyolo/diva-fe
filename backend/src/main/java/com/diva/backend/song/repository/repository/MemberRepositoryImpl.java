@@ -1,4 +1,4 @@
-package com.diva.backend.member.repository;
+package com.diva.backend.song.repository.repository;
 
 import static com.diva.backend.member.entity.QMember.member;
 

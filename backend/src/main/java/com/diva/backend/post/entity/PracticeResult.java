@@ -2,8 +2,7 @@ package com.diva.backend.post.entity;
 
 import com.diva.backend.entity.BaseEntity;
 import com.diva.backend.member.entity.Member;
-import com.diva.backend.member.entity.Song;
-import com.diva.backend.post.dto.PostResponseDto;
+import com.diva.backend.song.entity.Song;
 import com.diva.backend.post.dto.PracticeResultPostDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
