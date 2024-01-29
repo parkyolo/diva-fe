@@ -39,22 +39,20 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
-    @Id
-    @GeneratedValue(strategy = IDENTITY)
+    @Id @GeneratedValue(strategy = IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
-  @Id
-  @GeneratedValue(strategy = IDENTITY)
-  @Column(name = "member_id")
-  private Long id;
-
     @NotBlank
+    @Column(name = "member_email", unique = true, length = 30)
+    private String email;
+
     @Setter
+    @NotBlank
     @Column(name = "nickname", length = 30)
     private String nickname;
 
-    //@NotBlank
+//    @NotBlank
     @Column(name = "gender", length = 10)
     private String gender;
 
@@ -62,30 +60,31 @@ public class Member extends BaseEntity {
     @Column(name = "profile_img", length = 200)
     private String profileImg;
 
-  @Column(name = "profile_img", length = 200)
-  private String profileImg;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private MemberStatus status;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private MemberStatus status;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
 
-  @NotNull
-  @Enumerated(EnumType.STRING)
-  private MemberRole role;
+    @JsonManagedReference
+    @NotNull
+    @OneToMany(mappedBy = "member")
+    private List<OAuth2> oAuth2s = new ArrayList<>();
 
-  @JsonManagedReference
-  @NotNull
-  @OneToMany(mappedBy = "member")
-  private List<OAuth2> oAuth2s = new ArrayList<>();
+    @JsonManagedReference
+    @NotNull
+    @OneToMany(mappedBy = "member")
+    private Set<Notification> notifications = new HashSet<>();
 
-  @JsonManagedReference
-  @NotNull
-  @OneToMany(mappedBy = "member")
-  private Set<Notification> notifications = new HashSet<>();
+    @NotNull
+    @OneToMany(mappedBy = "member")
+    private List<Likes> likes = new ArrayList<>();
 
-  @NotNull
-  @OneToMany(mappedBy = "member")
-  private List<Post> posts = new ArrayList<>();
+    @NotNull
+    @OneToMany(mappedBy = "member")
+    private List<Post> posts = new ArrayList<>();
 
     @NotNull
     @OneToMany(mappedBy = "member")
@@ -101,12 +100,9 @@ public class Member extends BaseEntity {
 //    private VocalRange vocalRange;
 
     @Builder
-    protected Member(Long id, String nickname, String email, String profileImg, String gender) {
-        this.id = id;
-        this.nickname = nickname;
+    protected Member(String email, String nickname) {
         this.email = email;
-        this.profileImg = profileImg;
-        this.gender = gender;
+        this.nickname = nickname;
 //        this.vocalRange = vocalRange;
         this.role = MEMBER;
         this.status = ACTIVE;
