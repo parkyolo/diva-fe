@@ -1,6 +1,7 @@
-package com.diva.backend.member.entity;
+package com.diva.backend.song.entity;
 
 import com.diva.backend.entity.BaseEntity;
+import com.diva.backend.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,11 +18,11 @@ public class SavedSong extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "song")
+    @JoinColumn(name = "song_id")
     private Song song;
 
 }
