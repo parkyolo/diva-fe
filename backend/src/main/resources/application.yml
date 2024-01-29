@@ -9,6 +9,8 @@ spring:
         properties:
             hibernate:
                 default_batch_fetch_size: 100
+logging.level:
+    org.hibernate.SQL: debug
 
 # JWT
 jwt:

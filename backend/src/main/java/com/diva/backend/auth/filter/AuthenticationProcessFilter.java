@@ -52,7 +52,7 @@ public class AuthenticationProcessFilter extends OncePerRequestFilter {
             String accessToken = jwtService.extractAccessToken(request);
             //System.out.println("accessToken : " + accessToken);
             MemberFromJWT memberFromJWT = jwtService.validateAndExtractEmailFromAccessToken(
-                    accessToken);
+                accessToken);
 
             // request에 memberId 담기
             request.setAttribute("memberId", memberFromJWT.getMemberId());

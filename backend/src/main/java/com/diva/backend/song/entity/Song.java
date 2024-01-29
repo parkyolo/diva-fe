@@ -1,4 +1,4 @@
-package com.diva.backend.member.entity;
+package com.diva.backend.song.entity;
 
 import com.diva.backend.entity.BaseEntity;
 import jakarta.persistence.*;

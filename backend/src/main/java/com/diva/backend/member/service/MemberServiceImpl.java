@@ -1,15 +1,15 @@
 package com.diva.backend.member.service;
 
-import com.diva.backend.member.dto.MemberNicknameUpdateRequestDto;
-import com.diva.backend.member.dto.MemberProfileUpdateRequestDto;
-import com.diva.backend.member.dto.MemberProfileUpdateResponseDto;
-import com.diva.backend.member.dto.MemberResponseDto;
-import com.diva.backend.member.dto.MemeberNicknameUpdateResponseDto;
+
+import com.diva.backend.member.dto.*;
 import com.diva.backend.member.entity.Member;
-import com.diva.backend.member.repository.MemberRepository;
+import com.diva.backend.song.repository.repository.MemberRepository;
+import com.diva.backend.song.repository.SavedSongRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
