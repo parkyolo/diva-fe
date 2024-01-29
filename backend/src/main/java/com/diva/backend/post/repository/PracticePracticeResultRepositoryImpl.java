@@ -10,12 +10,12 @@ import java.util.List;
 import static com.diva.backend.post.entity.QPracticeResult.practiceResult;
 
 @RequiredArgsConstructor
-public class ResultRepositoryImpl implements ResultRepositoryQueryDsl{
+public class PracticePracticeResultRepositoryImpl implements PracticeResultRepositoryQueryDsl {
 
     private final EntityManager em;
 
     @Override
-    public List<PracticeResult> SaveResult() {
+    public List<PracticeResult> noOffsetPracticeResultWithMemberAndSongAndPost() {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         return queryFactory

@@ -7,6 +7,5 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ResultRepository extends JpaRepository<PracticeResult, Long> {
-    List<PracticeResult> saveResult();
+public interface PracticeResultRepository extends JpaRepository<PracticeResult, Long> {
 }
