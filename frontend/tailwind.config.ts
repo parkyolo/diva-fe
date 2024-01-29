@@ -40,6 +40,9 @@ const config: Config = {
       'bg-black': '#111318',
       white: '#f3f3f3',
       'btn-black': '#1f2021',
+      darkgray: '#202229',
+      pink: '#8B177E',
+      green: '#00FFA3',
     },
     fontFamily: {
       sans: ['SpoqaHanSansNeo', 'sans-serif'],

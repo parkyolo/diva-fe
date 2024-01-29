@@ -1,31 +1,47 @@
-'use client';
-
 import Link from 'next/link';
-import RangeBox from './RangeBar';
 import RightArrow from '/public/svgs/right_arrow.svg';
-import { useState } from 'react';
-import SimilarRangeSinger from './SimilarRangeSinger';
 import Navigation from '@/components/Navigation';
 import Header from '@/components/Header';
 import MainLogo from '/public/svgs/logo.svg';
+import VolumeIcon from '/public/svgs/volume_up.svg';
+import Piano from './Piano';
+import ReadMore from './ReadMore';
 
 /**
- * C1:0부터 B7:48까지 숫자로 변환하는 함수
- * @param range 음역대
- * @returns 음역대를 수치로 변환한 숫자
+ * C2:1부터 E7:32까지 숫자로 변환하는 함수
+ * @param enVocalRange 음역대
+ * @returns 음역대를 숫자로 변환한 값
  */
-export const convertRange2Num = (range: string) => {
-  const [first_alphabet, _second_number] = range.split('');
-  const second_number: number = +_second_number;
+export const convertRange2Num = (enVocalRange: string) => {
+  const [pitchName, _octave] = enVocalRange.split('');
+  const octave: number = +_octave;
+
   let result_num = 0;
-  result_num += first_alphabet.charCodeAt(0);
+  result_num += pitchName.charCodeAt(0);
   if (result_num > 66) result_num -= 7;
-  result_num = (result_num % 10) + 7 * (second_number - 1);
+  result_num = (result_num % 10) + 7 * (octave - 2) + 1;
+
   return result_num;
 };
 
+const syllables = ['라', '시', '도', '레', '미', '파', '솔'];
+
+const convertVocalRangeEn2Ko = (enVocalRange: string) => {
+  const [pitchName, _octave] = enVocalRange.split('');
+  const octave: number = +_octave - 2;
+
+  const syllable_name = syllables[pitchName.charCodeAt(0) - 65];
+  return String(octave) + '옥타브 ' + syllable_name;
+};
+
 const Range = () => {
-  const [range, setRange] = useState<string[] | []>(['E3', 'A5']);
+  // 음역대: 0옥타브 도(C2) ~ 4옥타브 미(E6)
+  const enVocalRange = ['F3', 'E5'];
+  const koVocalRange = [
+    convertVocalRangeEn2Ko(enVocalRange[0]),
+    convertVocalRangeEn2Ko(enVocalRange[1]),
+  ];
+  const similarRangeSinger = ['소향'];
 
   return (
     <>
@@ -38,23 +54,44 @@ const Range = () => {
       />
       <main>
         <section className="flex flex-col justify-center items-center w-full">
-          <h1 className="flex flex-col justify-center items-center w-full mb-7">
-            <p>
-              당신의 음역대는{' '}
-              <em className="text-skyblue text-2xl font-bold not-italic">
-                {range[0]}
-                {range[1]}
-              </em>
-              입니다.
-            </p>
-            <Link
-              href="/range/check"
-              className="text-gray underline underline-offset-4 hover:text-skyblue"
-            >
-              재측정하러가기
-            </Link>
+          <h1 className="flex flex-col justify-center items-center w-full gap-1 mb-3">
+            <span>당신의 음역대는</span>
+            <em className="text-skyblue text-2xl font-bold not-italic">
+              {koVocalRange[0]}&nbsp;~&nbsp;{koVocalRange[1]}
+            </em>
+            <span>입니다.</span>
           </h1>
-          <RangeBox lowRange={range[0]} highRange={range[1]}></RangeBox>
+          <Link
+            href="/range/check"
+            className="text-gray underline underline-offset-4 hover:text-skyblue mb-5"
+          >
+            재측정하러가기
+          </Link>
+
+          <div className="flex w-full justify-around items-center mb-7">
+            <VolumeIcon />
+            <button className="text-xl bg-darkgray rounded-xl px-5 py-3">
+              {koVocalRange[0]}
+            </button>
+            <button className="text-xl bg-darkgray rounded-xl px-5 py-3">
+              {koVocalRange[1]}
+            </button>
+          </div>
+          <div className="w-full mb-5">
+            <Piano
+              startVocalRange={convertRange2Num(enVocalRange[0])}
+              endVocalRange={convertRange2Num(enVocalRange[1])}
+            />
+          </div>
+          <div className="flex flex-col items-center mb-7">
+            <span>나와 가장 비슷한 음역대의 가수는</span>
+            <span>
+              <em className="text-skyblue text-2xl not-italic font-bold">
+                {similarRangeSinger}
+              </em>
+              &nbsp;입니다.
+            </span>
+          </div>
           <Link
             href="/"
             className="flex justify-between items-center w-full mb-5 bg-blue p-2 pl-5 rounded-xl"
@@ -62,7 +99,7 @@ const Range = () => {
             <p>추천 노래 살펴보기</p>
             <RightArrow />
           </Link>
-          <SimilarRangeSinger />
+          <ReadMore lowRange={enVocalRange[0]} highRange={enVocalRange[1]} />
         </section>
       </main>
       <Navigation />
