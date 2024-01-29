@@ -3,6 +3,8 @@ package com.diva.backend.auth.service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.diva.backend.auth.dto.MemberFromJWT;
 import com.diva.backend.auth.entity.Token;
 import com.diva.backend.auth.exception.InvalidAccessTokenException;
 import com.diva.backend.auth.exception.InvalidRefreshTokenException;
@@ -10,6 +12,7 @@ import com.diva.backend.auth.exception.NoSuchRefreshTokenInDBException;
 import com.diva.backend.auth.repository.TokenRepository;
 import com.diva.backend.exception.NoSuchDeviceTokenException;
 import com.diva.backend.exception.NoSuchMemberException;
+import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,8 +33,8 @@ import java.util.Optional;
 
 import static com.diva.backend.auth.enumstorage.messages.JwtMessages.ACCESS_TOKEN;
 import static com.diva.backend.auth.enumstorage.messages.JwtMessages.REFRESH_TOKEN;
-import static com.diva.backend.enumstorage.messages.Messages.INVALID;
-import static com.diva.backend.enumstorage.messages.Messages.NOT_FOUND;
+import static com.diva.backend.enumstorage.messages.MemberMessages.MEMBER;
+import static com.diva.backend.enumstorage.messages.Messages.*;
 
 @Getter
 @Service
@@ -61,7 +64,7 @@ public class JwtService {
 
     // access token, refresh token을 발급, DB에 저장한다.
 //    @Transactional
-    public String[] issueJwts(String email) {
+    public String[] issueJwts(Long memberId, String email) {
 //        , Member member
 //        , DeviceToken deviceToken) {
         // refresh token을 발급한다.
@@ -70,6 +73,7 @@ public class JwtService {
             .withSubject("refreshToken")
             .withIssuedAt(new Date(System.currentTimeMillis()))
             .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenExpiration))
+            .withClaim("memberId", String.valueOf(memberId))
             .withClaim("email", email)
             .withClaim("issuedTime", System.currentTimeMillis())
             .sign(Algorithm.HMAC512(secret));
@@ -99,7 +103,8 @@ public class JwtService {
             .withSubject("accessToken")
             .withIssuedAt(new Date(System.currentTimeMillis()))
             .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenExpiration))
-            .withClaim("email", email)
+                .withClaim("memberId", String.valueOf(memberId))
+                .withClaim("email", email)
             .withClaim("issuedTime", System.currentTimeMillis())
             .sign(Algorithm.HMAC512(secret));
 
@@ -162,6 +167,9 @@ public class JwtService {
             throw new JWTVerificationException(REFRESH_TOKEN.getMessage() + INVALID.getMessage());
         }
 
+        Member member = memberRepository.findNotDeletedByEmail(email)
+                .orElseThrow(() -> new NoSuchMemberException(SUCH.getMessage() + MEMBER.getMessage() + NOT_EXISTS.getMessage()));
+
         // refreshToken이 유효하면
         // access token을 발급한다.
         String newAccessToken = JWT.create()
@@ -169,7 +177,8 @@ public class JwtService {
             .withSubject("accessToken")
             .withIssuedAt(new Date(System.currentTimeMillis()))
             .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenExpiration))
-            .withClaim("email", email)
+                .withClaim("memberId", String.valueOf(member.getId()))
+                .withClaim("email", email)
             .withClaim("issuedTime", System.currentTimeMillis())
             .sign(Algorithm.HMAC512(secret));
 
@@ -179,6 +188,7 @@ public class JwtService {
             .withSubject("refreshToken")
             .withIssuedAt(new Date(System.currentTimeMillis()))
             .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenExpiration))
+            .withClaim("memberId", String.valueOf(member.getId()))
             .withClaim("email", email)
             .withClaim("issuedTime", System.currentTimeMillis())
             .sign(Algorithm.HMAC512(secret));
@@ -215,18 +225,24 @@ public class JwtService {
      * 토큰 형식 : Bearer XXX에서 Bearer를 제외하고 순수 토큰만 가져오기 위해서
      * 헤더를 가져온 후 "Bearer"를 삭제(""로 replace)
      */
-    public String validateAndExtractEmailFromAccessToken(String accessToken) throws InvalidAccessTokenException {
+    public MemberFromJWT validateAndExtractEmailFromAccessToken(String accessToken) throws InvalidAccessTokenException {
         try {
             // accessToken 값 검증
-            String email = JWT.require(Algorithm.HMAC512(secret))
-                .withIssuer("LetMeKnow")
-                .withSubject("accessToken")
-                .build() // 반환된 빌더로 JWT verifier 생성
-                .verify(accessToken) // accessToken을 검증하고 유효하지 않다면 예외 발생
-                .getClaim("email") // claim(Email) 가져오기
+            DecodedJWT jwt = JWT.require(Algorithm.HMAC512(secret))
+                    .withIssuer("LetMeKnow")
+                    .withSubject("accessToken")
+                    .build() // 반환된 빌더로 JWT verifier 생성
+                    .verify(accessToken);// accessToken을 검증하고 유효하지 않다면 예외 발생
+
+            Long memberId = jwt.getClaim("memberId")
+                    .asLong(); // claim(MemberId) 가져오기
+            String email = jwt.getClaim("email") // claim(Email) 가져오기
                 .asString();
 
-            return email;
+            return MemberFromJWT.builder()
+                    .memberId(memberId)
+                    .email(email)
+                    .build();
         }
         catch (JWTVerificationException e) {
             throw new InvalidAccessTokenException(

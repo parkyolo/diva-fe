@@ -48,7 +48,7 @@ public class AuthService {
             // 있으면, 연관된 Member를 찾는다.
             Member member = oAuth2.getMember();
 
-            String[] jwts = jwtService.issueJwts(member.getEmail());
+            String[] jwts = jwtService.issueJwts(member.getId(), member.getEmail());
 
             Token token = Token.builder()
                 .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())
@@ -81,7 +81,7 @@ public class AuthService {
                 .providerId(kakaoOAuthResponse.getProviderId())
                 .build();
 
-            String[] jwts = jwtService.issueJwts(kakaoOAuthResponse.getEmail());
+            String[] jwts = jwtService.issueJwts(member.getId(), kakaoOAuthResponse.getEmail());
 
             Token token = Token.builder()
                 .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())

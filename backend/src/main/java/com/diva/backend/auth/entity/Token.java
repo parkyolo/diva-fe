@@ -33,7 +33,7 @@ public class Token {
 
     // 우리 서버에서 발급한 JWT Refresh Token
     @NotBlank
-    @Column(unique = true, columnDefinition = "varchar(300)")
+    @Column(unique = true, columnDefinition = "varchar(400)")
     private String refreshToken;
 
     @NotNull
