@@ -108,39 +108,22 @@ public class Member extends BaseEntity {
         this.status = ACTIVE;
     }
 
-//    @NotNull
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "vocal_range_id")
-//    private VocalRange vocalRange;
+    //== 비즈니스 로직 ==//
+    public void deleteMember() {
+        this.status = DELETED;
+    }
 
-  @Builder
-  protected Member(Long id, String nickname, String email, String profileImg, String gender) {
-    this.id = id;
-    this.nickname = nickname;
-    this.email = email;
-    this.profileImg = profileImg;
-    this.gender = gender;
-//        this.vocalRange = vocalRange;
-    this.role = MEMBER;
-    this.status = ACTIVE;
-  }
+    //==연관관계 메소드==//
+    public void addOAuth2(OAuth2 oAuth2) {
+        oAuth2s.add(oAuth2);
+    }
 
-  //== 비즈니스 로직 ==//
-  public void deleteMember() {
-    this.status = DELETED;
-  }
-
-  //==연관관계 메소드==//
-  public void addOAuth2(OAuth2 oAuth2) {
-    oAuth2s.add(oAuth2);
-  }
-
-  //==DTO==//
-  public MemberFindDto toMemberFindDto() {
+    //==DTO==//
+    public MemberFindDto toMemberFindDto() {
     return MemberFindDto.builder()
         .id(id)
         .email(email)
         .nickname(nickname)
         .build();
-  }
+    }
 }
