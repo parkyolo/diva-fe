@@ -1,4 +1,4 @@
-package com.diva.backend.member.dto;
+package com.diva.backend.song.dto;
 
 import com.diva.backend.song.entity.Song;
 import lombok.Builder;
