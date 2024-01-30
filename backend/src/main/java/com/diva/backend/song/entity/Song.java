@@ -24,7 +24,7 @@ public class Song extends BaseEntity {
 
     @NotBlank
     @Column(name = "artist", length = 50)
-    private String atrist;
+    private String artist;
 
     @NotBlank
     @Column(name = "cover_img", length = 200)

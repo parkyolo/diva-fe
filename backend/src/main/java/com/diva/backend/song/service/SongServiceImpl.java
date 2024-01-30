@@ -1,10 +1,13 @@
 package com.diva.backend.song.service;
 
-import com.diva.backend.member.dto.SavedSongsResponseDto;
+import com.diva.backend.post.entity.PracticeResult;
+import com.diva.backend.song.dto.PracticeResultResponseDto;
+import com.diva.backend.song.dto.SavedSongsResponseDto;
 import com.diva.backend.member.entity.Member;
 import com.diva.backend.song.entity.SavedSong;
+import com.diva.backend.song.repository.PracticeResultRepository;
 import com.diva.backend.song.repository.SavedSongRepository;
-import com.diva.backend.song.repository.repository.MemberRepository;
+import com.diva.backend.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +21,7 @@ import org.springframework.stereotype.Service;
 public class SongServiceImpl implements SongService{
     private final MemberRepository memberRepository;
     private final SavedSongRepository savedSongRepository;
+    private final PracticeResultRepository practiceResultRepository;
 
     @Transactional
     @Override
@@ -38,5 +42,24 @@ public class SongServiceImpl implements SongService{
             savedSongList.add(SavedSongsResponseDto.from(savedSong.getSong()));
         }
         return savedSongList;
+    }
+
+    @Transactional
+    @Override
+    public List<PracticeResultResponseDto> getPracticeResults(String email) {
+        Member member = memberRepository.findMemberByEmail(email)
+            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Long memberId = member.getId();
+
+        List<PracticeResult> list = practiceResultRepository.findByMemberId(memberId);
+        // log
+        for (PracticeResult p : list) {
+            log.info("result score : {} , song {}", p.getScore(), p.getSong().getTitle());
+        }
+        List<PracticeResultResponseDto> practiceResultList = new ArrayList<>();
+        for (PracticeResult practiceResult : list) {
+            practiceResultList.add(PracticeResultResponseDto.from(practiceResult));
+        }
+        return practiceResultList;
     }
 }

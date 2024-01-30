@@ -13,7 +13,7 @@ import com.diva.backend.auth.repository.TokenRepository;
 import com.diva.backend.dto.MemberFindDto;
 import com.diva.backend.member.entity.Member;
 import com.diva.backend.exception.NoSuchMemberException;
-import com.diva.backend.song.repository.repository.MemberRepository;
+import com.diva.backend.member.repository.MemberRepository;
 import com.diva.backend.util.RandomNickname;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

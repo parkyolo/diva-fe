@@ -1,11 +1,12 @@
-package com.diva.backend.post.repository;
+package com.diva.backend.song.repository;
 
 import com.diva.backend.post.entity.PracticeResult;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
-@Repository
 public interface PracticeResultRepository extends JpaRepository<PracticeResult, Long> {
+    List<PracticeResult> findByMemberId(Long memberId);
+
 }

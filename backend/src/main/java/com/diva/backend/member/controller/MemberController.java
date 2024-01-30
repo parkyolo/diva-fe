@@ -2,6 +2,8 @@ package com.diva.backend.member.controller;
 
 import com.diva.backend.member.dto.*;
 import com.diva.backend.member.service.MemberService;
+import com.diva.backend.song.dto.PracticeResultResponseDto;
+import com.diva.backend.song.dto.SavedSongsResponseDto;
 import com.diva.backend.song.service.SongService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +45,11 @@ public class MemberController {
     public List<SavedSongsResponseDto> getSavedSongs(HttpServletRequest request) {
         String email = (String) request.getAttribute("email");
         return songService.getSavedSongs(email);
+    }
+
+    @GetMapping("/members/list")
+    public List<PracticeResultResponseDto> getPracticeResults(HttpServletRequest request) {
+        String email = (String) request.getAttribute("email");
+        return songService.getPracticeResults(email);
     }
 }
