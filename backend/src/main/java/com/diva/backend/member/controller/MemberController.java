@@ -52,4 +52,10 @@ public class MemberController {
         String email = (String) request.getAttribute("email");
         return songService.getPracticeResults(email);
     }
+
+    @GetMapping("/members/posts")
+    public List<MemberPostResponseDto> getMemberPosts(HttpServletRequest request) {
+        String email = (String)request.getAttribute("email");
+        return memberService.getMemberPosts(email);
+    }
 }
