@@ -12,4 +12,6 @@ public interface MemberService {
 
     MemberProfileUpdateResponseDto updateProfile(String email,
         MemberProfileUpdateRequestDto requestDto);
+
+    List<MemberPostResponseDto> getMemberPosts(String email);
 }
