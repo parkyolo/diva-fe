@@ -6,7 +6,7 @@ import static com.diva.backend.enumstorage.messages.Messages.SUCH;
 
 import com.diva.backend.auth.userdetail.PrincipalUserDetails;
 import com.diva.backend.member.entity.Member;
-import com.diva.backend.song.repository.repository.MemberRepository;
+import com.diva.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
