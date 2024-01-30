@@ -3,8 +3,7 @@ package com.diva.backend.member.service;
 
 import com.diva.backend.member.dto.*;
 import com.diva.backend.member.entity.Member;
-import com.diva.backend.song.repository.repository.MemberRepository;
-import com.diva.backend.song.repository.SavedSongRepository;
+import com.diva.backend.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
