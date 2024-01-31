@@ -81,18 +81,18 @@ public class AuthService {
                 .providerId(kakaoOAuthResponse.getProviderId())
                 .build();
 
-            String[] jwts = jwtService.issueJwts(member.getId(), kakaoOAuthResponse.getEmail());
+            // Member를 저장한다.
+            Member newMember = memberRepository.save(member);
+
+            String[] jwts = jwtService.issueJwts(newMember.getId(), kakaoOAuthResponse.getEmail());
 
             Token token = Token.builder()
-                .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())
-                .resourceRefreshToken(kakaoOAuthResponse.getResourceRefreshToken())
-                .scope(kakaoOAuthResponse.getScope())
-                .refreshToken(jwts[1])
-                .oAuth2(oAuth2)
-                .build();
-
-            // Member를 저장한다.
-            memberRepository.save(member);
+                    .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())
+                    .resourceRefreshToken(kakaoOAuthResponse.getResourceRefreshToken())
+                    .scope(kakaoOAuthResponse.getScope())
+                    .refreshToken(jwts[1])
+                    .oAuth2(oAuth2)
+                    .build();
 
             // OAuth2를 저장한다.
             oAuth2Repository.save(oAuth2);

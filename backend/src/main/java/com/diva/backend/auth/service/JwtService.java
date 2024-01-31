@@ -16,6 +16,8 @@ import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +62,7 @@ public class JwtService {
 
     // access token, refresh token을 발급, DB에 저장한다.
 //    @Transactional
-    public String[] issueJwts(Long memberId, String email) {
+    public String[] issueJwts(@NotNull Long memberId, @NotBlank String email) {
 //        , Member member
 //        , DeviceToken deviceToken) {
         // refresh token을 발급한다.
