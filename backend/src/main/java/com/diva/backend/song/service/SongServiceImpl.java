@@ -39,7 +39,7 @@ public class SongServiceImpl implements SongService{
 
         List<SavedSongsResponseDto> savedSongList = new ArrayList<>();
         for (SavedSong savedSong : list) {
-            savedSongList.add(SavedSongsResponseDto.from(savedSong.getSong()));
+            savedSongList.add(SavedSongsResponseDto.from(savedSong, savedSong.getSong()));
         }
         return savedSongList;
     }
@@ -53,9 +53,9 @@ public class SongServiceImpl implements SongService{
 
         List<PracticeResult> list = practiceResultRepository.findByMemberId(memberId);
         // log
-        for (PracticeResult p : list) {
-            log.info("result score : {} , song {}", p.getScore(), p.getSong().getTitle());
-        }
+//        for (PracticeResult p : list) {
+//            log.info("result score : {} , song {}", p.getScore(), p.getSong().getTitle());
+//        }
         List<PracticeResultResponseDto> practiceResultList = new ArrayList<>();
         for (PracticeResult practiceResult : list) {
             practiceResultList.add(PracticeResultResponseDto.from(practiceResult));
