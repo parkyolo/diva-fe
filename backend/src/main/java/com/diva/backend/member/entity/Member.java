@@ -1,10 +1,5 @@
 package com.diva.backend.member.entity;
 
-import static com.diva.backend.enumstorage.role.MemberRole.MEMBER;
-import static com.diva.backend.enumstorage.status.MemberStatus.ACTIVE;
-import static com.diva.backend.enumstorage.status.MemberStatus.DELETED;
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 import com.diva.backend.auth.entity.OAuth2;
 import com.diva.backend.dto.MemberFindDto;
 import com.diva.backend.entity.BaseEntity;
@@ -16,34 +11,28 @@ import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.song.entity.SavedSong;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import static com.diva.backend.enumstorage.role.MemberRole.MEMBER;
+import static com.diva.backend.enumstorage.status.MemberStatus.ACTIVE;
+import static com.diva.backend.enumstorage.status.MemberStatus.DELETED;
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
-    @Id @GeneratedValue(strategy = IDENTITY)
+    @Id 
+    @GeneratedValue(strategy = IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
