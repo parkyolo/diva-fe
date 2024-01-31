@@ -14,7 +14,7 @@ public class SavedSong extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "saved_id")
+    @Column(name = "saved_song_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

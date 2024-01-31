@@ -8,12 +8,14 @@ import lombok.Getter;
 
 @Getter
 public class PracticeResultResponseDto {
+    private final Long practiceResultId;
     private final String songTitle;
     private final String coverImg;
     private final LocalDateTime createdDate;
 
     @Builder
-    public PracticeResultResponseDto(String songTitle, String coverImg, LocalDateTime createdDate) {
+    public PracticeResultResponseDto(Long practiceResultId, String songTitle, String coverImg, LocalDateTime createdDate) {
+        this.practiceResultId = practiceResultId;
         this.songTitle = songTitle;
         this.coverImg = coverImg;
         this.createdDate = createdDate;
@@ -21,6 +23,7 @@ public class PracticeResultResponseDto {
 
     public static PracticeResultResponseDto from (PracticeResult practiceResult) {
         return PracticeResultResponseDto.builder()
+            .practiceResultId(practiceResult.getId())
             .songTitle(practiceResult.getSong().getTitle())
             .coverImg(practiceResult.getSong().getCoverImg())
             .createdDate(practiceResult.getCreatedDate())

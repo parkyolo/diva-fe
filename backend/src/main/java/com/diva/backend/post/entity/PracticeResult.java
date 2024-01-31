@@ -20,7 +20,7 @@ public class PracticeResult extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "result_id")
+    @Column(name = "practice_result_id")
     private Long id;
 
     @NotNull
