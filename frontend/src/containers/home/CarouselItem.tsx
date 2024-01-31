@@ -1,24 +1,37 @@
-'use client';
-
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 export interface CardProps {
   index: number;
-  activeIndex: number;
+  active: number;
+  setActive: (n: number) => void;
+  length: number;
   children?: React.ReactNode;
-  onClick: (event: React.MouseEvent<HTMLDivElement>) => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-export default function CarouselItem({
+const CarouselItem = ({
   index,
-  activeIndex,
+  active,
+  setActive,
+  length,
   children,
   onClick,
-}: CardProps) {
+}: CardProps) => {
   const [scaled, setScaled] = useState<Boolean>(false);
 
-  const offset = (index - activeIndex)/10 ;
-  const direction = Math.sign(index - activeIndex);
+  let offset = (index - active) / 10;
+  let direction = Math.sign(index - active);
+  if (active === length - 1) {
+    if (index === 0) {
+      direction *= -1;
+      offset = 1 / 10;
+    }
+  } else if (active === 0) {
+    if (index === length - 1) {
+      direction *= -1;
+      offset = 1 / 10;
+    }
+  }
   const absOffset = Math.abs(offset);
 
   const cssTransformProperties = `
@@ -26,28 +39,23 @@ export default function CarouselItem({
         scaleY(calc(1 +  ${absOffset}  * -0.9))
         translateX(calc( ${direction} * -3.5rem))
         translateZ(calc( ${absOffset} * -35rem))
-        scale(${scaled && index === activeIndex ? 1.05 : 1})
+        scale(${scaled && index === active ? 1.05 : 1})
        `;
 
-  const cssOpacity = `
-        ${Math.abs(index - activeIndex) >= 3 ? '0' : '1'}`;
-
-  const cssDisplay = `
-        ${Math.abs(index - activeIndex) >= 2 ? 'none' : 'block'},
-  `;
-
   return (
-    <div
-      className="carousel-item absolute h-full w-full cursor-pointer overflow-hidden rounded-3xl drop-shadow-[0_8px_30px_rgb(0,0,0,0.12)] transition-all duration-700 ease-in-out"
+    <button
+      className="flex justify-center items-center w-full aspect-square overflow-hidden rounded-3xl transition-all duration-700 ease-in-out"
       style={{
         transform: cssTransformProperties,
-        opacity: cssOpacity,
-        display: cssDisplay,
-        zIndex: `${scaled ? 100 : 1}`,
+        zIndex: index === active ? 10 : 0,
       }}
-      onClick={onClick}
+      key={index}
+      onClick={active === index ? onClick : () => setActive(index)}
+      // disabled={active !== index}
     >
       {children}
-    </div>
+    </button>
   );
-}
+};
+
+export default CarouselItem;
