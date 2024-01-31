@@ -15,9 +15,10 @@ const Timer = ({ onFinish }: TimerProps) => {
           clearInterval(intervalId);
           onFinish();
         }
+        console.log(newCount)
         return newCount;
       });
-    }, 1000);
+    }, 1000)
   }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행되도록 함
 
   const minutes = Math.floor(count / 60);
