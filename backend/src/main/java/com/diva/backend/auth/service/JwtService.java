@@ -232,8 +232,8 @@ public class JwtService {
                     .build() // 반환된 빌더로 JWT verifier 생성
                     .verify(accessToken);// accessToken을 검증하고 유효하지 않다면 예외 발생
 
-            Long memberId = jwt.getClaim("memberId")
-                    .asLong(); // claim(MemberId) 가져오기
+            Long memberId = Long.parseLong(jwt.getClaim("memberId")
+                    .asString()); // claim(MemberId) 가져오기
             String email = jwt.getClaim("email") // claim(Email) 가져오기
                 .asString();
 
