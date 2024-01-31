@@ -2,12 +2,15 @@
 
 import Content from '@/containers/home/Content';
 import Navigation from '@/components/Navigation';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Header from '@/components/Header';
 import MainLogo from '/public/svgs/logo.svg';
 import LeftArrow from '/public/svgs/left_arrow.svg';
 import Link from 'next/link';
 import PlayResult from '../play/PlayResult';
+import RealMode from '../play/RealMode';
+import TutorialMode from '../play/TutorialMode';
+import CloseButton from '/public/svgs/close_button.svg';
 
 const Home = () => {
   const homePage = 0b00;
@@ -15,7 +18,8 @@ const Home = () => {
   const tutorialMode = 0b10;
   const resultPage = 0b11;
 
-  const [mode, setMode] = useState(resultPage);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const [mode, setMode] = useState(homePage);
   // const [musicId, setMusicId]
 
   const handleModeChange = (newMode: number) => {
@@ -41,9 +45,34 @@ const Home = () => {
           <Navigation />
         </>
       ) : mode === realMode ? (
-        <>실전</>
+        <>
+          <Header
+            LeftComponent={
+              <div className="text-skyblue font-bold text-xl">실전모드</div>
+            }
+          />
+          <RealMode audioRef={audioRef} />
+          <audio autoPlay ref={audioRef}>
+            <source src={'/audio/폰서트.m4a'} type={'audio/mp3'} />
+          </audio>
+        </>
       ) : mode === tutorialMode ? (
-        <>튜토리얼</>
+        <>
+          <Header
+            LeftComponent={
+              <div className="text-skyblue font-bold text-xl">튜토리얼</div>
+            }
+            RightComponent={
+              <button onClick={handleGoBack} className="font-samlip">
+                <CloseButton />
+              </button>
+            }
+          />
+          <TutorialMode audioRef={audioRef} />
+          <audio autoPlay ref={audioRef}>
+            <source src={'/audio/폰서트.m4a'} type={'audio/mp3'} />
+          </audio>
+        </>
       ) : (
         <>
           <Header
