@@ -1,27 +1,35 @@
 import { useEffect, useState } from 'react';
 
-const Timer: React.FC = () => {
+interface TimerProps {
+  onFinish: () => void;
+}
+
+const Timer = ({ onFinish }: TimerProps) => {
   const [count, setCount] = useState(0);
 
-  // TODO: 타이머 기능 개발
-  const start = Date.now();
-  // useEffect(() => {
-  //   const timeoutId = setInterval(() => {
-  //     const delta = Date.now() - start; // milliseconds elapsed since start
-  //     setCount(() => Math.floor(delta / 1000));
-  //     if (count >= 60) {
-  //       clearInterval(timeoutId);
-  //     }
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCount((prevCount) => {
+        const newCount = prevCount + 1;
+        if (newCount === 20) {
+          clearInterval(intervalId);
+          onFinish();
+        }
+        return newCount;
+      });
+    }, 1000);
+  }, []); // 빈 배열을 전달하여 컴포넌트가 마운트될 때만 실행되도록 함
 
-  //     return () => clearInterval(timeoutId);
-  //   }, 1000); // update about every second
-  // }, []);
+  const minutes = Math.floor(count / 60);
+  const seconds = count % 60;
 
   return (
     <div className="text-3xl">
-      <span>0</span>
+      <span>{minutes < 10 ? `0${minutes}` : minutes}</span>
       <span>:</span>
-      <span className="text-skyblue">{count}</span>
+      <span className="text-skyblue">
+        {seconds < 10 ? `0${seconds}` : seconds}
+      </span>
     </div>
   );
 };
