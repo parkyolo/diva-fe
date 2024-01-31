@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
-    List<Post> findAllByPageId(Long pageId);
-
-    List<Post> findAllByMemberId(Long memberId);
+public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryQueryDsl {
+  List<Post> findAllByPageId(Long pageId);
+  List<Post> findAllByMemberId(Long memberId);
 }

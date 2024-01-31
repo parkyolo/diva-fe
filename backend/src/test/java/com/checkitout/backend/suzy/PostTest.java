@@ -1,21 +1,17 @@
 package com.checkitout.backend.suzy;
 
+import com.diva.backend.post.dto.PostPaginationDto;
+import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.repository.PostRepository;
-import com.diva.backend.post.service.PostService;
-import com.diva.backend.post.service.PostServiceImpl;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class PostTest {
 
-    @Autowired
-    private PostRepository postRepository;
-
-    @Test
-    public void test() {
-        System.out.println("asdasdadasd");
-    }
 
 }
