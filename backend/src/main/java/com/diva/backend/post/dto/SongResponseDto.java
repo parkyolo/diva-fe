@@ -8,17 +8,19 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PracticeResultPostDto {
+public class SongResponseDto {
 
     @NotNull
-    private Long id;
+    private Long songId;
 
-    @NotNull
-    private int score;
+    private String title;
+
+    private String artist;
 
     @Builder
-    protected PracticeResultPostDto(Long id, int score) {
-        this.id = id;
-        this.score = score;
+    public SongResponseDto(Long songId, String title, String artist) {
+        this.songId = songId;
+        this.title = title;
+        this.artist = artist;
     }
 }

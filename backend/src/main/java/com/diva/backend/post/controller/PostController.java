@@ -1,18 +1,19 @@
 package com.diva.backend.post.controller;
 
-import com.diva.backend.post.dto.PostResponseDto;
-import com.diva.backend.post.entity.Post;
+import com.diva.backend.post.dto.PostCreateResponseDto;
+import com.diva.backend.post.dto.PostCreateRequestDto;
 import com.diva.backend.post.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/posts")
 public class PostController {
+
     private final PostService postService;
 
     @Autowired
@@ -20,11 +21,14 @@ public class PostController {
         this.postService = postService;
     }
 
-    /*
-        게시글 전체 조회
-     */
-    @GetMapping("/list")
-    public List<PostResponseDto> getPosts(@RequestParam Long pageId) {
-        return postService.getPosts(pageId);
+    // 게시글 작성
+    @PostMapping
+    public PostCreateResponseDto createPost(@RequestBody PostCreateRequestDto postCreateRequestDto, HttpServletRequest request) {
+        Long memberId = (Long) request.getAttribute("memberId");
+
+        String content = postCreateRequestDto.getContent();
+        Long practiceResultId = postCreateRequestDto.getPracticeResultId();
+
+        return postService.createPost(memberId, content, practiceResultId);
     }
 }
