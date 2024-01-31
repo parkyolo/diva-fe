@@ -24,9 +24,7 @@ public class PostServiceImpl implements PostService {
         this.practiceResultRepository = practiceResultRepository;
     }
 
-    /*
-    게시글 작성
-    */
+    // 게시글 작성
     @Override
     @Transactional
     public PostCreateResponseDto createPost(Long memberId, String content, Long practiceResultId) {
@@ -37,7 +35,6 @@ public class PostServiceImpl implements PostService {
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
 
         Long practiceResultMemberId = practiceResult.getMember().getId();
-
         if(!practiceResultMemberId.equals(memberId))  {
             throw new IllegalArgumentException("작성자의 회원 ID가 일치하지 않습니다.");
         }
@@ -50,5 +47,20 @@ public class PostServiceImpl implements PostService {
 
         Post savedPost = postRepository.save(post);
         return savedPost.toPostResponseDto();
+    }
+
+    // 게시글 삭제
+    @Override
+    @Transactional
+    public void deletePost(Long postId, Long memberId) {
+        Post post = postRepository.findById(postId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다."));
+
+        Long postMemberId = post.getMember().getId();
+        if (!postMemberId.equals(memberId)) {
+            throw new IllegalArgumentException("게시글을 삭제할 수 있는 권한이 없습니다.");
+        }
+
+        postRepository.delete(post);
     }
 }
