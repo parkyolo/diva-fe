@@ -8,6 +8,8 @@ import lombok.Getter;
 
 @Getter
 public class MemberPostResponseDto {
+    private final Long memberId;
+    private final Long postId;
     private final String nickname;
     private final String content;
     private final String songTitle;
@@ -15,7 +17,9 @@ public class MemberPostResponseDto {
     private final String recordUrl;
 
     @Builder
-    public MemberPostResponseDto(String nickname, String content, String songTitle, String artist ,String recordUrl) {
+    public MemberPostResponseDto(Long memberId, Long postId, String nickname, String content, String songTitle, String artist ,String recordUrl) {
+        this.memberId = memberId;
+        this.postId = postId;
         this.nickname = nickname;
         this.content = content;
         this.songTitle = songTitle;
@@ -25,6 +29,8 @@ public class MemberPostResponseDto {
 
     public static MemberPostResponseDto from (Member member,Post post, PracticeResult practiceResult, String url) {
         return MemberPostResponseDto.builder()
+            .memberId(member.getId())
+            .postId(post.getId())
             .nickname(member.getNickname())
             .content(post.getContent())
             .songTitle(practiceResult.getSong().getTitle())

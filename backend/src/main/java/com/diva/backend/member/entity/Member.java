@@ -93,10 +93,10 @@ public class Member extends BaseEntity {
     private VocalRange vocalRange;
 
     @Builder
-    protected Member(String email, String nickname) {
+    protected Member(String email, String nickname, String gender) {
         this.email = email;
         this.nickname = nickname;
-//        this.vocalRange = vocalRange;
+        this.gender = gender;
         this.role = MEMBER;
         this.status = ACTIVE;
     }
