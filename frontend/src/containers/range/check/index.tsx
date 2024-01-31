@@ -13,6 +13,29 @@ import LeftArrow from '/public/svgs/left_arrow.svg';
 import { useRouter } from 'next/navigation';
 
 const RangeCheckPage: React.FC = () => {
+  const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
+  useEffect(() => {
+    const getAudioStream = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: false,
+          audio: true,
+        });
+        setAudioStream(stream);
+      } catch (error) {
+        console.error('Error accessing microphone:', error);
+      }
+    };
+
+    getAudioStream();
+  }, []);
+  const handleStopButtonClick = () => {
+    if (audioStream) {
+      audioStream.getTracks().forEach((track) => track.stop());
+      setAudioStream(null); // Optional: Clear the state if needed
+    }
+  };
+
   const router = useRouter();
 
   const GuidePhase = 0b00;
@@ -21,7 +44,9 @@ const RangeCheckPage: React.FC = () => {
 
   const [currentPhase, setCurrentPhase] = useState(GuidePhase);
   const [isResultLoading, setIsResultLoading] = useState(true);
-
+  const handleTimerFinish = () => {
+    setCurrentPhase(LoadingPhase);
+  };
   // 결과 로딩할 때 일정 시간 후 '결과 확인하기' 버튼 렌더링
   useEffect(() => {
     if (currentPhase === LoadingPhase) {
@@ -82,10 +107,15 @@ const RangeCheckPage: React.FC = () => {
             }
           ></Header>
           <main className="flex flex-col justify-evenly items-center">
-            <Timer></Timer>
-            <PitchDetector></PitchDetector>
+            <Timer onFinish={()=> {handleTimerFinish(); handleStopButtonClick()}}></Timer>
+            <PitchDetector audioStream={audioStream}></PitchDetector>
             <VoiceDetector></VoiceDetector>
-            <ClayButton onClick={() => setCurrentPhase(LoadingPhase)}>
+            <ClayButton
+              onClick={() => {
+                setCurrentPhase(LoadingPhase);
+                handleStopButtonClick();
+              }}
+            >
               녹음 중지하기
             </ClayButton>
           </main>

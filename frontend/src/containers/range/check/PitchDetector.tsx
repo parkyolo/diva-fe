@@ -1,26 +1,29 @@
 import ClayButton from '@/components/ClayButton';
 import { useEffect, useRef, useState } from 'react';
 
-const PitchDetector: React.FC = () => {
+
+interface PitchDetectorProps {
+  audioStream: MediaStream | null;
+}
+
+const PitchDetector: React.FC<PitchDetectorProps> = ({ audioStream }) => {
   const [valueToDisplay, setValueToDisplay] = useState<number>(0);
   const audioContextRef = useRef(new AudioContext());
   const analyserRef = useRef(audioContextRef.current.createAnalyser());
+      const handleStopButtonClick = () => {
+        console.log('버튼 눌림')
+        if (audioStream) {
+          audioStream.getTracks().forEach((track) => track.stop());
+          
+        }
+      };
   useEffect(() => {
-    const init = () => {
-      navigator.mediaDevices
-        .getUserMedia({ video: false, audio: true })
-        .then(function (stream) {
-          let source = audioContextRef.current.createMediaStreamSource(stream);
-          source.connect(analyserRef.current);
+    if (audioStream) {
+      let source = audioContextRef.current.createMediaStreamSource(audioStream);
+      source.connect(analyserRef.current);
       visualize();
-      
-    });
-  };
-    const intervalId = setInterval(init, 1000);
-
-    // 컴포넌트가 언마운트될 때 clearInterval을 통해 interval을 정리합니다.
-    return () => clearInterval(intervalId);
-  }, []);
+    }
+  }, [audioStream]);
 
   const visualize = () => {
     let previousValueToDisplay = 0;
@@ -144,7 +147,10 @@ const PitchDetector: React.FC = () => {
       <span>음높이 : </span>
       <span className="text-skyblue">{valueToDisplay}</span>
       <span>Hz</span>
+      <br /><br /><br />
+    <button onClick={handleStopButtonClick}>정지버튼</button>
     </div>
+  
   );
 };
 
