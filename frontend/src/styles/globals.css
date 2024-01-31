@@ -66,6 +66,12 @@ body {
   }
 }
 
+@media screen and (min-height: 1024px) {
+  :root {
+    font-size: 20px;
+  }
+}
+
 /* text-base w-full px-7 py-10 overflow-y-scroll basis-full */
 main {
   font-size: 1rem;
