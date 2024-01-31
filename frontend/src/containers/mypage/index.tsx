@@ -10,7 +10,18 @@ import { useState } from 'react';
 import MyPageContent from './MyPageContent';
 import SettingPage from './SettingPage';
 
+
+interface user {
+  profileImg : string
+  nickname: string
+}
+
 const MyPage = () => {
+  
+  const user:user = {
+    profileImg: '/images/cactus.png',
+    nickname: '가벼운해바라기씨',
+  };
   const myPage = 0b00;
   const settingPage = 0b01;
   const [page, setPage] = useState<number>(myPage);
@@ -44,7 +55,9 @@ const MyPage = () => {
               </button>
             }
           />
-          <MyPageContent />
+          <main className="py-0 px-5">
+            <MyPageContent userinfo={user}></MyPageContent>
+          </main>
         </>
       ) : (
         <>
@@ -56,11 +69,11 @@ const MyPage = () => {
             }
             RightComponent={
               <button onClick={handleUpdateProfile}>
-                <span>완료</span>
+                <span className=" font-samlip text-skyblue">완료</span>
               </button>
             }
           />
-          <SettingPage />
+          <SettingPage userinfo={user}></SettingPage>
         </>
       )}
       <Navigation />

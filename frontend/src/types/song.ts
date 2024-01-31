@@ -10,6 +10,7 @@ export interface Song {
   songRange?: SongRange;
   similarity: string;
   difficulty: DifficultyRange;
+  createDate?: Date;
 }
 
 export interface SongRange {
