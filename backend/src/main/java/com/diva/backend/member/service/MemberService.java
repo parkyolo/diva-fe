@@ -7,11 +7,7 @@ public interface MemberService {
 
     MemberResponseDto getMemberInfo(String email);
 
-    MemeberNicknameUpdateResponseDto updateNickname(String email,
-        MemberNicknameUpdateRequestDto requestDto);
-
-    MemberProfileUpdateResponseDto updateProfile(String email,
-        MemberProfileUpdateRequestDto requestDto);
+    MemberInfoUpdateResponseDto updateInfo(String email, MemberInfoUpdateRequestDto requestDto);
 
     List<MemberPostResponseDto> getMemberPosts(String email);
 }
