@@ -3,6 +3,7 @@ package com.diva.backend.post.service;
 import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.repository.MemberRepository;
 import com.diva.backend.post.dto.PostCreateResponseDto;
+import com.diva.backend.post.dto.PostUpdateRequestDto;
 import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.post.repository.PostRepository;
@@ -62,5 +63,21 @@ public class PostServiceImpl implements PostService {
         }
 
         postRepository.delete(post);
+    }
+
+    // 게시글 수정
+    @Override
+    @Transactional
+    public PostUpdateRequestDto updatePost(Long postId, Long memberId, PostUpdateRequestDto requestDto) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다." + postId));
+
+        Long postMemberId = post.getMember().getId();
+        if (!postMemberId.equals(memberId)) {
+            throw new IllegalArgumentException("게시글을 수정할 수 있는 권한이 없습니다.");
+        }
+
+        post.update(requestDto.getContent());
+        return requestDto;
     }
 }
