@@ -11,6 +11,7 @@ export interface Song {
   similarity: string;
   difficulty: DifficultyRange;
   createDate?: Date;
+  isLiked?: boolean;
 }
 
 export interface SongRange {

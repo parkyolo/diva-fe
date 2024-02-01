@@ -7,6 +7,7 @@ interface SimilarityCounterProps {
 const SimilarityCounter = ({ label }: SimilarityCounterProps) => {
   return (
     <span
+      // 애니메이션 활성화를 위해 key 부여
       key={label}
       className="text-3xl text-center text-skyblue animate-blink"
     >
