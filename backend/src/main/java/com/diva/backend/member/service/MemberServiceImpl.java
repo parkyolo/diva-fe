@@ -52,29 +52,24 @@ public class MemberServiceImpl implements MemberService {
             .build();
     }
 
-
+    @Transactional
     @Override
-    public MemeberNicknameUpdateResponseDto updateNickname(String email,
-        MemberNicknameUpdateRequestDto requestDto) {
+    public MemberInfoUpdateResponseDto updateInfo(String email, MemberInfoUpdateRequestDto requestDto) {
         Member member = memberRepository.findMemberByEmail(email)
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
-        if (requestDto == null) {
-            throw new IllegalArgumentException("변경할 닉네임이 입력되지 않음");
+        String nickname = requestDto.getNickname();
+        String profileImg = requestDto.getProfileImg();
+        if (!nickname.isBlank()) {
+            member.setNickname(requestDto.getNickname());
         }
-        member.setNickname(requestDto.getNickname());
-        return MemeberNicknameUpdateResponseDto.builder()
-            .nickname(member.getNickname())
-            .build();
-    }
+        if(!profileImg.isBlank()) {
+            member.setProfileImg(requestDto.getProfileImg());
+        }
 
-    @Override
-    public MemberProfileUpdateResponseDto updateProfile(String email,
-        MemberProfileUpdateRequestDto requestDto) {
-        Member member = memberRepository.findMemberByEmail(email)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
-        member.setProfileImg(requestDto.getProfileImg());
-        return MemberProfileUpdateResponseDto.builder()
-            .profileImg(member.getProfileImg())
+        Member newMember = memberRepository.save(member);
+        return MemberInfoUpdateResponseDto.builder()
+            .nickname(newMember.getNickname())
+            .profileImg(newMember.getProfileImg())
             .build();
     }
 
