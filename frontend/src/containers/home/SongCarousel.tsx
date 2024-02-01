@@ -16,6 +16,8 @@ interface SongCarouselProps {
   songs: Song[];
 }
 
+// TODO: 모달 떠있는 상태에서 캐러셀 넘어가는 문제
+// TODO: pc 버전에서 캐러셀 슬라이드시 클릭 이벤트로 감지하는 문제
 const SongCarousel = ({
   interval = 5000,
   onClick,
