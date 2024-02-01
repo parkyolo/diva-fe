@@ -3,66 +3,67 @@
 import Image from 'next/image';
 import DotsThreeVertical from '/public/svgs/dots-three-vertical.svg';
 import LikeIcon from '/public/svgs/like.svg';
-import PostContents from './PostContents';
-import { useRef, useState } from 'react';
+import PostContent from './PostContent';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import useModal from '@/hooks/useModal';
 import BottomSheet from '../BottomSheet/BottomSheet';
 import PlayIcon from '/public/svgs/polygon.svg';
-
-interface Props {
-  profileImg: string;
-  nickname: string;
-  writerId: string;
-  songTitle: string;
-  artistName: string;
-  contents: string;
-  coverImg: string;
-  audiofile: string;
-  likes: number;
-  liked: boolean;
-}
+import { PostInterface } from '@/types/post';
 
 const Post = ({
-  profileImg,
-  nickname,
-  writerId,
-  songTitle,
-  artistName,
-  contents,
-  coverImg,
-  audiofile,
-  likes,
-  liked,
-}: Props) => {
-  // 전역으로 관리되고 있는 유저 정보
-  const user = {
-    id: '10190@gmail.com',
-  };
+  post,
+  isPlaying,
+  handleCurrentAudio,
+}: {
+  post: PostInterface;
+  isPlaying: boolean;
+  handleCurrentAudio: Dispatch<SetStateAction<number | null>>;
+}) => {
+  const user = { id: 1 }; // 전역으로 관리되고 있는 유저 정보
+  const {
+    postId,
+    audioUrl,
+    content,
+    writerId,
+    nickname,
+    profileUrl,
+    songTitle,
+    coverImgUrl,
+    artist,
+    likes,
+    liked,
+  } = post;
+
+  // 컨텐츠 더보기
   const maxContentsLength = 65;
   const [more, setMore] = useState(
-    contents.length > maxContentsLength ? true : false,
+    content.length > maxContentsLength ? true : false,
   );
   const handleMoreButton = () => {
     setMore(!more);
   };
 
+  // 수정/삭제 모달
   const [isOpen, open, close] = useModal();
-  const [audio, setAudio] = useState(new Audio(audiofile));
-  const playButton = useRef<HTMLButtonElement>(null);
-  const pauseButton = useRef<HTMLButtonElement>(null);
+
   const handleEditPost = () => {};
   const handleRemovePost = () => {};
 
-  const handleAudioPlay = () => {
-    audio.play();
-    if (playButton.current) playButton.current.style.display = 'none';
-    if (pauseButton.current) pauseButton.current.style.display = 'block';
-  };
+  // 오디오 제어
+  const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    if (!isPlaying) audioRef.current?.pause();
+  }, [isPlaying]);
 
   const handleAudioPause = () => {
-    audio.pause();
-    if (playButton.current) playButton.current.style.display = 'block';
-    if (pauseButton.current) pauseButton.current.style.display = 'none';
+    audioRef.current?.pause();
+    handleCurrentAudio(null);
+  };
+
+  const handleAudioPlay = () => {
+    audioRef.current?.play();
+    handleCurrentAudio(postId);
   };
 
   return (
@@ -70,7 +71,7 @@ const Post = ({
       <div className="flex justify-between items-center w-full">
         <div className="flex gap-2 justify-start items-center">
           <Image
-            src={profileImg}
+            src={profileUrl}
             alt="profile-img"
             width={54}
             height={54}
@@ -81,7 +82,7 @@ const Post = ({
             <div className="font-bold text-xl">{nickname}</div>
             <div className="">
               <span>{songTitle}</span> &middot;&nbsp;
-              <span>{artistName}</span>
+              <span>{artist}</span>
             </div>
           </div>
         </div>
@@ -94,57 +95,59 @@ const Post = ({
         )}
       </div>
       <div className="">
-        {contents.length > maxContentsLength ? (
+        {content.length > maxContentsLength ? (
           more ? (
             <>
-              <PostContents contents={contents} styles={'text-overflow'} />
+              <PostContent content={content} styles={'text-overflow'} />
               <button onClick={handleMoreButton} className="text-gray">
                 더 보기
               </button>
             </>
           ) : (
             <>
-              <PostContents contents={contents} />
+              <PostContent content={content} />
               <button onClick={handleMoreButton} className="text-gray">
                 접기
               </button>
             </>
           )
         ) : (
-          <PostContents contents={contents} />
+          <PostContent content={content} />
         )}
       </div>
-      <div className="relative">
+      <div className="relative w-full h-24">
         <Image
-          src={coverImg}
+          src={coverImgUrl}
           alt={songTitle}
-          width={100}
-          height={96}
+          width={0}
+          height={0}
+          sizes="100vw"
           className="w-full h-24 rounded-xl object-cover brightness-50"
         ></Image>
-        <button
-          onClick={handleAudioPlay}
-          className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
-          ref={playButton}
-        >
-          <PlayIcon viewBox="0 0 50 50" />
-        </button>
-        <button
-          onClick={handleAudioPause}
-          className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] hidden"
-          ref={pauseButton}
-        >
-          <div className="font-bold text-3xl font-samlip">| |</div>
-        </button>
+        {isPlaying ? (
+          <button
+            onClick={handleAudioPause}
+            className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <div className="font-bold text-3xl font-samlip">| |</div>
+          </button>
+        ) : (
+          <button
+            onClick={handleAudioPlay}
+            className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
+          >
+            <PlayIcon viewBox="0 0 50 50" />
+            <audio src={audioUrl}></audio>
+          </button>
+        )}
+        <audio src={audioUrl} ref={audioRef}></audio>
       </div>
       <div className="flex justify-start gap-2 items-center">
-        <div>
-          {liked ? (
-            <LikeIcon className="fill-red stroke-red" />
-          ) : (
-            <LikeIcon className="stroke-gray" />
-          )}
-        </div>
+        {liked ? (
+          <LikeIcon className="fill-red stroke-red" />
+        ) : (
+          <LikeIcon className="stroke-gray" />
+        )}
         <div className="text-gray ">
           <em className="not-italic font-bold text-white">{likes}명</em>이
           좋아합니다.
