@@ -6,6 +6,12 @@ const nextConfig = {
       test: /\.svg$/i,
       use: '@svgr/webpack',
     });
+    config.module.rules.push({
+      test: /\.(wav)$/,
+      use: {
+        loader: 'file-loader',
+      },
+    });
     return config;
   },
 };
