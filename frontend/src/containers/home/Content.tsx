@@ -1,12 +1,9 @@
 'use client';
 import useModal from '@/hooks/useModal';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
-import VolumeOn from '/public/svgs/volume_up.svg';
-import VolumeOff from '/public/svgs/volume_off.svg';
 import { Song } from '@/types/song';
 import Main from '@/components/Main';
 import SongCarousel from './SongCarousel';
-import { useState } from 'react';
 
 const SongRecommendations: Song[] = [
   {
@@ -16,6 +13,8 @@ const SongRecommendations: Song[] = [
     similarity: '90',
     coverImg: '/images/3.jpg',
     difficulty: 4,
+    isLiked: false,
+    mrUrl: '/audio/폰서트.mp3',
   },
   {
     id: '1',
@@ -24,6 +23,8 @@ const SongRecommendations: Song[] = [
     similarity: '70',
     coverImg: '/images/4.jpg',
     difficulty: 5,
+    isLiked: false,
+    mrUrl: '/audio/형.mp3',
   },
   {
     id: '2',
@@ -32,6 +33,8 @@ const SongRecommendations: Song[] = [
     similarity: '50',
     coverImg: '/images/5.jpg',
     difficulty: 3,
+    isLiked: true,
+    mrUrl: '/audio/흰수염고래.mp3',
   },
 ];
 
@@ -44,20 +47,11 @@ const Content = ({ onModeChange }: { onModeChange: Function }) => {
     onModeChange(0b10);
   };
 
-  const [isMusicPreviewOn, setIsMusicPreviewOn] = useState<boolean>(true);
-
   return (
     <>
       <Main className="relative">
-        <button
-          className="absolute top-[1rem] right-[2rem]"
-          onClick={() => setIsMusicPreviewOn((prev) => !prev)}
-        >
-          {isMusicPreviewOn ? <VolumeOn /> : <VolumeOff />}
-        </button>
-
         <SongCarousel
-          interval={5000}
+          interval={50000}
           onClick={open}
           songs={SongRecommendations}
         ></SongCarousel>

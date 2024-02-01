@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { Song } from '@/types/song';
+import Image from 'next/image';
+import { useRef, useState } from 'react';
 
 export interface CardProps {
   index: number;
@@ -7,6 +9,7 @@ export interface CardProps {
   length: number;
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  song: Song;
 }
 
 const CarouselItem = ({
@@ -14,11 +17,9 @@ const CarouselItem = ({
   active,
   setActive,
   length,
-  children,
   onClick,
+  song,
 }: CardProps) => {
-  const [scaled, setScaled] = useState<Boolean>(false);
-
   let offset = (index - active) / 10;
   let direction = Math.sign(index - active);
   if (active === length - 1) {
@@ -39,7 +40,6 @@ const CarouselItem = ({
         scaleY(calc(1 +  ${absOffset}  * -0.9))
         translateX(calc( ${direction} * -3.5rem))
         translateZ(calc( ${absOffset} * -35rem))
-        scale(${scaled && index === active ? 1.05 : 1})
        `;
 
   return (
@@ -51,9 +51,15 @@ const CarouselItem = ({
       }}
       key={index}
       onClick={active === index ? onClick : () => setActive(index)}
-      // disabled={active !== index}
     >
-      {children}
+      <Image
+        draggable="false"
+        className="w-full aspect-square"
+        width={500}
+        height={500}
+        src={song.coverImg}
+        alt={song.title}
+      />
     </button>
   );
 };
