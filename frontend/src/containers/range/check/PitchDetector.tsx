@@ -1,22 +1,20 @@
-import ClayButton from '@/components/ClayButton';
 import { useEffect, useRef, useState } from 'react';
-
 
 interface PitchDetectorProps {
   audioStream: MediaStream | null;
+  pitchArr: number[];
+  updatePitchArray: (newPitchArray: number[]) => void;
 }
 
-const PitchDetector: React.FC<PitchDetectorProps> = ({ audioStream }) => {
+const PitchDetector: React.FC<PitchDetectorProps> = ({
+  audioStream,
+  pitchArr,
+  updatePitchArray,
+}) => {
   const [valueToDisplay, setValueToDisplay] = useState<number>(0);
   const audioContextRef = useRef(new AudioContext());
   const analyserRef = useRef(audioContextRef.current.createAnalyser());
-      const handleStopButtonClick = () => {
-        console.log('버튼 눌림')
-        if (audioStream) {
-          audioStream.getTracks().forEach((track) => track.stop());
-          
-        }
-      };
+
   useEffect(() => {
     if (audioStream) {
       let source = audioContextRef.current.createMediaStreamSource(audioStream);
@@ -65,9 +63,9 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({ audioStream }) => {
         smoothingCount = 0;
         return;
       }
-
-      console.log(valueToDisplay);
+      pitchArr.push(valueToDisplay);
       setValueToDisplay(valueToDisplay);
+      updatePitchArray([...pitchArr, valueToDisplay]);
     };
     drawNote();
   };
@@ -106,13 +104,11 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({ audioStream }) => {
       }
     }
 
-    // Find the last index where that value is greater than the next one (the dip)
     var d = 0;
     while (c[d] > c[d + 1]) {
       d++;
     }
 
-    // Iterate from that index through the end and find the maximum sum
     var maxValue = -1;
     var maxIndex = -1;
     for (var i = d; i < SIZE; i++) {
@@ -124,11 +120,6 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({ audioStream }) => {
 
     var T0 = maxIndex;
 
-    // Not as sure about this part, don't @ me
-    // From the original author:
-    // interpolation is parabolic interpolation. It helps with precision. We suppose that a parabola pass through the
-    // three points that comprise the peak. 'a' and 'b' are the unknowns from the linear equation system and b/(2a) is
-    // the "error" in the abscissa. Well x1,x2,x3 should be y1,y2,y3 because they are the ordinates.
     var x1 = c[T0 - 1];
     var x2 = c[T0];
     var x3 = c[T0 + 1];
@@ -147,10 +138,7 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({ audioStream }) => {
       <span>음높이 : </span>
       <span className="text-skyblue">{valueToDisplay}</span>
       <span>Hz</span>
-      <br /><br /><br />
-    <button onClick={handleStopButtonClick}>정지버튼</button>
     </div>
-  
   );
 };
 

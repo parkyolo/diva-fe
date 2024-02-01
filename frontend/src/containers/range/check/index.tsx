@@ -11,9 +11,12 @@ import PitchDetector from '@/containers/range/check/PitchDetector';
 import Header from '@/components/Header';
 import LeftArrow from '/public/svgs/left_arrow.svg';
 import { useRouter } from 'next/navigation';
+import { convertHztoNote } from '@/utils/convertHztoNote';
 
 const RangeCheckPage: React.FC = () => {
   const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
+  const [pitchArray, setPitchArray] = useState<number[]>([]);
+
   useEffect(() => {
     const getAudioStream = async () => {
       try {
@@ -29,15 +32,20 @@ const RangeCheckPage: React.FC = () => {
 
     getAudioStream();
   }, []);
-  const handleStopButtonClick = () => {
+
+  const handleStopRecording = () => {
     if (audioStream) {
       audioStream.getTracks().forEach((track) => track.stop());
-      setAudioStream(null); // Optional: Clear the state if needed
+      setAudioStream(null);
+      convertHztoNote(pitchArray);
+      setCurrentPhase(LoadingPhase);
+      const { minNoteName, maxNoteName } = convertHztoNote(pitchArray);
+      console.log(minNoteName, maxNoteName);
+      setCurrentPhase(LoadingPhase);
     }
   };
 
   const router = useRouter();
-
   const GuidePhase = 0b00;
   const RecordingPhase = 0b01;
   const LoadingPhase = 0b10;
@@ -54,7 +62,6 @@ const RangeCheckPage: React.FC = () => {
         setIsResultLoading(false);
       }, 1000);
 
-      // Cleanup function to clear the timeout if the component unmounts
       return () => clearTimeout(timeoutId);
     }
   }, [currentPhase]);
@@ -107,13 +114,22 @@ const RangeCheckPage: React.FC = () => {
             }
           ></Header>
           <main className="flex flex-col justify-evenly items-center">
-            <Timer onFinish={()=> {handleTimerFinish(); handleStopButtonClick()}}></Timer>
-            <PitchDetector audioStream={audioStream}></PitchDetector>
+            <Timer
+              onFinish={() => {
+                handleStopRecording();
+              }}
+            ></Timer>
+            <PitchDetector
+              audioStream={audioStream}
+              pitchArr={pitchArray}
+              updatePitchArray={(newPitchArray) => {
+                setPitchArray(newPitchArray);
+              }}
+            ></PitchDetector>
             <VoiceDetector></VoiceDetector>
             <ClayButton
               onClick={() => {
-                setCurrentPhase(LoadingPhase);
-                handleStopButtonClick();
+                handleStopRecording();
               }}
             >
               녹음 중지하기
