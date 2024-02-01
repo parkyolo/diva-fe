@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Getter
 @Entity
+@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Post extends BaseEntity {
 
@@ -46,18 +48,12 @@ public class Post extends BaseEntity {
     private List<Likes> likes = new ArrayList<>();
 
     @Builder
-    public Post(Long id, String content, Member member, PracticeResult practiceResult) {
-        this.id = id;
-        this.content = content;
-        this.member = member;
-        this.practiceResult = practiceResult;
-    }
-
-    @Builder
     public Post(String content, Member member, PracticeResult practiceResult) {
         this.content = content;
         this.member = member;
+        this.member.addPost(this);
         this.practiceResult = practiceResult;
+        this.practiceResult.setPost(this);
     }
 
     // 게시글 수정
