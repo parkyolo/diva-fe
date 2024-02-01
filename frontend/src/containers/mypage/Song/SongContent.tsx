@@ -34,7 +34,7 @@ const SongContent = () => {
       <div className="flex justify-start p-2">{date}</div>
       <div className="flex flex-row flex-wrap ">
         {ImagesItems?.map((item, songId) => (
-          <SongItems song={item}></SongItems>
+          <SongItems key={songId} song={item}></SongItems>
         ))}
       </div>
     </div>
