@@ -120,4 +120,9 @@ public class Member extends BaseEntity {
             .build();
     }
 
+    public void updateMemberWhenVocalTest(VocalRange vocalRange, String gender) {
+        this.vocalRange = vocalRange;
+        this.gender = gender;
+    }
+
 }

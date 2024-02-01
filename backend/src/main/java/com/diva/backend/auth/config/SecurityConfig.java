@@ -58,7 +58,10 @@ public class SecurityConfig {
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/members/**").permitAll()
                 .requestMatchers("/posts/**").permitAll()
+                .requestMatchers("/vocal-test").permitAll()
+                .requestMatchers("/sing/**").permitAll()
                 .anyRequest().authenticated()
+
             );
 
         // 세션

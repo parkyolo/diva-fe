@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryQueryDsl {
+    Optional<Member> findMemberById(Long memberId);
     Optional<Member> findMemberByEmail(String email);
     Optional<Member> findNotDeletedById(long id);
     Optional<Member> findNotDeletedByEmail(String email);
