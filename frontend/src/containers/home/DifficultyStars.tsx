@@ -10,12 +10,22 @@ interface Props {
 
 const DifficultyStars = ({ difficulty }: Props) => {
   return (
-    <div className="flex justify-center">
-      {[...Array(difficulty)].map(() => (
-        <Image src={StarFilled} alt="채워진 별" />
+    <div className="flex justify-center items-center">
+      {[...Array(difficulty)].map((_, idx) => (
+        <div
+          key={idx}
+          className="w-[2.2rem] flex justify-center items-center -mr-[0.3rem]"
+        >
+          <Image src={StarFilled} alt="채워진 별" />
+        </div>
       ))}
-      {[...Array(5 - difficulty)].map(() => (
-        <Image src={StarEmpty} alt="빈 별" />
+      {[...Array(5 - difficulty)].map((_, idx) => (
+        <div
+          key={idx}
+          className="w-[2.2rem] flex justify-center items-center -mr-[0.3rem]"
+        >
+          <Image src={StarEmpty} alt="빈 별" />
+        </div>
       ))}
     </div>
   );
