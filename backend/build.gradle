@@ -83,21 +83,30 @@ dependencyManagement {
 }
 
 // querydsl 추가 시작
-apply plugin: "com.ewerk.gradle.plugins.querydsl"
+//apply plugin: "com.ewerk.gradle.plugins.querydsl"
 def querydslDir = "$buildDir/generated/querydsl"
-querydsl {
-    library = "com.querydsl:querydsl-apt:${queryDslVersion}"
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
+//querydsl {
+//    library = "com.querydsl:querydsl-apt:${queryDslVersion}"
+//    jpa = true
+//    querydslSourcesDir = querydslDir
+//}
 sourceSets {
     main.java.srcDir querydslDir
 }
 configurations {
     querydsl.extendsFrom compileClasspath
 }
-compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
+
+//compileQuerydsl {
+//    options.annotationProcessorPath = configurations.querydsl
+//}
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
 }
 // querydsl 추가 끝
 
