@@ -4,6 +4,7 @@ import com.diva.backend.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,9 @@ public class VocalRange extends BaseEntity {
     @OneToOne(mappedBy = "vocalRange")
     private Member member;
 
+    @Builder
+    protected VocalRange(String highestNote, String lowestNote) {
+        this.highestNote = highestNote;
+        this.lowestNote = lowestNote;
+    }
 }
