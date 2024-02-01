@@ -77,11 +77,11 @@ public class Member extends BaseEntity {
 
     @NotNull
     @OneToMany(mappedBy = "member")
-    private List<Post> posts = new ArrayList<>();
+    private List<PracticeResult> practiceResults = new ArrayList<>();
 
     @NotNull
     @OneToMany(mappedBy = "member")
-    private List<PracticeResult> practiceResults = new ArrayList<>();
+    private List<Post> posts = new ArrayList<>();
 
     @NotNull
     @OneToMany(mappedBy = "member")
@@ -109,6 +109,14 @@ public class Member extends BaseEntity {
     //==연관관계 메소드==//
     public void addOAuth2(OAuth2 oAuth2) {
         oAuth2s.add(oAuth2);
+    }
+
+    public void addPracticeResult(PracticeResult practiceResult) {
+        this.practiceResults.add(practiceResult);
+    }
+
+    public void addPost(Post post) {
+        this.posts.add(post);
     }
 
     //==DTO==//
