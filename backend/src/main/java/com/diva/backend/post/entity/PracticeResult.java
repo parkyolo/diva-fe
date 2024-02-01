@@ -6,9 +6,7 @@ import com.diva.backend.post.dto.PracticeResultResponseDto;
 import com.diva.backend.song.entity.Song;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -25,7 +23,7 @@ public class PracticeResult extends BaseEntity {
 
     @NotNull
     @Column(name = "score")
-    private int score;
+    private Integer score;
 
     @NotNull
     @ManyToOne(fetch = LAZY)
@@ -37,9 +35,19 @@ public class PracticeResult extends BaseEntity {
     @JoinColumn(name = "song_id")
     private Song song;
 
+    @Setter
     @OneToOne
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Builder
+    protected PracticeResult(Integer score, Member member, Song song) {
+        this.score = score;
+        this.member = member;
+        this.member.addPracticeResult(this);
+        this.song = song;
+        this.song.addPracticeResult(this);
+    }
 
     public PracticeResultResponseDto toPracticeResultPostDto() {
         return PracticeResultResponseDto.builder()

@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostUpdateRequestDto {
 
-  private String content;
+    private String content;
 
-  @Builder
-  protected PostUpdateRequestDto(String content) {
-    this.content = content;
-  }
+    @Builder
+    protected PostUpdateRequestDto(String content) {
+        this.content = content;
+    }
 }
