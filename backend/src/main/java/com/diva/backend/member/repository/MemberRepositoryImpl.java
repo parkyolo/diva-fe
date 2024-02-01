@@ -15,6 +15,15 @@ public class MemberRepositoryImpl implements MemberRepositoryQueryDsl {
     private final EntityManager em;
 
     @Override
+    public Optional<Member> findMemberById(Long memberId) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+        return Optional.ofNullable(
+            queryFactory.selectFrom(member)
+                .where(member.id.eq(memberId))
+                .fetchOne());
+    }
+
+    @Override
     public Optional<Member> findMemberByEmail(String email) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
         return Optional.ofNullable(
