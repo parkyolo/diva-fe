@@ -12,13 +12,15 @@ public class PracticeResultResponseDto {
     private final String songTitle;
     private final String coverImg;
     private final LocalDateTime createdDate;
+    private final String artist;
 
     @Builder
-    public PracticeResultResponseDto(Long practiceResultId, String songTitle, String coverImg, LocalDateTime createdDate) {
+    public PracticeResultResponseDto(Long practiceResultId, String songTitle, String coverImg, LocalDateTime createdDate, String artist) {
         this.practiceResultId = practiceResultId;
         this.songTitle = songTitle;
         this.coverImg = coverImg;
         this.createdDate = createdDate;
+        this.artist = artist;
     }
 
     public static PracticeResultResponseDto from (PracticeResult practiceResult) {
@@ -27,6 +29,7 @@ public class PracticeResultResponseDto {
             .songTitle(practiceResult.getSong().getTitle())
             .coverImg(practiceResult.getSong().getCoverImg())
             .createdDate(practiceResult.getCreatedDate())
+            .artist(practiceResult.getSong().getArtist())
             .build();
     }
 }
