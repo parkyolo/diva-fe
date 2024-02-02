@@ -25,16 +25,14 @@ public class SingServiceImpl implements SingService{
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
         String highestNote = requestDto.getHighestNote();
         String lowestNote = requestDto.getLowestNote();
-        String gender = requestDto.getGender();
 
         VocalRange vocalRange = VocalRange.builder().highestNote(highestNote).lowestNote(lowestNote).build();
         vocalRangeRepository.save(vocalRange);
-        member.updateMemberWhenVocalTest(vocalRange, gender);
+        member.updateMemberWhenVocalTest(vocalRange);
         memberRepository.save(member);
         return VocalTestResponseDto.builder()
             .highestNote(highestNote)
             .lowestNote(lowestNote)
-            .gender(gender)
             .build();
     }
 
@@ -45,11 +43,9 @@ public class SingServiceImpl implements SingService{
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
         String highestNote = member.getVocalRange().getHighestNote();
         String lowestNote = member.getVocalRange().getLowestNote();
-        String gender = member.getGender();
         return VocalTestResponseDto.builder()
             .highestNote(highestNote)
             .lowestNote(lowestNote)
-            .gender(gender)
             .build();
     }
 }

@@ -10,10 +10,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED, force = true)
 public class MemberInfoUpdateRequestDto {
     private final String nickname;
-    private final String profileImg;
+    private final Boolean profileImg;
 
     @Builder
-    public MemberInfoUpdateRequestDto(String nickname, String profileImg) {
+    public MemberInfoUpdateRequestDto(String nickname, Boolean profileImg) {
         this.nickname = nickname;
         this.profileImg = profileImg;
     }

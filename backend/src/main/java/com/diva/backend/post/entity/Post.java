@@ -84,30 +84,4 @@ public class Post extends BaseEntity {
                 .likesCount(likes.size())
             .build();
     }
-
-    public PostSelectResponseDto toPostAllDto() {
-        MemberResponseDto memberResponseDto = MemberResponseDto.builder()
-                .memberId(member.getId())
-                .nickname(member.getNickname())
-                .profileImg(member.getProfileImg())
-                .build();
-
-        PracticeResultResponseDto practiceResultResponseDto = PracticeResultResponseDto.builder()
-                .practiceResultId(practiceResult.getId())
-                .score(practiceResult.getScore())
-                .song(SongResponseDto.builder()
-                        .songId(practiceResult.getSong().getId())
-                        .title(practiceResult.getSong().getTitle())
-                        .artist(practiceResult.getSong().getArtist())
-                        .build())
-                .build();
-
-        return PostCreateResponseDto.builder()
-                .postId(this.id)
-                .content(this.content)
-                .member(memberResponseDto)
-                .practiceResult(practiceResultResponseDto)
-                .likesCount(likes.size())
-                .build();
-    }
 }

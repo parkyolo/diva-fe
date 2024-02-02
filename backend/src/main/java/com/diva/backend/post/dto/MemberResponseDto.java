@@ -17,10 +17,10 @@ public class MemberResponseDto {
     @NotBlank
     private String nickname;
 
-    private String profileImg;
+    private Boolean profileImg;
 
     @Builder
-    protected MemberResponseDto(Long memberId, String nickname, String profileImg) {
+    protected MemberResponseDto(Long memberId, String nickname, Boolean profileImg) {
         this.memberId = memberId;
         this.nickname = nickname;
         this.profileImg = profileImg;
