@@ -5,7 +5,7 @@ import com.diva.backend.post.dto.PostUpdateRequestDto;
 
 public interface PostService {
     // 게시글 작성
-    PostCreateResponseDto createPost(Long memberId, String content, Long practiceResultId);
+    void createPost(Long memberId, String content, Long practiceResultId);
 
     // 게시글 삭제
     void deletePost(Long postId, Long memberId);
