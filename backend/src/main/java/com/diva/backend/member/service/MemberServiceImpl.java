@@ -48,7 +48,6 @@ public class MemberServiceImpl implements MemberService {
             .email(member.getEmail())
             .profileImg(member.getProfileImg())
             .vocalRange(vocalRangeDto)
-            .gender(member.getGender())
             .build();
     }
 
@@ -58,12 +57,11 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findMemberByEmail(email)
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
         String nickname = requestDto.getNickname();
-        String profileImg = requestDto.getProfileImg();
         if (!nickname.isBlank()) {
             member.setNickname(requestDto.getNickname());
         }
-        if(!profileImg.isBlank()) {
-            member.setProfileImg(requestDto.getProfileImg());
+        if(requestDto.getProfileImg()) {
+            member.setProfileImg(true);
         }
 
         Member newMember = memberRepository.save(member);

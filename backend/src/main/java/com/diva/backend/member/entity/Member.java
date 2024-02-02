@@ -45,13 +45,9 @@ public class Member extends BaseEntity {
     @Column(name = "nickname", length = 30)
     private String nickname;
 
-    //    @NotBlank
-    @Column(name = "gender", length = 10)
-    private String gender;
-
     @Setter
-    @Column(name = "profile_img", length = 200)
-    private String profileImg;
+    @Column(name = "profile_img")
+    private Boolean profileImg;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -93,10 +89,9 @@ public class Member extends BaseEntity {
     private VocalRange vocalRange;
 
     @Builder
-    protected Member(String email, String nickname, String gender) {
+    protected Member(String email, String nickname) {
         this.email = email;
         this.nickname = nickname;
-        this.gender = gender;
         this.role = MEMBER;
         this.status = ACTIVE;
     }
@@ -128,9 +123,8 @@ public class Member extends BaseEntity {
             .build();
     }
 
-    public void updateMemberWhenVocalTest(VocalRange vocalRange, String gender) {
+    public void updateMemberWhenVocalTest(VocalRange vocalRange) {
         this.vocalRange = vocalRange;
-        this.gender = gender;
     }
 
 }
