@@ -28,7 +28,7 @@ public class PostServiceImpl implements PostService {
     // 게시글 작성
     @Override
     @Transactional
-    public PostCreateResponseDto createPost(Long memberId, String content, Long practiceResultId) {
+    public void createPost(Long memberId, String content, Long practiceResultId) {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원이 존재하지 않습니다."));
 
@@ -46,8 +46,7 @@ public class PostServiceImpl implements PostService {
                 .practiceResult(practiceResult)
             .build();
 
-        Post savedPost = postRepository.save(post);
-        return savedPost.toPostResponseDto();
+        postRepository.save(post);
     }
 
     // 게시글 삭제
