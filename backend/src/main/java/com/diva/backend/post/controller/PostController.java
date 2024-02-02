@@ -2,12 +2,15 @@ package com.diva.backend.post.controller;
 
 import com.diva.backend.post.dto.PostCreateRequestDto;
 import com.diva.backend.post.dto.PostCreateResponseDto;
+import com.diva.backend.post.dto.PostSelectResponseDto;
 import com.diva.backend.post.dto.PostUpdateRequestDto;
 import com.diva.backend.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/posts")
@@ -18,6 +21,12 @@ public class PostController {
     @Autowired
     public PostController(PostService postService) {
         this.postService = postService;
+    }
+
+    // 게시글 전체 조회
+    @GetMapping("/list")
+    public ResponseEntity<List<PostSelectResponseDto>> getAllPosts() {
+        return ResponseEntity.ok(postService.getAllPosts());
     }
 
     // 게시글 작성
