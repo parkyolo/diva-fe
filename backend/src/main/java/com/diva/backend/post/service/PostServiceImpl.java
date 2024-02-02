@@ -3,6 +3,7 @@ package com.diva.backend.post.service;
 import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.repository.MemberRepository;
 import com.diva.backend.post.dto.PostCreateResponseDto;
+import com.diva.backend.post.dto.PostSelectResponseDto;
 import com.diva.backend.post.dto.PostUpdateRequestDto;
 import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
@@ -11,6 +12,8 @@ import com.diva.backend.song.repository.PracticeResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -23,6 +26,22 @@ public class PostServiceImpl implements PostService {
         this.postRepository = postRepository;
         this.memberRepository = memberRepository;
         this.practiceResultRepository = practiceResultRepository;
+    }
+
+    // 게시글 전체 조회
+    @Override
+    List<PostSelectResponseDto> getPosts(Long postId) {
+        return postRepository.findAllByPageId(postId).stream()
+            .map((Post::toPostAllDto))
+            .toList();
+    }
+
+    @Override
+    public List<PostSelectResponseDto> getAllPosts() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     // 게시글 작성
