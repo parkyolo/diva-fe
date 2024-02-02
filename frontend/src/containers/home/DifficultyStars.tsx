@@ -11,6 +11,7 @@ interface Props {
 const DifficultyStars = ({ difficulty }: Props) => {
   return (
     <div className="flex justify-center items-center">
+      <span className="text-2xl font-bold mr-2">난이도</span>
       {[...Array(difficulty)].map((_, idx) => (
         <div
           key={idx}

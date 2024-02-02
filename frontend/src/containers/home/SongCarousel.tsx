@@ -9,6 +9,7 @@ import BookmarkButton from './BookmarkButton';
 import VolumeOn from '/public/svgs/volume_up.svg';
 import VolumeOff from '/public/svgs/volume_off.svg';
 import { useRef, useState } from 'react';
+import { UpArrowIcon } from '../../../public/svgs';
 
 interface SongCarouselProps {
   interval: number;
@@ -65,8 +66,12 @@ const SongCarousel = ({
         ></ImageCarousel>
 
         <section className="flex flex-col items-center gap-[0.5rem]">
-          <BookmarkButton isLiked={songs[active].isLiked!} />
-          <DifficultyStars difficulty={songs[active].difficulty} />
+          <div className="flex flex-col justify-center items-center">
+            <UpArrowIcon className="stroke-white animate-bounce" />
+            <UpArrowIcon className="stroke-white animate-bounce" />
+            <span className="font-samlip text-xl">지금 부르러 가기</span>
+          </div>
+
           <SongInformation song={songs[active]} />
         </section>
 
