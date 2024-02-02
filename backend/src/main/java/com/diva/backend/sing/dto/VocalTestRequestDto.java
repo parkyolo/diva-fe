@@ -11,13 +11,11 @@ import lombok.NoArgsConstructor;
 public class VocalTestRequestDto {
     private final String highestNote;
     private final String lowestNote;
-    private final String gender;
 
     @Builder
-    public VocalTestRequestDto(String highestNote, String lowestNote, String gender) {
+    public VocalTestRequestDto(String highestNote, String lowestNote) {
         this.highestNote = highestNote;
         this.lowestNote = lowestNote;
-        this.gender = gender;
     }
 
 }

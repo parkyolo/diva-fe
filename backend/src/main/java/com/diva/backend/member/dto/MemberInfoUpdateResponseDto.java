@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class MemberInfoUpdateResponseDto {
     private final String nickname;
-    private final String profileImg;
+    private final Boolean profileImg;
 
     @Builder
-    public MemberInfoUpdateResponseDto(String nickname, String profileImg) {
+    public MemberInfoUpdateResponseDto(String nickname, Boolean profileImg) {
         this.nickname = nickname;
         this.profileImg = profileImg;
     }
