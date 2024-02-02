@@ -43,14 +43,6 @@ public class Song extends BaseEntity {
     private String lyric;
 
     @NotBlank
-    @Column(name = "playtime", length = 10)
-    private String playtime;
-
-    @NotNull
-    @Column(name = "release_date")
-    private LocalDateTime releaseDate;
-
-    @NotBlank
     @Column(name = "mr_url", length = 200)
     private String mrUrl;
 
@@ -64,13 +56,11 @@ public class Song extends BaseEntity {
     private List<PracticeResult> practiceResults = new ArrayList<>();
 
     @Builder
-    protected Song(String title, String artist, String coverImg, String lyric, String playtime, LocalDateTime releaseDate, String mrUrl) {
+    protected Song(String title, String artist, String coverImg, String lyric, String mrUrl) {
         this.title = title;
         this.artist = artist;
         this.coverImg = coverImg;
         this.lyric = lyric;
-        this.playtime = playtime;
-        this.releaseDate = releaseDate;
         this.mrUrl = mrUrl;
     }
 

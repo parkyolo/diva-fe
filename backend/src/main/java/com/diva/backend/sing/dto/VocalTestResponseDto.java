@@ -9,13 +9,11 @@ import lombok.Getter;
 public class VocalTestResponseDto {
     private final String highestNote;
     private final String lowestNote;
-    private final String gender;
 
     @Builder
-    public VocalTestResponseDto(String highestNote, String lowestNote, String gender) {
+    public VocalTestResponseDto(String highestNote, String lowestNote) {
         this.highestNote = highestNote;
         this.lowestNote = lowestNote;
-        this.gender = gender;
     }
 
 }
