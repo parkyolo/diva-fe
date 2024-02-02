@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/posts")
 public class PostController {
-
     private final PostService postService;
 
     @Autowired
@@ -31,13 +30,14 @@ public class PostController {
 
     // 게시글 작성
     @PostMapping
-    public PostCreateResponseDto createPost(@RequestBody PostCreateRequestDto postCreateRequestDto, HttpServletRequest request) {
+    public ResponseEntity<Void> createPost(@RequestBody PostCreateRequestDto postCreateRequestDto, HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
 
         String content = postCreateRequestDto.getContent();
         Long practiceResultId = postCreateRequestDto.getPracticeResultId();
 
-        return postService.createPost(memberId, content, practiceResultId);
+        postService.createPost(memberId, content, practiceResultId);
+        return ResponseEntity.noContent().build();
     }
 
     // 게시글 삭제
