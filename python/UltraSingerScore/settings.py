@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+
+import uuid
+
 import boto3
 
 ssm = boto3.client('ssm')
@@ -25,6 +28,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-u@9_8#=ebzd*-$e1)mi80qu7bf8g-da8tij+n)13@gn_42cj0b'
+
+SHARED_REDIS_KEY = str(uuid.uuid4()) + 'api_processing'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
