@@ -76,6 +76,9 @@ for parameter in parameters['Parameters']:
         AWS_SECRET_ACCESS_KEY = value
 
 MIDDLEWARE = [
+    # SingleRequestOnlyMiddleware 설정
+    'scores.middleware.SingleRequestOnlyMiddleware',
+
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
