@@ -1,14 +1,10 @@
 import { useCarousel } from '@/hooks/useCarousel';
 import ImageCarousel from './ImageCarousel';
 import { Song } from '@/types/song';
-import Image from 'next/image';
 import SimilarityCounter from './SimilarityCounter';
 import SongInformation from './SongInformation';
-import DifficultyStars from './DifficultyStars';
-import BookmarkButton from './BookmarkButton';
-import VolumeOn from '/public/svgs/volume_up.svg';
-import VolumeOff from '/public/svgs/volume_off.svg';
 import { useRef, useState } from 'react';
+import { RoundedUpArrowIcon, VolumeOff, VolumeOn } from '../../../public/svgs';
 
 interface SongCarouselProps {
   interval: number;
@@ -65,8 +61,12 @@ const SongCarousel = ({
         ></ImageCarousel>
 
         <section className="flex flex-col items-center gap-[0.5rem]">
-          <BookmarkButton isLiked={songs[active].isLiked!} />
-          <DifficultyStars difficulty={songs[active].difficulty} />
+          <div className="flex flex-col justify-center items-center">
+            <RoundedUpArrowIcon className="stroke-white animate-bounce" />
+            <RoundedUpArrowIcon className="stroke-white animate-bounce" />
+            <span className="font-samlip text-xl">지금 부르러 가기</span>
+          </div>
+
           <SongInformation song={songs[active]} />
         </section>
 
