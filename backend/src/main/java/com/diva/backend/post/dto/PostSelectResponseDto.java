@@ -34,26 +34,31 @@ public class PostSelectResponseDto {
         this.likesCount = likesCount;
     }
 
-    public PostSelectResponseDto(Post post) {
-        this.postId = post.getId();
-        this.content = post.getContent();
-        this.member = new MemberResponseDto(
-            post.getMember().getId(),
-            post.getMember().getNickname(),
-            post.getMember().getProfileImg()
-        );
-        if(post.getPracticeResult() != null) {
-            this.practiceResult = new PracticeResultResponseDto(
-                post.getPracticeResult().getId(),
-                post.getPracticeResult().getScore(),
-                new SongResponseDto(
-                    post.getPracticeResult().getSong().getId(),
-                    post.getPracticeResult().getSong().getTitle(),
-                    post.getPracticeResult().getSong().getArtist(),
-                    post.getPracticeResult().getSong().getCoverImg()
-                )
-            );
-        }
-        this.likesCount = post.getLikes().size();
+    // Post 엔티티를 PostResponseDto로 변환
+    public static PostSelectResponseDto toPostResponseDto(Post post) {
+        MemberResponseDto memberResponseDto = MemberResponseDto.builder()
+                .memberId(post.getMember().getId())
+                .nickname(post.getMember().getNickname())
+                .profileImg(post.getMember().getProfileImg())
+            .build();
+
+        PracticeResultResponseDto practiceResultResponseDto = PracticeResultResponseDto.builder()
+                .practiceResultId(post.getPracticeResult().getId())
+                .score(post.getPracticeResult().getScore())
+                .song(SongResponseDto.builder()
+                        .songId(post.getPracticeResult().getSong().getId())
+                        .title(post.getPracticeResult().getSong().getTitle())
+                        .artist(post.getPracticeResult().getSong().getArtist())
+                        .coverImg(post.getPracticeResult().getSong().getCoverImg())
+                    .build())
+            .build();
+
+        return PostSelectResponseDto.builder()
+                .postId(post.getId())
+                .content(post.getContent())
+                .member(memberResponseDto)
+                .practiceResult(practiceResultResponseDto)
+                .likesCount(post.getLikes().size())
+            .build();
     }
 }
