@@ -8,18 +8,18 @@ import PostContainer from '../../components/post/PostContainer';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import UploadButton from './UploadButton';
 import { PostInterface } from '@/types/post';
+import UploadContent from '@/containers/UploadContent/UploadContent';
+import { useAtom, useSetAtom } from 'jotai';
+import { feedPageAtom } from '@/store/atom';
 
 const PAGE_SIZE = 5;
 
 const Feed = () => {
   // 피드 페이지, 업로드 폼 토글
+
   const feedPage = 0b0;
   const uploadForm = 0b1;
-
-  const [currentPage, setCurrentPage] = useState<number>(feedPage);
-  const handleCurrentPage = () => {
-    setCurrentPage(uploadForm);
-  };
+  const [isFeedPage] = useAtom(feedPageAtom);
 
   // data fetch
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -145,7 +145,7 @@ const Feed = () => {
 
   return (
     <>
-      {currentPage === feedPage ? (
+      {isFeedPage === 0b0 ? (
         <>
           <Header
             LeftComponent={
@@ -161,7 +161,7 @@ const Feed = () => {
           <Navigation />
         </>
       ) : (
-        <>업로드페이지</>
+        <UploadContent />
       )}
     </>
   );

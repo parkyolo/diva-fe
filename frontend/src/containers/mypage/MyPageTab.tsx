@@ -11,7 +11,7 @@ const myPageTab = () => {
 
   return (
     <>
-      <div className="basis-full flex flex-col">
+      <div className="flex flex-col">
         <div className="flex flex-row w-full justify-around h-1/6 items-center p-5">
           <div
             className={
@@ -53,7 +53,9 @@ const myPageTab = () => {
       </div>
       <div className="basis-full">
         {mode === song ? (
-          <SongContent />
+          <>
+            <SongContent />
+          </>
         ) : mode === like ? (
           <LikeContent />
         ) : (
