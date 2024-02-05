@@ -12,9 +12,9 @@ interface myPageProps {
 
 const MyPageContent = ({ userinfo }: myPageProps) => {
   return (
-    <div className="flex flex-col basis-full">
+    <div className="flex flex-col basis-full h-full">
       <div className="flex flex-row justify-start items-center">
-        <div className="rounded-full w-1/2">
+        <div className="rounded-full w-1/3">
           <Image
             src={userinfo.profileImg}
             alt={userinfo.nickname}

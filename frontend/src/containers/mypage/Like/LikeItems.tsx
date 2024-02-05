@@ -4,6 +4,10 @@ import useModal from '@/hooks/useModal';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import Link from 'next/link';
 import { useState } from 'react';
+import { useAtom, useSetAtom } from 'jotai';
+import { feedPageAtom } from '@/store/atom';
+import { homePageAtom } from '@/store/atom';
+
 interface ContentProps {
   song: Song;
 }
@@ -11,7 +15,10 @@ interface ContentProps {
 const LikeItems = ({ song }: ContentProps) => {
   const [isOpen, open, close] = useModal();
   const realMode = 0b01;
-  const tutorialMode = 0b10;
+  const setHomePageAtom = useSetAtom(homePageAtom);
+  const handleModeChange = (newMode: number) => {
+    setHomePageAtom(newMode);
+  };
   const [mode, setMode] = useState(realMode);
   const changeModeToReal = () => {
     setMode(0b01);
@@ -21,7 +28,7 @@ const LikeItems = ({ song }: ContentProps) => {
   };
   return (
     <>
-      <div className="w-1/3 aspect-square p-2 relative">
+      <div className="w-1/3 aspect-square p-1 relative">
         <div className="relative" onClick={open}>
           <Image
             src={song.coverImg}
@@ -29,7 +36,7 @@ const LikeItems = ({ song }: ContentProps) => {
             width={500}
             height={500}
           />
-          <div className='absolute top-0 w-full h-full  bg-opacity-45 bg-bg-black '></div>
+          <div className="absolute top-0 w-full h-full  bg-opacity-45 bg-bg-black "></div>
           <span className="w-full text-center absolute top-1/2 -translate-y-1/2  text-white">
             {song.title}
           </span>
@@ -38,13 +45,17 @@ const LikeItems = ({ song }: ContentProps) => {
       {isOpen && (
         <BottomSheet close={close}>
           <BottomSheet.Button btnColor="bg-blue" onClick={changeModeToReal}>
-            <Link href="/">실전모드</Link>
+            <Link href="/" onClick={() => handleModeChange(0b01)}>
+              실전모드
+            </Link>
           </BottomSheet.Button>
           <BottomSheet.Button
             btnColor="bg-btn-black"
             onClick={changeModetoTutorial}
           >
-            <Link href="/">튜토리얼</Link>
+            <Link href="/" onClick={() => handleModeChange(0b10)}>
+              튜토리얼
+            </Link>
           </BottomSheet.Button>
         </BottomSheet>
       )}
