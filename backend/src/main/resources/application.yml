@@ -23,7 +23,6 @@ jwt:
             header: AuthorizationRefresh
 
 server:
-    port: ${SERVER.PORT}
     error:
         include-message: always
         include-binding-errors: always
