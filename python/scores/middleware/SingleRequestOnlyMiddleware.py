@@ -3,7 +3,7 @@ from django.conf import settings
 from django.http import HttpResponse
 
 
-class SingleRequestOnlyMiddleware(object):
+class SingleRequestOnlyMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
         self.redis = redis.StrictRedis(host='i10a607.p.ssafy.io', port=3307, db=0)
@@ -17,7 +17,7 @@ class SingleRequestOnlyMiddleware(object):
             return HttpResponse('{"error": "API is currently processing a request. Please try again later."}', status=429)
 
         # redis에 API가 처리 중이라는 key 생성
-        self.redis.set(redis_key, True)
+        self.redis.set(redis_key, 1)
 
         # request 처리
         response = self.get_response(request)
