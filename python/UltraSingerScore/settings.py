@@ -35,7 +35,7 @@ SECRET_KEY = 'django-insecure-u@9_8#=ebzd*-$e1)mi80qu7bf8g-da8tij+n)13@gn_42cj0b
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://i10a607.p.ssafy.io:3307",
+        "LOCATION": "i10a607.p.ssafy.io:3307",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
