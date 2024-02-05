@@ -6,10 +6,11 @@ import FeedIcon from '/public/svgs/nav_feed.svg';
 import HomeIcon from '/public/svgs/nav_home.svg';
 import MyPageIcon from '/public/svgs/nav_mypage.svg';
 import RangeIcon from '/public/svgs/nav_test.svg';
+import { useSetAtom } from 'jotai';
+
 
 const Navigation = () => {
   const path: string | null = usePathname();
-
   return (
     <nav className="flex justify-around px-5 py-3.5 bg-btn-black">
       <Link

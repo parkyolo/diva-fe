@@ -16,7 +16,7 @@ import { convertHztoNote } from '@/utils/convertHztoNote';
 const RangeCheckPage: React.FC = () => {
   const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
   const [pitchArray, setPitchArray] = useState<number[]>([]);
-
+  
   useEffect(() => {
     const getAudioStream = async () => {
       try {
@@ -29,10 +29,10 @@ const RangeCheckPage: React.FC = () => {
         console.error('Error accessing microphone:', error);
       }
     };
-
     getAudioStream();
   }, []);
 
+  
   const handleStopRecording = () => {
     if (audioStream) {
       audioStream.getTracks().forEach((track) => track.stop());
@@ -40,6 +40,26 @@ const RangeCheckPage: React.FC = () => {
       convertHztoNote(pitchArray);
       setCurrentPhase(LoadingPhase);
       const { minNoteName, maxNoteName } = convertHztoNote(pitchArray);
+
+      const handlePost = async () => {
+        console.log('post 보내는 중 ...')
+        const postUploadData = {
+          highestNote: maxNoteName,
+          lowestNote: minNoteName,
+        };
+        try {
+          const response = await fetch('', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(postUploadData),
+          });
+        } catch (error) {
+          console.error('Error during upload:', error);
+        }
+      };
+      handlePost()
       console.log(minNoteName, maxNoteName);
       setCurrentPhase(LoadingPhase);
     }
@@ -52,9 +72,7 @@ const RangeCheckPage: React.FC = () => {
 
   const [currentPhase, setCurrentPhase] = useState(GuidePhase);
   const [isResultLoading, setIsResultLoading] = useState(true);
-  const handleTimerFinish = () => {
-    setCurrentPhase(LoadingPhase);
-  };
+
   // 결과 로딩할 때 일정 시간 후 '결과 확인하기' 버튼 렌더링
   useEffect(() => {
     if (currentPhase === LoadingPhase) {
