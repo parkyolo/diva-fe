@@ -13,20 +13,14 @@ public class SongResponseDto {
     @NotNull
     private Long songId;
 
-    @NotNull
     private String title;
 
-    @NotNull
     private String artist;
 
-    @NotNull
-    private String coverImg;
-
     @Builder
-    public SongResponseDto(Long songId, String title, String artist, String coverImg) {
+    public SongResponseDto(Long songId, String title, String artist) {
         this.songId = songId;
         this.title = title;
         this.artist = artist;
-        this.coverImg = coverImg;
     }
 }

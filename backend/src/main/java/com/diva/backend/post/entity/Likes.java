@@ -5,7 +5,6 @@ import com.diva.backend.member.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,10 +22,6 @@ public class Likes extends BaseEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "liked")
-    private Boolean liked;
-
-    @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -35,11 +30,4 @@ public class Likes extends BaseEntity {
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
-
-    @Builder
-    protected Likes(Boolean liked, Member member, Post post) {
-        this.liked = liked;
-        this.member = member;
-        this.post = post;
-    }
 }
