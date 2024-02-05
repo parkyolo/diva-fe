@@ -33,14 +33,9 @@ const UploadContent = () => {
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
   };
-  const feedPage = 0b0;
-  const uploadForm = 0b1;
-  const [isFeedPage] = useAtom(feedPageAtom);
   const setFeedPageAtom = useSetAtom(feedPageAtom);
   const handleCurrentPage = () => {
-    setFeedPageAtom((prevValue) =>
-      prevValue === feedPage ? uploadForm : feedPage,
-    );
+    setFeedPageAtom(0b0) 
   };
   const handleUpload = async () => {
     const postUploadData = {
