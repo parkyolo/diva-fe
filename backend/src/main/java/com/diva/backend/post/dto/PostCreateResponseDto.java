@@ -11,26 +11,26 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCreateResponseDto {
 
-  @NotNull
-  private Long postId;
+    @NotNull
+    private Long postId;
 
-  private String content;
+    private String content;
 
-  @NotNull
-  private MemberResponseDto member;
+    @NotNull
+    private MemberResponseDto member;
 
-  @NotNull
-  private PracticeResultResponseDto practiceResult;
+    @NotNull
+    private PracticeResultResponseDto practiceResult;
 
-  @NotNull
-  private Integer likesCount;
+    @NotNull
+    private Integer likesCount;
 
-  @Builder
-  protected PostCreateResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Integer likesCount) {
-    this.postId = postId;
-    this.content = content;
-    this.member = member;
-    this.practiceResult = practiceResult;
-    this.likesCount = likesCount;
-  }
+    @Builder
+    protected PostCreateResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Integer likesCount) {
+        this.postId = postId;
+        this.content = content;
+        this.member = member;
+        this.practiceResult = practiceResult;
+        this.likesCount = likesCount;
+    }
 }
