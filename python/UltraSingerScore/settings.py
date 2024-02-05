@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+import os
 import uuid
 
 import boto3
@@ -30,6 +31,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-u@9_8#=ebzd*-$e1)mi80qu7bf8g-da8tij+n)13@gn_42cj0b'
 
 SHARED_REDIS_KEY = str(uuid.uuid4()) + 'api_processing'
+
+os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+os.environ["CUDA_VISIBLE_DEVICES"] = "6"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
