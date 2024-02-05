@@ -21,16 +21,25 @@ public class VocalRange extends BaseEntity {
     @Column(name = "highest_note", length = 10)
     private String highestNote;
 
+    @Column(name = "highest_midi")
+    private Integer highestMidi;
+
     @NotBlank
     @Column(name = "lowest_note", length = 10)
     private String lowestNote;
+
+    @Column(name = "lowest_midi")
+    private Integer lowestMidi;
 
     @OneToOne(mappedBy = "vocalRange")
     private Member member;
 
     @Builder
-    protected VocalRange(String highestNote, String lowestNote) {
+    protected VocalRange(String highestNote, Integer highestMidi, String lowestNote, Integer lowestMidi) {
         this.highestNote = highestNote;
+        this.highestMidi = highestMidi;
+
         this.lowestNote = lowestNote;
+        this.lowestMidi = lowestMidi;
     }
 }
