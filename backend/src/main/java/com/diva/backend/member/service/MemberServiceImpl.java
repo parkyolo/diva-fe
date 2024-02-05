@@ -60,9 +60,7 @@ public class MemberServiceImpl implements MemberService {
         if (!nickname.isBlank()) {
             member.setNickname(requestDto.getNickname());
         }
-        if(requestDto.getProfileImg()) {
-            member.setProfileImg(true);
-        }
+        member.setProfileImg(requestDto.getProfileImg());
 
         Member newMember = memberRepository.save(member);
         return MemberInfoUpdateResponseDto.builder()
