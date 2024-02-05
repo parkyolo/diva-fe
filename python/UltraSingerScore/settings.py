@@ -40,7 +40,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "6"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["70.12.130.101"]
 
 # Application definition
 
