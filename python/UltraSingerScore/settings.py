@@ -17,6 +17,8 @@ import uuid
 
 import boto3
 
+from scores.middleware import SingleRequestOnlyMiddleware
+
 ssm = boto3.client('ssm')
 path = "/Score/Django/"
 parameters = ssm.get_parameters_by_path(Path=path, Recursive=True, WithDecryption=True)
@@ -80,9 +82,6 @@ for parameter in parameters['Parameters']:
         AWS_SECRET_ACCESS_KEY = value
 
 MIDDLEWARE = [
-    # SingleRequestOnlyMiddleware 설정
-    'scores.middleware.SingleRequestOnlyMiddleware',
-
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -90,6 +89,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # SingleRequestOnlyMiddleware 설정
+    'scores.middleware.SingleRequestOnlyMiddleware.SingleRequestOnlyMiddleware',
 ]
 
 ROOT_URLCONF = 'UltraSingerScore.urls'
