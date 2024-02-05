@@ -4,11 +4,14 @@ import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.entity.VocalRange;
 import com.diva.backend.member.repository.MemberRepository;
 import com.diva.backend.member.repository.VocalRangeRepository;
+import com.diva.backend.sing.dto.LiveResponseDto;
+import com.diva.backend.sing.dto.TutorialResponseDto;
 import com.diva.backend.sing.dto.VocalTestRequestDto;
 import com.diva.backend.sing.dto.VocalTestResponseDto;
 import com.diva.backend.util.RecommendArtist;
+import com.diva.backend.song.entity.Song;
+import com.diva.backend.song.repository.SongRepository;
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +23,7 @@ public class SingServiceImpl implements SingService{
     private final MemberRepository memberRepository;
     private final VocalRangeRepository vocalRangeRepository;
     private final RecommendArtist recommendArtist;
+    private final SongRepository songRepository;
 
     @Transactional
     @Override
@@ -38,7 +42,7 @@ public class SingServiceImpl implements SingService{
         // 음역대에 맞는 가수 추천 (highestNote를 파라미터로)
         int highestMidi = recommendArtist.noteToMidi(highestNote, true);
         String artist = vocalRangeRepository.findMatchingArtistByMaxMidi(highestMidi);
-        System.out.println(artist);
+        //System.out.println(artist);
         return VocalTestResponseDto.builder()
             .highestNote(highestNote)
             .lowestNote(lowestNote)
@@ -57,5 +61,21 @@ public class SingServiceImpl implements SingService{
             .highestNote(highestNote)
             .lowestNote(lowestNote)
             .build();
+    }
+
+    @Override
+    public TutorialResponseDto getTutorialMode(Long memberId, Long songId) {
+        Member member = memberRepository.findMemberById(memberId)
+            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Song song = songRepository.findSongById(songId);
+        return TutorialResponseDto.from(song);
+    }
+
+    @Override
+    public LiveResponseDto getLiveMode(Long memberId, Long songId) {
+        Member member = memberRepository.findMemberById(memberId)
+            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Song song = songRepository.findSongById(songId);
+        return LiveResponseDto.from(song);
     }
 }
