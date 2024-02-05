@@ -1,3 +1,6 @@
+server:
+    port: ${SERVER.PORT}
+    
 spring:
     config:
         import: 'aws-parameterstore:'
