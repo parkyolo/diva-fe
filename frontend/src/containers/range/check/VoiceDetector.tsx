@@ -8,7 +8,7 @@ const VoiceDetector: React.FC = () => {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       setHasInputVoice(true);
-    }, 3000);
+    }, 300);
 
     // Cleanup function to clear the timeout if the component unmounts
     return () => clearTimeout(timeoutId);

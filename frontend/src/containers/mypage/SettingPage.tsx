@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import { useState, ChangeEvent } from 'react';
 
 interface user {
   profileImg: string;
@@ -8,6 +9,15 @@ interface myPageProps {
   userinfo: user;
 }
 const SettingPage = ({ userinfo }: myPageProps) => {
+  const [inputValue, setInputValue] = useState(userinfo.nickname);
+  const handleInputClick = () => {
+    if (inputValue === userinfo.nickname) {
+      setInputValue('');
+    }
+  };
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  };
   return (
     <main className="basis-full p-5 flex flex-col">
       <div className="flex flex-col items-center rounded-full h-1/2 gap-5 justify-around">
@@ -25,8 +35,10 @@ const SettingPage = ({ userinfo }: myPageProps) => {
         <div className="text-2xl font-bold shrink-0">닉네임</div>
         <input
           type="text"
-          className="text-2xl font-bold border-b-2 bg-[inherit] w-full appearance-none "
-          defaultValue={'가벼운해바라기씨'}
+          value={inputValue}
+          onClick={handleInputClick}
+          onChange={handleInputChange}
+          className="flex bg-[inherit] text-2xl font-bold px-3 w-full outline-none"
         />
       </div>
       <div className="px-5">

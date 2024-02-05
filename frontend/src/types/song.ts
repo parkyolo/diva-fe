@@ -9,8 +9,8 @@ export interface Song {
   mrUrl?: string;
   songRange?: SongRange;
   similarity: string;
-  difficulty: DifficultyRange;
-  createDate?: Date;
+  difficulty?: DifficultyRange;
+  createDate: Date;
   isLiked?: boolean;
 }
 

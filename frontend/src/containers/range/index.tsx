@@ -1,41 +1,49 @@
+'use client';
+
 import Link from 'next/link';
 import RightArrow from '/public/svgs/right_arrow.svg';
 import Navigation from '@/components/Navigation';
+import Content from '@/containers/home/Content';
 import Header from '@/components/Header';
 import MainLogo from '/public/svgs/logo.svg';
 import VolumeIcon from '/public/svgs/volume_up.svg';
 import Piano from './Piano';
 import ReadMore from './ReadMore';
+import { useSetAtom } from 'jotai';
+import { homePageAtom } from '@/store/atom';
 
-/**
- * C2:1부터 E7:32까지 숫자로 변환하는 함수
- * @param enVocalRange 음역대
- * @returns 음역대를 숫자로 변환한 값
- */
-export const convertRange2Num = (enVocalRange: string) => {
-  const [pitchName, _octave] = enVocalRange.split('');
-  const octave: number = +_octave;
+  /**
+   * C2:1부터 E7:32까지 숫자로 변환하는 함수
+   * @param enVocalRange 음역대
+   * @returns 음역대를 숫자로 변환한 값
+   */
+  export const convertRange2Num = (enVocalRange: string) => {
+    const [pitchName, _octave] = enVocalRange.split('');
+    const octave: number = +_octave;
 
-  let result_num = 0;
-  result_num += pitchName.charCodeAt(0);
-  if (result_num > 66) result_num -= 7;
-  result_num = (result_num % 10) + 7 * (octave - 2) + 1;
+    let result_num = 0;
+    result_num += pitchName.charCodeAt(0);
+    if (result_num > 66) result_num -= 7;
+    result_num = (result_num % 10) + 7 * (octave - 2) + 1;
 
-  return result_num;
-};
-
-const syllables = ['라', '시', '도', '레', '미', '파', '솔'];
-
-const convertVocalRangeEn2Ko = (enVocalRange: string) => {
-  const [pitchName, _octave] = enVocalRange.split('');
-  const octave: number = +_octave - 2;
-
-  const syllable_name = syllables[pitchName.charCodeAt(0) - 65];
-  return String(octave) + '옥타브 ' + syllable_name;
-};
+    return result_num;
+  };
 
 const Range = () => {
-  // 음역대: 0옥타브 도(C2) ~ 4옥타브 미(E6)
+  const setHomePageAtom = useSetAtom(homePageAtom);
+  const handleModeChange = (newMode: number) => {
+    setHomePageAtom(newMode);
+  };
+  const syllables = ['라', '시', '도', '레', '미', '파', '솔'];
+
+  const convertVocalRangeEn2Ko = (enVocalRange: string) => {
+    const [pitchName, _octave] = enVocalRange.split('');
+    const octave: number = +_octave - 2;
+
+    const syllable_name = syllables[pitchName.charCodeAt(0) - 65];
+    return String(octave) + '옥타브 ' + syllable_name;
+  };
+
   const enVocalRange = ['F3', 'E5'];
   const koVocalRange = [
     convertVocalRangeEn2Ko(enVocalRange[0]),
@@ -43,11 +51,13 @@ const Range = () => {
   ];
   const similarRangeSinger = ['소향'];
 
+
+
   return (
     <>
       <Header
         LeftComponent={
-          <Link href="/">
+          <Link href="/" onClick={() => handleModeChange(0b00)}>
             <MainLogo />
           </Link>
         }
@@ -95,6 +105,7 @@ const Range = () => {
           <Link
             href="/"
             className="flex justify-between items-center w-full mb-5 bg-blue p-2 pl-5 rounded-xl"
+            onClick={() => handleModeChange(0b00)}
           >
             <p>추천 노래 살펴보기</p>
             <RightArrow />

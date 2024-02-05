@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import Wiggle from '/public/images/wiggle1.png';
 
 interface PitchDetectorProps {
   audioStream: MediaStream | null;
@@ -14,15 +15,15 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({
   const [valueToDisplay, setValueToDisplay] = useState<number>(0);
   const audioContextRef = useRef(new AudioContext());
   const analyserRef = useRef(audioContextRef.current.createAnalyser());
-
+  const [hasInputVoice, setHasInputVoice] = useState(false);
   useEffect(() => {
     if (audioStream) {
       let source = audioContextRef.current.createMediaStreamSource(audioStream);
       source.connect(analyserRef.current);
       visualize();
     }
-  }, [audioStream]);
 
+  }, [audioStream]);
   const visualize = () => {
     let previousValueToDisplay = 0;
     let smoothingCount = 0;
@@ -66,6 +67,7 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({
       pitchArr.push(valueToDisplay);
       setValueToDisplay(valueToDisplay);
       updatePitchArray([...pitchArr, valueToDisplay]);
+      setHasInputVoice(true)
     };
     drawNote();
   };
@@ -134,11 +136,13 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({
   };
 
   return (
-    <div className="text-3xl">
-      <span>음높이 : </span>
-      <span className="text-skyblue">{valueToDisplay}</span>
-      <span>Hz</span>
-    </div>
+    <>
+      <div className="text-3xl">
+        <span>음높이 : </span>
+        <span className="text-skyblue">{valueToDisplay}</span>
+        <span>Hz</span>
+      </div>
+    </>
   );
 };
 
