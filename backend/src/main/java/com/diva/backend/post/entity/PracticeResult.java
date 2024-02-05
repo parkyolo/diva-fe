@@ -26,10 +26,6 @@ public class PracticeResult extends BaseEntity {
     private Integer score;
 
     @NotNull
-    @Column(name = "record_url", length = 200)
-    private String record_url;
-
-    @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
