@@ -21,6 +21,7 @@ import threading
 from unicodedata import normalize
 
 import tensorflow as tf
+import gc
 
 from .model.Score import Score
 
@@ -68,13 +69,15 @@ def calculate_score(request):
         torch.cuda.set_per_process_memory_fraction(0.125)
 
         # tensorflow
-        tf.compat.v1.disable_eager_execution()  # Eager Execution 비활성화
-        sess = tf.compat.v1.Session()
-        gpus = tf.config.list_physical_devices('GPU')
-        tf.config.set_logical_device_configuration(
-            gpus[0],
-            [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
-        tf.config.gpu.set_per_process_memory_growth(True)
+        tf.keras.backend.clear_session()
+
+        gc.collect()
+        # gpus = tf.config.list_physical_devices('GPU')
+        # tf.config.set_logical_device_configuration(
+        #     gpus[0],
+        #     [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
+
+        # tf.config.gpu.set_per_process_memory_growth(True)
 
         # S3로부터 사용자의 녹음 파일을 다운로드한다.
         # 녹음 파일은 diva-s3/PracticeResult/{practice_result_id}/에 저장된다.
@@ -100,7 +103,6 @@ def calculate_score(request):
         # GPU 할당 해제
         # torch
         torch.cuda.empty_cache()
-        sess.close()
 
         # muted 파일을 S3에 저장한다.
         bucket.upload_file(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "/" + "cache" + "/" + artist + "-" + title + "_mute.wav",
