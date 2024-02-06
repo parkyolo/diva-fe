@@ -88,7 +88,7 @@ def calculate_score(request):
     score = Score(final_score)
 
     # 점수를 보정한다.
-    score = min(100, 50 + score)
+    score.score = min(100, 50 + score.score)
 
     # score 객체를 json으로 변환한다.
     dumps = json.dumps(score.__dict__)
