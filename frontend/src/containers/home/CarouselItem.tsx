@@ -35,6 +35,8 @@ const CarouselItem = ({
   }
   const absOffset = Math.abs(offset);
 
+  // const buttonRef = useRef<HTMLButtonElement>(null);
+
   const cssTransformProperties = `
         rotateY(calc(${offset} * 55deg))
         scaleY(calc(1 +  ${absOffset}  * -0.9))

@@ -16,7 +16,6 @@ const Home = () => {
   const homePage = 0b00;
   const realMode = 0b01;
   const tutorialMode = 0b10;
-  const resultPage = 0b11;
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const [mode, setMode] = useState(homePage);

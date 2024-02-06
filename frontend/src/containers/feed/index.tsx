@@ -1,16 +1,16 @@
 'use client';
 
 import Header from '@/components/Header';
-import Link from 'next/link';
-import MainLogo from '/public/svgs/logo.svg';
 import Navigation from '@/components/Navigation';
-import PostContainer from '../../components/post/PostContainer';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import UploadButton from './UploadButton';
-import { PostInterface } from '@/types/post';
 import UploadContent from '@/containers/UploadContent/UploadContent';
-import { useAtom, useSetAtom } from 'jotai';
-import { feedPageAtom } from '@/store/atom';
+import { feedPageAtom } from '@/store/feed';
+import { PostInterface } from '@/types/post';
+import { useAtom } from 'jotai';
+import Link from 'next/link';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import PostContainer from '../../components/post/PostContainer';
+import UploadButton from './UploadButton';
+import MainLogo from '/public/svgs/logo.svg';
 
 const PAGE_SIZE = 5;
 
