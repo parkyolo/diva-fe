@@ -72,6 +72,7 @@ def calculate_score(request):
             gpus[0],
             [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
 
+        tf.compat.v1.disable_eager_execution()  # Eager Execution 비활성화
         sess = tf.compat.v1.Session()
 
         # S3로부터 사용자의 녹음 파일을 다운로드한다.
