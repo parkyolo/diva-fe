@@ -16,7 +16,7 @@ public class PostCreateRequestDto {
     private Long practiceResultId;
 
     @Builder
-    public PostCreateRequestDto(String content, Long practiceResultId) {
+    protected PostCreateRequestDto(String content, Long practiceResultId) {
         this.content = content;
         this.practiceResultId = practiceResultId;
     }
