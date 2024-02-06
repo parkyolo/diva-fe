@@ -126,5 +126,4 @@ public class Member extends BaseEntity {
     public void updateMemberWhenVocalTest(VocalRange vocalRange) {
         this.vocalRange = vocalRange;
     }
-
 }

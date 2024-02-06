@@ -2,10 +2,6 @@ package com.diva.backend.post.entity;
 
 import com.diva.backend.entity.BaseEntity;
 import com.diva.backend.member.entity.Member;
-import com.diva.backend.post.dto.MemberResponseDto;
-import com.diva.backend.post.dto.PostCreateResponseDto;
-import com.diva.backend.post.dto.PracticeResultResponseDto;
-import com.diva.backend.post.dto.SongResponseDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -52,39 +48,17 @@ public class Post extends BaseEntity {
         this.content = content;
         this.member = member;
         this.member.addPost(this);
+        this.setPracticeResult(practiceResult);
+    }
+
+    // 연관관계 메소드
+    public void setPracticeResult(PracticeResult practiceResult) {
         this.practiceResult = practiceResult;
-        this.practiceResult.setPost(this);
+        practiceResult.setPost(this);
     }
 
     // 게시글 수정
     public void update(String content) {
         this.content = content;
-    }
-
-    // Post 엔티티를 PostResponseDto로 변환
-    public PostCreateResponseDto toPostResponseDto() {
-        MemberResponseDto memberResponseDto = MemberResponseDto.builder()
-                .memberId(member.getId())
-                .nickname(member.getNickname())
-                .profileImg(member.getProfileImg())
-            .build();
-
-        PracticeResultResponseDto practiceResultResponseDto = PracticeResultResponseDto.builder()
-                .practiceResultId(practiceResult.getId())
-                .score(practiceResult.getScore())
-                .song(SongResponseDto.builder()
-                    .songId(practiceResult.getSong().getId())
-                    .title(practiceResult.getSong().getTitle())
-                    .artist(practiceResult.getSong().getArtist())
-                    .build())
-            .build();
-
-        return PostCreateResponseDto.builder()
-                .postId(this.id)
-                .content(this.content)
-                .member(memberResponseDto)
-                .practiceResult(practiceResultResponseDto)
-                .likesCount(likes.size())
-            .build();
     }
 }

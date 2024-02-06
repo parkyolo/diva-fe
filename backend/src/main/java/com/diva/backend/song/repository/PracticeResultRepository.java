@@ -9,4 +9,6 @@ import org.springframework.stereotype.Repository;
 public interface PracticeResultRepository extends JpaRepository<PracticeResult, Long> {
     List<PracticeResult> findByMemberId(Long memberId);
     PracticeResult findByPostId(Long postId);
+
+    PracticeResult findPracticeResultById(Long practiceResultId);
 }

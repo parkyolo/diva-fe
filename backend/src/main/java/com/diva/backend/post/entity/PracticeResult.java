@@ -51,8 +51,8 @@ public class PracticeResult extends BaseEntity {
 
     public PracticeResultResponseDto toPracticeResultPostDto() {
         return PracticeResultResponseDto.builder()
-            .practiceResultId(this.id)
-            .score(this.score)
+                .practiceResultId(this.id)
+                .score(this.score)
             .build();
     }
 }
