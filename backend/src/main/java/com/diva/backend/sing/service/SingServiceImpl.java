@@ -27,27 +27,26 @@ public class SingServiceImpl implements SingService{
 
     @Transactional
     @Override
-    public VocalTestResponseDto saveTestResult(Long memberId, VocalTestRequestDto requestDto) {
+    public void saveTestResult(Long memberId, VocalTestRequestDto requestDto) {
         Member member = memberRepository.findMemberById(memberId)
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
-        // 음역대 정보 받아와서 저장
         String highestNote = requestDto.getHighestNote();
         String lowestNote = requestDto.getLowestNote();
+        int highestMidi = recommendArtist.noteToMidi(highestNote, true);
+        int lowestMidi = recommendArtist.noteToMidi(lowestNote, true);
 
-        VocalRange vocalRange = VocalRange.builder().highestNote(highestNote).lowestNote(lowestNote).build();
+        // 음역대 정보 저장
+        VocalRange vocalRange = VocalRange.builder()
+                                .highestNote(highestNote)
+                                .highestMidi(highestMidi)
+                                .lowestNote(lowestNote)
+                                .lowestMidi(lowestMidi)
+                                .build();
         vocalRangeRepository.save(vocalRange);
         member.updateMemberWhenVocalTest(vocalRange);
         memberRepository.save(member);
-
-        // 음역대에 맞는 가수 추천 (highestNote를 파라미터로)
-        int highestMidi = recommendArtist.noteToMidi(highestNote, true);
-        String artist = vocalRangeRepository.findMatchingArtistByMaxMidi(highestMidi);
-        //System.out.println(artist);
-        return VocalTestResponseDto.builder()
-            .highestNote(highestNote)
-            .lowestNote(lowestNote)
-            .matchingArtist(artist)
-            .build();
+        // 리턴할 필요없음
+        return;
     }
 
     @Transactional
@@ -57,9 +56,17 @@ public class SingServiceImpl implements SingService{
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
         String highestNote = member.getVocalRange().getHighestNote();
         String lowestNote = member.getVocalRange().getLowestNote();
+
+        // 음역대에 맞는 가수 추천 (highestNote를 파라미터로)
+        int highestMidi = recommendArtist.noteToMidi(highestNote, true);
+        int lowestMidi = recommendArtist.noteToMidi(lowestNote, true);
+        String artist = vocalRangeRepository.findMatchingArtistByMaxMidi(highestMidi);
         return VocalTestResponseDto.builder()
             .highestNote(highestNote)
             .lowestNote(lowestNote)
+            .highestMidi(highestMidi)
+            .lowestMidi(lowestMidi)
+            .matchingArtist(artist)
             .build();
     }
 
