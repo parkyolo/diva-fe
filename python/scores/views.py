@@ -16,7 +16,10 @@ from UltraSingerCustom.src.UltraSinger import UltraSinger
 
 import os
 import json
+
 from unicodedata import normalize
+
+import tensorflow as tf
 
 from .model.Score import Score
 
