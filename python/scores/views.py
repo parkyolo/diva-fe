@@ -69,7 +69,6 @@ def calculate_score(request):
         torch.cuda.set_per_process_memory_fraction(0.125)
 
         # tensorflow
-
         gpus = tf.config.list_physical_devices('GPU')
         tf.config.set_logical_device_configuration(
             gpus[0],
@@ -94,16 +93,14 @@ def calculate_score(request):
                                       output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
         us = UltraSinger(scoreSettings)
 
-        result = 0
+        with Manager() as manager:
+            result_dict = manager.dict()
+            tensor_process = TensorProcess(result_dict=result_dict, us=us)
+            tensor_process.start()
+            tensor_process.join()
+            print(result_dict['result'])  # Prints the result of us.analyze()
 
-        get_result(result, us)
-
-        # multiprocessing.set_start_method('spawn')
-        process = multiprocessing.Process(target=get_result, args=(result,))
-        process.start()
-        process.join()
-
-        final_score = result
+        final_score = result_dict['result']
 
         # GPU 할당 해제
         # torch
@@ -142,11 +139,3 @@ def calculate_score(request):
         shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
 
         return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-def get_result(number, us: UltraSinger):
-    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-    os.environ["CUDA_VISIBLE_DEVICES"] = "6"
-
-    number = us.analyze()
-    return number
