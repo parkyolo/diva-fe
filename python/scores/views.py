@@ -16,7 +16,7 @@ from UltraSingerCustom.src.UltraSinger import UltraSinger
 
 import os
 import json
-import threading
+import multiprocessing
 
 from unicodedata import normalize
 
@@ -92,11 +92,16 @@ def calculate_score(request):
                                       output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
         us = UltraSinger(scoreSettings)
 
-        thread = threading.Thread(target=us.analyze)
+        manager = multiprocessing.Manager()
+        return_dict = manager.dict()
 
-        thread.start()
+        process = multiprocessing.Process(target=us.analyze)
 
-        thread.join()
+        process.start()
+
+        process.join()
+
+        final_score = return_dict['final_score']
 
         # GPU 할당 해제
         # torch
