@@ -93,10 +93,10 @@ def calculate_score(request):
         us = UltraSinger(scoreSettings)
 
         def get_value(return_value):
-            return_value = us.analyze()
-            return return_value
+            return_value[0] = us.analyze()
+            return return_value[0]
 
-        return_value = None
+        return_value = [None]
         thread = threading.Thread(target=get_value, args=return_value)
 
         thread.start()
