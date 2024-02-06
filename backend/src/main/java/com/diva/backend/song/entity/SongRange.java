@@ -5,6 +5,7 @@ import com.diva.backend.song.entity.Song;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 
 @Entity
@@ -25,4 +26,13 @@ public class SongRange extends BaseEntity {
 
     @OneToOne(mappedBy = "songRange")
     private Song song;
+
+    @Builder
+    protected SongRange(String highestNote, Integer highestMidi, Song song) {
+        this.highestNote = highestNote;
+        this.highestMidi = highestMidi;
+
+        this.song = song;
+        this.song.setSongRange(this);
+    }
 }
