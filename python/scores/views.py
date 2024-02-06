@@ -60,7 +60,14 @@ def calculate_score(request):
         print('Count of using GPUs:', torch.cuda.device_count())
 
         # GPU Memory 최대 4GB로 제한
+        # torch
         torch.cuda.set_per_process_memory_fraction(0.125)
+
+        # tensorflow
+        gpus = tf.config.list_physical_devices('GPU')
+        tf.config.set_logical_device_configuration(
+            gpus[0],
+            [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
 
         # S3로부터 사용자의 녹음 파일을 다운로드한다.
         # 녹음 파일은 diva-s3/PracticeResult/{practice_result_id}/에 저장된다.
