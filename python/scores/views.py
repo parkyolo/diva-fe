@@ -61,7 +61,8 @@ def calculate_score(request):
     # 녹음 파일은 diva-s3/PracticeResult/{practice_result_id}/에 저장된다.
     remote = practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3"
 
-    after_filename = normalize('NFD', remote)
+    # after_filename = normalize('NFD', remote)
+    after_filename = remote
 
     bucket.download_file(after_filename,
                          current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3")
