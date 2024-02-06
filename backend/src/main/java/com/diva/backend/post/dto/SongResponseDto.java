@@ -22,7 +22,7 @@ public class SongResponseDto {
     private String coverImg;
 
     @Builder
-    public SongResponseDto(Long songId, String title, String artist, String coverImg) {
+    protected SongResponseDto(Long songId, String title, String artist, String coverImg) {
         this.songId = songId;
         this.title = title;
         this.artist = artist;

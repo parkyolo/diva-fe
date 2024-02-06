@@ -44,7 +44,7 @@ public class Post extends BaseEntity {
     private List<Likes> likes = new ArrayList<>();
 
     @Builder
-    public Post(String content, Member member, PracticeResult practiceResult) {
+    protected Post(String content, Member member, PracticeResult practiceResult) {
         this.content = content;
         this.member = member;
         this.member.addPost(this);
