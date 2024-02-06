@@ -69,13 +69,11 @@ def calculate_score(request):
         torch.cuda.set_per_process_memory_fraction(0.125)
 
         # tensorflow
-        tf.keras.backend.clear_session()
 
-        gc.collect()
-        # gpus = tf.config.list_physical_devices('GPU')
-        # tf.config.set_logical_device_configuration(
-        #     gpus[0],
-        #     [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
+        gpus = tf.config.list_physical_devices('GPU')
+        tf.config.set_logical_device_configuration(
+            gpus[0],
+            [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
 
         # tf.config.gpu.set_per_process_memory_growth(True)
 
@@ -103,6 +101,11 @@ def calculate_score(request):
         # GPU 할당 해제
         # torch
         torch.cuda.empty_cache()
+
+        # tensorflow
+        tf.keras.backend.clear_session()
+
+        gc.collect()
 
         # muted 파일을 S3에 저장한다.
         bucket.upload_file(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "/" + "cache" + "/" + artist + "-" + title + "_mute.wav",
