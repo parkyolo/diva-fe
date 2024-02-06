@@ -6,7 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-// 게시글 작성 요청 DTO
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PostCreateRequestDto {
@@ -17,7 +16,7 @@ public class PostCreateRequestDto {
     private Long practiceResultId;
 
     @Builder
-    protected PostCreateRequestDto(String content, Long practiceResultId) {
+    public PostCreateRequestDto(String content, Long practiceResultId) {
         this.content = content;
         this.practiceResultId = practiceResultId;
     }
