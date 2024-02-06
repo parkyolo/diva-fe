@@ -13,8 +13,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 
 import os
-import uuid
-
 import boto3
 
 from scores.middleware import SingleRequestOnlyMiddleware
@@ -32,16 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-u@9_8#=ebzd*-$e1)mi80qu7bf8g-da8tij+n)13@gn_42cj0b'
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "i10a607.p.ssafy.io:3307",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
-SHARED_REDIS_KEY = str(uuid.uuid4()) + 'api_processing'
+SHARED_API_STATUS = False
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "6"
