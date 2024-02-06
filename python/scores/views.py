@@ -24,6 +24,7 @@ import tensorflow as tf
 import gc
 
 from .model.Score import Score
+from .process.TensorProcess import TensorProcess
 
 
 # Create your views here.
