@@ -29,7 +29,7 @@ const KakaoLogin: NextPage = () => {
       // 전역 상태에 저장
       setAccessTokenWithLocalStorage(accessToken);
 
-      // router.push('/');
+      router.push('/');
     } else {
       console.log('로그인 실패');
       alert('로그인 중 에러가 발생했습니다.');
