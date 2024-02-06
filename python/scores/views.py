@@ -67,6 +67,7 @@ def calculate_score(request):
         torch.cuda.set_per_process_memory_fraction(0.125)
 
         # tensorflow
+        sess = tf.compat.v1.Session()
         gpus = tf.config.list_physical_devices('GPU')
         tf.config.set_logical_device_configuration(
             gpus[0],
@@ -100,7 +101,11 @@ def calculate_score(request):
         shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
 
         # GPU 할당 해제
+        # torch
         torch.cuda.empty_cache()
+
+        # tensorflow
+        sess.close()
 
         # 점수를 반환한다.
         score = Score(final_score)
@@ -115,7 +120,11 @@ def calculate_score(request):
 
     except Exception as e:
         # GPU 할당 해제
+        # torch
         torch.cuda.empty_cache()
+
+        # tensorflow
+        sess.close()
 
         # PracticeResult에 PracticeResultId 폴더를 지운다.
         shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
