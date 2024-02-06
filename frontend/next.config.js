@@ -1,6 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false, // useEffect 두 번 호출 방지
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: `${process.env.NEXT_PUBLIC_BACKEND_URI}/:path*`,
+      },
+    ];
+  },
   webpack: (config) => {
     config.module.rules.push({
       test: /\.svg$/i,
@@ -14,14 +22,6 @@ const nextConfig = {
     });
     return config;
   },
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/:path*',
-  //       destination: `${process.env.NEXT_PUBLIC_BACKEND_URI}/:path*`,
-  //     },
-  //   ];
-  // },
 };
 
 module.exports = nextConfig;
