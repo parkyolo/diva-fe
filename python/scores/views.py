@@ -103,6 +103,7 @@ def calculate_score(request):
 
         result = 0
 
+        multiprocessing.set_start_method('spawn')
         process = multiprocessing.Process(target=get_result, args=(result,))
         process.start()
         process.join()
