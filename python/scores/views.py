@@ -67,11 +67,12 @@ def calculate_score(request):
         torch.cuda.set_per_process_memory_fraction(0.125)
 
         # tensorflow
-        sess = tf.compat.v1.Session()
         gpus = tf.config.list_physical_devices('GPU')
         tf.config.set_logical_device_configuration(
             gpus[0],
             [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
+
+        sess = tf.compat.v1.Session()
 
         # S3로부터 사용자의 녹음 파일을 다운로드한다.
         # 녹음 파일은 diva-s3/PracticeResult/{practice_result_id}/에 저장된다.
