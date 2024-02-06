@@ -21,11 +21,7 @@ const AuthProvider = ({ children, landing }: AuthProviderProps) => {
   // TODO: 로그인 시 유저 정보를 다시 안 읽는 문제 해결 필요
   const user = useAtomValue(userAtom);
 
-  return (
-    <Provider>
-      <ClientOnly>{user ? children : landing}</ClientOnly>
-    </Provider>
-  );
+  return <ClientOnly>{user ? children : landing}</ClientOnly>;
 };
 
 export default AuthProvider;
