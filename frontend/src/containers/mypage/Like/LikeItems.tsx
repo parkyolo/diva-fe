@@ -5,8 +5,8 @@ import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useAtom, useSetAtom } from 'jotai';
-import { feedPageAtom } from '@/store/atom';
-import { homePageAtom } from '@/store/atom';
+import { feedPageAtom } from '@/store/feed';
+import { homePageAtom } from '@/store/feed';
 
 interface ContentProps {
   song: Song;

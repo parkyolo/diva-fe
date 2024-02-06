@@ -1,13 +1,11 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import FeedIcon from '/public/svgs/nav_feed.svg';
 import HomeIcon from '/public/svgs/nav_home.svg';
 import MyPageIcon from '/public/svgs/nav_mypage.svg';
 import RangeIcon from '/public/svgs/nav_test.svg';
-import { useSetAtom } from 'jotai';
-
 
 const Navigation = () => {
   const path: string | null = usePathname();

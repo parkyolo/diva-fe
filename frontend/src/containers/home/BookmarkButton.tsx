@@ -1,7 +1,6 @@
 import Bookmark from '/public/svgs/bookmark.svg';
 
-import { Song } from '@/types/song';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface BookmarkButtonProps {
   isLiked: boolean;

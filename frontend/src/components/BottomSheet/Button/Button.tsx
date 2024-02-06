@@ -1,4 +1,4 @@
-import { MouseEventHandler, ReactNode, useEffect } from 'react';
+import { MouseEventHandler, ReactNode } from 'react';
 
 type btnColor = 'bg-btn-black' | 'bg-blue';
 

@@ -1,17 +1,18 @@
-import Login from '@/app/login/page';
 import MainLogo from '/public/svgs/main_logo.svg';
-import LoginButton from '@/components/login/LoginButton';
+import Main from '@/components/Main';
+import KaKaoLoginButton from './KakaoLoginButton';
 
 const Landing = () => {
   return (
-    <main className="flex flex-col justify-around items-center">
-      <span className="text-center text-white text-2xl">
+    <Main className="py-[4rem]">
+      <p className="text-center text-2xl font-bold landing">
         어느 날 디바가 내 폰 안으로 들어왔다
-      </span>
-      <MainLogo />
-      {/* <Login /> */}
-      <LoginButton />
-    </main>
+      </p>
+      <div>
+        <MainLogo />
+      </div>
+      <KaKaoLoginButton />
+    </Main>
   );
 };
 
