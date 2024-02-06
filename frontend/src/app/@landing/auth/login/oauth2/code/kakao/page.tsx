@@ -21,15 +21,9 @@ const KakaoLogin: NextPage = () => {
 
     if (response.ok) {
       // 응답으로부터 토큰정보 추출
-      const accessToken = response.headers.get('authorization') as string;
-      const refreshToken = response.headers.get(
-        'authorizationrefresh',
-      ) as string;
-
-      // 응답으로부터 유저 정보 추출
-      // const data = await response.json();
-      // const user = JSON.parse(data.data);
-      // const { id, email, nickname } = user;
+      const accessToken: string = response.headers.get('authorization') ?? '';
+      const refreshToken: string =
+        response.headers.get('authorizationrefresh') ?? '';
 
       // 전역 상태에 저장
       setAccessTokenWithLocalStorage(accessToken);

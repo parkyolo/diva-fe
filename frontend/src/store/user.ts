@@ -17,7 +17,6 @@ export const userAtom = atom(async (get, { signal }) => {
       },
     );
 
-    // console.log(await response.json());
     return response.json();
   }
 
