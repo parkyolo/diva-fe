@@ -19,9 +19,10 @@ public class SingController {
     private final SingService singService;
 
     @PostMapping("/vocal-test")
-    public VocalTestResponseDto saveTestResult(HttpServletRequest request, @RequestBody VocalTestRequestDto requestDto) {
+    public String saveTestResult(HttpServletRequest request, @RequestBody VocalTestRequestDto requestDto) {
         Long memberId = (Long) request.getAttribute("memberId");
-        return singService.saveTestResult(memberId, requestDto);
+        singService.saveTestResult(memberId, requestDto);
+        return "저장 완료!";
     }
 
     @GetMapping("/vocal-test")
