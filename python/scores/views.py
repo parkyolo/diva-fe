@@ -46,54 +46,65 @@ def calculate_score(request):
 
     # PracticeResult에 PracticeResult의 id로 폴더를 만든다.
     current_path = os.getcwd()
-    os.makedirs(current_path + "/scores/" + practice_result_dir + "/" + practice_result_id + "/", exist_ok=True)
 
-    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-    os.environ["CUDA_VISIBLE_DEVICES"] = "6"
+    try:
+        os.makedirs(current_path + "/scores/" + practice_result_dir + "/" + practice_result_id + "/", exist_ok=True)
 
-    # GPU 할당 확인
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print('Device:', device)
-    print('Current cuda device:', torch.cuda.current_device())
-    print('Count of using GPUs:', torch.cuda.device_count())
+        os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+        os.environ["CUDA_VISIBLE_DEVICES"] = "6"
 
-    # S3로부터 사용자의 녹음 파일을 다운로드한다.
-    # 녹음 파일은 diva-s3/PracticeResult/{practice_result_id}/에 저장된다.
-    remote = practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3"
+        # GPU 할당 확인
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        print('Device:', device)
+        print('Current cuda device:', torch.cuda.current_device())
+        print('Count of using GPUs:', torch.cuda.device_count())
 
-    # after_filename = normalize('NFD', remote)
-    after_filename = remote
+        # S3로부터 사용자의 녹음 파일을 다운로드한다.
+        # 녹음 파일은 diva-s3/PracticeResult/{practice_result_id}/에 저장된다.
+        remote = practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3"
 
-    bucket.download_file(after_filename,
-                         current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3")
+        # after_filename = normalize('NFD', remote)
+        after_filename = remote
 
-    song_dir = "song"
+        bucket.download_file(after_filename,
+                             current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3")
 
-    # 녹음 파일을 분석한다.
-    scoreSettings = ScoreSettings(id=practice_result_id,
-                                  input_file_path=current_path + "/" + "scores" + "/" + song_dir + "/" + artist + "-" + title + "_INFO.txt",
-                                  input_audio_file_path=current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3",
-                                  output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
-    us = UltraSinger(scoreSettings)
-    final_score = us.analyze()
+        song_dir = "song"
 
-    # muted 파일을 S3에 저장한다.
-    bucket.upload_file(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "/" + "cache" + "/" + artist + "-" + title + "_mute.wav",
-                       practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "_vocal.wav")
+        # 녹음 파일을 분석한다.
+        scoreSettings = ScoreSettings(id=practice_result_id,
+                                      input_file_path=current_path + "/" + "scores" + "/" + song_dir + "/" + artist + "-" + title + "_INFO.txt",
+                                      input_audio_file_path=current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3",
+                                      output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
+        us = UltraSinger(scoreSettings)
+        final_score = us.analyze()
 
-    # PracticeResult에 PracticeResultId 폴더를 지운다.
-    shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
+        # muted 파일을 S3에 저장한다.
+        bucket.upload_file(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "/" + "cache" + "/" + artist + "-" + title + "_mute.wav",
+                           practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "_vocal.wav")
 
-    # GPU Memory 초기화
-    torch.cuda.empty_cache()
+        # PracticeResult에 PracticeResultId 폴더를 지운다.
+        shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
 
-    # 점수를 반환한다.
-    score = Score(final_score)
+        # GPU 할당 해제
+        torch.cuda.empty_cache()
 
-    # 점수를 보정한다.
-    score.score = min(100, 50 + score.score)
+        # 점수를 반환한다.
+        score = Score(final_score)
 
-    # score 객체를 json으로 변환한다.
-    dumps = json.dumps(score.__dict__)
+        # 점수를 보정한다.
+        score.score = min(100, 50 + score.score)
 
-    return Response(dumps, status=status.HTTP_200_OK)
+        # score 객체를 json으로 변환한다.
+        dumps = json.dumps(score.__dict__)
+
+        return Response(dumps, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        # PracticeResult에 PracticeResultId 폴더를 지운다.
+        shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
+
+        # GPU 할당 해제
+        torch.cuda.empty_cache()
+
+        return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
