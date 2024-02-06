@@ -2,23 +2,20 @@
 
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
-import UploadContent from '@/containers/UploadContent/UploadContent';
-import { feedPageAtom } from '@/store/feed';
+import UploadForm from '@/containers/feed/UploadForm';
+import { feedPage, feedPageAtom } from '@/store/feed';
 import { PostInterface } from '@/types/post';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import PostContainer from '../../components/post/PostContainer';
 import UploadButton from './UploadButton';
-import MainLogo from '/public/svgs/logo.svg';
+import { HeaderLogo } from '../../../public/svgs';
 
 const PAGE_SIZE = 5;
 
 const Feed = () => {
   // 피드 페이지, 업로드 폼 토글
-
-  const feedPage = 0b0;
-  const uploadForm = 0b1;
   const [isFeedPage] = useAtom(feedPageAtom);
 
   // data fetch
@@ -106,14 +103,10 @@ const Feed = () => {
     },
   ]);
 
-  /**
-   * @todo data fetch
-   */
   const fetchPosts = useCallback(async () => {
     if (!throttle.current) {
       throttle.current = setTimeout(async () => {
-        // data fetch
-        // fetch(...);
+        // TODO: data fetch
 
         setFetching(false);
         throttle.current = null;
@@ -145,12 +138,12 @@ const Feed = () => {
 
   return (
     <>
-      {isFeedPage === 0b0 ? (
+      {isFeedPage === feedPage ? (
         <>
           <Header
             LeftComponent={
               <Link href="/">
-                <MainLogo />
+                <HeaderLogo />
               </Link>
             }
           />
@@ -161,7 +154,7 @@ const Feed = () => {
           <Navigation />
         </>
       ) : (
-        <UploadContent />
+        <UploadForm />
       )}
     </>
   );
