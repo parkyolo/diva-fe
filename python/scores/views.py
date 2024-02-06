@@ -72,6 +72,7 @@ def calculate_score(request):
         tf.config.set_logical_device_configuration(
             gpus[0],
             [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
+        tf.config.gpu.set_per_process_memory_growth(True)
 
         # S3로부터 사용자의 녹음 파일을 다운로드한다.
         # 녹음 파일은 diva-s3/PracticeResult/{practice_result_id}/에 저장된다.
@@ -92,20 +93,7 @@ def calculate_score(request):
                                       output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
         us = UltraSinger(scoreSettings)
 
-        def get_value():
-            result = us.analyze()
-            return result
-
-        return_value = 0
-        thread = threading.Thread(target=get_value)
-
-        thread.start()
-
-        thread.join()
-
-        return_value = thread.result  # 쓰레드의 결과 값을 가져옴
-
-        final_score = return_value
+        final_score = us.analyze()
 
         # GPU 할당 해제
         # torch
