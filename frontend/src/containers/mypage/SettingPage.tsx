@@ -18,6 +18,10 @@ const SettingPage = ({ userinfo }: myPageProps) => {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
+  const handleLogoutButton = (e: React.MouseEvent) => {
+    console.log('logout');
+  };
+
   return (
     <main className="basis-full p-5 flex flex-col">
       <div className="flex flex-col items-center rounded-full h-1/2 gap-5 justify-around">
@@ -42,7 +46,10 @@ const SettingPage = ({ userinfo }: myPageProps) => {
         />
       </div>
       <div className="px-5">
-        <button className="my-10 w-full font-bold text-2xl items-center bg-[#202229] p-2 rounded-xl">
+        <button
+          onClick={handleLogoutButton}
+          className="my-10 w-full font-bold text-2xl items-center bg-[#202229] p-2 rounded-xl"
+        >
           로그아웃
         </button>
       </div>
