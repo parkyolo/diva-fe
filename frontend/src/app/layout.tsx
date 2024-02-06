@@ -16,8 +16,6 @@ export default async function RootLayout({
   landing,
   children,
 }: RootLayoutProps) {
-  console.log('root layout');
-
   return (
     <html>
       <body>
