@@ -68,6 +68,8 @@ def calculate_score(request):
         torch.cuda.set_per_process_memory_fraction(0.125)
 
         # tensorflow
+        tf.compat.v1.disable_eager_execution()  # Eager Execution 비활성화
+        sess = tf.compat.v1.Session()
         gpus = tf.config.list_physical_devices('GPU')
         tf.config.set_logical_device_configuration(
             gpus[0],
@@ -98,6 +100,7 @@ def calculate_score(request):
         # GPU 할당 해제
         # torch
         torch.cuda.empty_cache()
+        sess.close()
 
         # muted 파일을 S3에 저장한다.
         bucket.upload_file(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "/" + "cache" + "/" + artist + "-" + title + "_mute.wav",
