@@ -84,6 +84,9 @@ def calculate_score(request):
     # PracticeResult에 PracticeResultId 폴더를 지운다.
     shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
 
+    # GPU Memory 초기화
+    torch.cuda.empty_cache()
+
     # 점수를 반환한다.
     score = Score(final_score)
 
