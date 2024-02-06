@@ -23,6 +23,7 @@ const KakaoLogin: NextPage = () => {
     if (response.ok) {
       // 응답으로부터 토큰정보 추출
       const accessToken: string = response.headers.get('authorization') ?? '';
+      // TODO: 리프레쉬 토큰 활용 필요
       const refreshToken: string =
         response.headers.get('authorizationrefresh') ?? '';
 
