@@ -16,6 +16,7 @@ from UltraSingerCustom.src.UltraSinger import UltraSinger
 
 import os
 import json
+import threading
 
 from unicodedata import normalize
 
@@ -72,9 +73,6 @@ def calculate_score(request):
             gpus[0],
             [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
 
-        tf.compat.v1.disable_eager_execution()  # Eager Execution 비활성화
-        sess = tf.compat.v1.Session()
-
         # S3로부터 사용자의 녹음 파일을 다운로드한다.
         # 녹음 파일은 diva-s3/PracticeResult/{practice_result_id}/에 저장된다.
         remote = practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3"
@@ -93,7 +91,16 @@ def calculate_score(request):
                                       input_audio_file_path=current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3",
                                       output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
         us = UltraSinger(scoreSettings)
-        final_score = us.analyze()
+
+        thread = threading.Thread(target=us.analyze)
+
+        thread.start()
+
+        thread.join()
+
+        # GPU 할당 해제
+        # torch
+        torch.cuda.empty_cache()
 
         # muted 파일을 S3에 저장한다.
         bucket.upload_file(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "/" + "cache" + "/" + artist + "-" + title + "_mute.wav",
@@ -101,13 +108,6 @@ def calculate_score(request):
 
         # PracticeResult에 PracticeResultId 폴더를 지운다.
         shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
-
-        # GPU 할당 해제
-        # torch
-        torch.cuda.empty_cache()
-
-        # tensorflow
-        sess.close()
 
         # 점수를 반환한다.
         score = Score(final_score)
@@ -124,9 +124,6 @@ def calculate_score(request):
         # GPU 할당 해제
         # torch
         torch.cuda.empty_cache()
-
-        # tensorflow
-        sess.close()
 
         # PracticeResult에 PracticeResultId 폴더를 지운다.
         shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
