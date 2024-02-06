@@ -94,14 +94,9 @@ def calculate_score(request):
                                       output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
         us = UltraSinger(scoreSettings)
 
-        def get_result(number):
-            os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-            os.environ["CUDA_VISIBLE_DEVICES"] = "6"
-
-            number = us.analyze()
-            return number
-
         result = 0
+
+        get_result(result, us)
 
         multiprocessing.set_start_method('spawn')
         process = multiprocessing.Process(target=get_result, args=(result,))
@@ -148,3 +143,9 @@ def calculate_score(request):
         return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+def get_result(number, us: UltraSinger):
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "6"
+
+    number = us.analyze()
+    return number
