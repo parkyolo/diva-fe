@@ -5,7 +5,7 @@ import KaKaoLoginButton from './KakaoLoginButton';
 const Landing = () => {
   return (
     <Main className="py-[4rem]">
-      <p className="text-center text-2xl font-bold landing">
+      <p className="text-center text-[1.3rem] font-bold landing">
         어느 날 디바가 내 폰 안으로 들어왔다
       </p>
       <div>

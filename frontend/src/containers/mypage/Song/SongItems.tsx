@@ -1,11 +1,11 @@
-import { Song } from '@/types/song';
+import { SangSong } from '@/types/song';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { useSetAtom } from 'jotai';
 import { songAtom, feedPageAtom } from '@/store/feed';
 
 interface ContentProps {
-  song: Song;
+  song: SangSong;
 }
 
 const SongItems = ({ song }: ContentProps) => {
@@ -13,20 +13,17 @@ const SongItems = ({ song }: ContentProps) => {
   const setSongData = useSetAtom(songAtom);
   const sendDatatoJotaiStore = () => {
     if (
-      song.id !== '' &&
-      song.title !== '' &&
+      song.songTitle !== '' &&
       song.artist !== '' &&
-      song.coverImg !== '' &&
-      song.similarity !== ''
+      song.coverImg !== '' 
     ) {
-      const dataTosend: Song = {
-        id: song.id,
-        title: song.title,
+      const dataTosend: SangSong = {
+        practiceResultId: song.practiceResultId,
+        songTitle: song.songTitle,
         artist: song.artist,
         coverImg: song.coverImg,
-        similarity: song.similarity,
-        createDate: song.createDate,
-        difficulty: song.difficulty,
+        createdDate: song.createdDate,
+        score: song.score
       };
       setSongData(dataTosend);
       setFeedPageAtom(0b1);
@@ -44,14 +41,14 @@ const SongItems = ({ song }: ContentProps) => {
         >
           <Link href="/feed">
             <Image
-              src={song.coverImg}
-              alt={song.title}
+              src={`/images/${song.coverImg}`}
+              alt={song.songTitle}
               width={500}
               height={500}
             />
             <div className="absolute top-0 w-full h-full  bg-opacity-45 bg-bg-black "></div>
             <span className="w-full text-center absolute top-1/2 -translate-y-1/2  text-white">
-              {song.title}
+              {song.songTitle}
             </span>
           </Link>
         </div>
