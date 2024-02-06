@@ -46,7 +46,7 @@ def calculate_score(request):
 
     # PracticeResult에 PracticeResult의 id로 폴더를 만든다.
     current_path = os.getcwd()
-    os.makedirs(current_path + "/scores/" + practice_result_dir + "/" + practice_result_id + "/")
+    os.makedirs(current_path + "/scores/" + practice_result_dir + "/" + practice_result_id + "/", exist_ok=True)
 
     os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
     os.environ["CUDA_VISIBLE_DEVICES"] = "6"
