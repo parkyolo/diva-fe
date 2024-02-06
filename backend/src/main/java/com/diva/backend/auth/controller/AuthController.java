@@ -31,12 +31,15 @@ public class AuthController {
     @Value("${KAKAO.CLIENT.ID}")
     private String kakaoClientId;
 
-    @Value("${allowed-origin}")
-    private String allowedOrigin;
+    @Value("${FRONTEND}")
+    private String frontend;
+
+    @Value("${FRONTEND.PORT}")
+    private String frontendPort;
 
     @GetMapping(value = "/login/oauth2/authorization/{provider}")
     public String oAuth2AuthorizationV1(@PathVariable(name = "provider") String provider) {
-        return "redirect:" + "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + allowedOrigin +":3000/auth/login/oauth2/code/" + provider;
+        return "redirect:" + "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + frontend + ":" + frontendPort + "/auth/login/oauth2/code/" + provider;
     }
 
     @GetMapping(value = "/login/oauth2/code/{provider}")
