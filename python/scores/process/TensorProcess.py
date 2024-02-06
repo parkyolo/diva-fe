@@ -9,7 +9,6 @@ class TensorProcess(Process):
         self.result_dict = result_dict
         self.us = us
 
-    def run(self):
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = "6"
 
@@ -18,4 +17,5 @@ class TensorProcess(Process):
             gpus[0],
             [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
 
+    def run(self):
         self.result_dict['result'] = self.us.analyze()

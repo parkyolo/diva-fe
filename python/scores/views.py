@@ -16,7 +16,7 @@ from UltraSingerCustom.src.UltraSinger import UltraSinger
 
 import os
 import json
-from multiprocessing import Manager
+import multiprocessing
 
 from unicodedata import normalize
 
@@ -64,6 +64,9 @@ def calculate_score(request):
         print('Device:', device)
         print('Current cuda device:', torch.cuda.current_device())
         print('Count of using GPUs:', torch.cuda.device_count())
+
+        # multiProcessing
+        multiprocessing.set_start_method('spawn')
 
         # GPU Memory 최대 4GB로 제한
         # torch
