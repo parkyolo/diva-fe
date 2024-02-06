@@ -3,39 +3,30 @@
 import Link from 'next/link';
 import RightArrow from '/public/svgs/right_arrow.svg';
 import Navigation from '@/components/Navigation';
-import Content from '@/containers/home/Content';
 import Header from '@/components/Header';
 import MainLogo from '/public/svgs/logo.svg';
 import VolumeIcon from '/public/svgs/volume_up.svg';
 import Piano from './Piano';
 import ReadMore from './ReadMore';
-import { useSetAtom } from 'jotai';
-import { homePageAtom } from '@/store/atom';
 
-  /**
-   * C2:1부터 E7:32까지 숫자로 변환하는 함수
-   * @param enVocalRange 음역대
-   * @returns 음역대를 숫자로 변환한 값
-   */
-  export const convertRange2Num = (enVocalRange: string) => {
-    const [pitchName, _octave] = enVocalRange.split('');
-    const octave: number = +_octave;
+/**
+ * C2:1부터 E7:32까지 숫자로 변환하는 함수
+ * @param enVocalRange 음역대
+ * @returns 음역대를 숫자로 변환한 값
+ */
+export const convertRange2Num = (enVocalRange: string) => {
+  const [pitchName, _octave] = enVocalRange.split('');
+  const octave: number = +_octave;
+  let result_num = 0;
+  result_num += pitchName.charCodeAt(0);
+  if (result_num > 66) result_num -= 7;
+  result_num = (result_num % 10) + 7 * (octave - 2) + 1;
 
-    let result_num = 0;
-    result_num += pitchName.charCodeAt(0);
-    if (result_num > 66) result_num -= 7;
-    result_num = (result_num % 10) + 7 * (octave - 2) + 1;
-
-    return result_num;
-  };
+  return result_num;
+};
 
 const Range = () => {
-  const setHomePageAtom = useSetAtom(homePageAtom);
-  const handleModeChange = (newMode: number) => {
-    setHomePageAtom(newMode);
-  };
   const syllables = ['라', '시', '도', '레', '미', '파', '솔'];
-
   const convertVocalRangeEn2Ko = (enVocalRange: string) => {
     const [pitchName, _octave] = enVocalRange.split('');
     const octave: number = +_octave - 2;
@@ -51,13 +42,21 @@ const Range = () => {
   ];
   const similarRangeSinger = ['소향'];
 
-
-
+  const listenLowestNote = () => {
+    const audio = new Audio(`/audio/pianoAudio/${enVocalRange[0]}.mov`);
+    audio.volume = 0.1;
+    audio.play();
+  };
+  const listenHighestNote = () => {
+    const audio = new Audio(`/audio/pianoAudio/${enVocalRange[1]}.mov`);
+    audio.volume = 0.1;
+    audio.play();
+  };
   return (
     <>
       <Header
         LeftComponent={
-          <Link href="/" onClick={() => handleModeChange(0b00)}>
+          <Link href="/">
             <MainLogo />
           </Link>
         }
@@ -80,10 +79,16 @@ const Range = () => {
 
           <div className="flex w-full justify-around items-center mb-7">
             <VolumeIcon />
-            <button className="text-xl bg-darkgray rounded-xl px-5 py-3">
+            <button
+              className="text-xl bg-darkgray rounded-xl px-5 py-3 hover:shadow-[inset_10px_-10px_52px_0px_rgba(12,16,16,0.81),inset_4px_-4px_22px_0px_rgba(191,191,191,0.20),_4px_4px_23px_0px_rgba(29,67,141,0.80)]"
+              onClick={listenLowestNote}
+            >
               {koVocalRange[0]}
             </button>
-            <button className="text-xl bg-darkgray rounded-xl px-5 py-3">
+            <button
+              className="text-xl bg-darkgray rounded-xl px-5 py-3 hover:shadow-[inset_10px_-10px_52px_0px_rgba(12,16,16,0.81),inset_4px_-4px_22px_0px_rgba(191,191,191,0.20),_4px_4px_23px_0px_rgba(29,67,141,0.80)]"
+              onClick={listenHighestNote}
+            >
               {koVocalRange[1]}
             </button>
           </div>
@@ -105,7 +110,6 @@ const Range = () => {
           <Link
             href="/"
             className="flex justify-between items-center w-full mb-5 bg-blue p-2 pl-5 rounded-xl"
-            onClick={() => handleModeChange(0b00)}
           >
             <p>추천 노래 살펴보기</p>
             <RightArrow />

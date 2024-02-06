@@ -9,18 +9,13 @@ import Link from 'next/link';
 import { useState } from 'react';
 import MyPageContent from './MyPageContent';
 import SettingPage from './SettingPage';
-import { useSetAtom } from 'jotai';
-import { homePageAtom } from '@/store/atom';
 interface user {
   profileImg : string
   nickname: string
 }
 
 const MyPage = () => {
-    const setHomePageAtom = useSetAtom(homePageAtom);
-    const handleModeChange = (newMode: number) => {
-      setHomePageAtom(newMode);
-    };
+
   const user:user = {
     profileImg: '/images/cactus.png',
     nickname: '가벼운해바라기씨',
@@ -48,7 +43,7 @@ const MyPage = () => {
         <>
           <Header
             LeftComponent={
-              <Link href="/" onClick={() => handleModeChange(0b00)}>
+              <Link href="/">
                 <MainLogo />
               </Link>
             }

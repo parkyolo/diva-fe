@@ -21,8 +21,8 @@ const rangeHeight = (lowRange: string, highRange: string) => {
 };
 
 const ReadMore = ({ lowRange, highRange }: Range) => {
-  const womanAverageRange = ['G3', 'C5'];
-  const manAverageRange = ['C3', 'G4'];
+  const womanAverageRange = ['E3', 'C5'];
+  const manAverageRange = ['A2', 'F4'];
 
   const resultRef = useRef<HTMLDivElement>(null);
 
