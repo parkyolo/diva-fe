@@ -17,6 +17,7 @@ from UltraSingerCustom.src.UltraSinger import UltraSinger
 import os
 import json
 import multiprocessing
+from multiprocessing import Manager
 
 from unicodedata import normalize
 
