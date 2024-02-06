@@ -92,11 +92,11 @@ def calculate_score(request):
                                       output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
         us = UltraSinger(scoreSettings)
 
-        def get_value(return_value):
-            return_value[0] = us.analyze()
-            return return_value[0]
+        def get_value(r):
+            r[0] = us.analyze()
+            return r[0]
 
-        return_value = [None]
+        return_value = [None] * 1
         thread = threading.Thread(target=get_value, args=return_value)
 
         thread.start()
