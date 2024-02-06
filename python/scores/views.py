@@ -92,17 +92,18 @@ def calculate_score(request):
                                       output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
         us = UltraSinger(scoreSettings)
 
-        def get_value(r) -> int:
+        def get_value():
             result = us.analyze()
-            r = result
-            return r
+            return result
 
         return_value = 0
-        thread = threading.Thread(target=get_value, args=return_value)
+        thread = threading.Thread(target=get_value)
 
         thread.start()
 
         thread.join()
+
+        return_value = thread.result  # 쓰레드의 결과 값을 가져옴
 
         final_score = return_value
 
