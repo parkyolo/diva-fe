@@ -1,23 +1,24 @@
-export interface Song {
-  id: string;
-  title: string;
-  artist: string;
+export interface SangSong {
+  practiceResultId: number;
+  songTitle: string;
   coverImg: string;
-  lyric?: string;
-  playtime?: string;
-  releaseDate?: Date;
-  mrUrl?: string;
-  songRange?: SongRange;
-  similarity: string;
-  difficulty?: DifficultyRange;
-  createDate?: Date;
-  isLiked?: boolean;
+  createdDate: string;
+  artist: string;
+  score: number;
 }
 
-export interface SongRange {
-  id: string;
-  highestNote: string;
-  song: Song;
+export interface SharedSong {
+  memberId: string;
+  postId: string;
+  nickname: string;
+  content: string;
+  songTitle: string;
+  artist: string;
+  recordUrl: string;
+}
+
+export interface letsUploadSongs extends SharedSong {
+  content: string;
 }
 
 type Enumerate<
