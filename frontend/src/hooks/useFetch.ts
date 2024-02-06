@@ -3,13 +3,13 @@ import { IRequestConfigResolver } from '@/services';
 import { useAtomValue } from 'jotai';
 import { useCallback, useState } from 'react';
 
-export const useFetch = (
+export const useFetch = <T>(
   requestConfigResolver: IRequestConfigResolver,
-): [boolean, any, any, (params?: any) => Promise<void>] => {
+): [boolean, T | null, any, (params?: any) => Promise<void>] => {
   const accessToken = useAtomValue(accessTokenAtom);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<unknown>(null);
-  const [data, setData] = useState<object | null>(null);
+  const [data, setData] = useState<T | null>(null);
 
   const request = useCallback(
     async (...params: any) => {
