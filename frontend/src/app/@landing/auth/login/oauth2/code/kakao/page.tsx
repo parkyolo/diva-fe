@@ -15,8 +15,9 @@ const KakaoLogin: NextPage = () => {
   const [user, setUser] = useAtom(userAtom);
 
   const loginHandler = async (code: string | null) => {
+    console.log('code', code);
     const response: Response = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URI}/auth/login/oauth2/code/kakao?code=${code}`,
+      `/api/auth/login/oauth2/code/kakao?code=${code}`,
     );
 
     if (response.ok) {
@@ -28,7 +29,7 @@ const KakaoLogin: NextPage = () => {
       // 전역 상태에 저장
       setAccessTokenWithLocalStorage(accessToken);
 
-      router.push('/');
+      // router.push('/');
     } else {
       console.log('로그인 실패');
       alert('로그인 중 에러가 발생했습니다.');

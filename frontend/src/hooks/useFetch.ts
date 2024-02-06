@@ -21,15 +21,12 @@ export const useFetch = <T>(
         let result;
 
         const { url, ...rest } = requestConfigResolver(params);
-        const res: Response = await fetch(
-          `${process.env.NEXT_PUBLIC_BACKEND_URI}${url}`,
-          {
-            headers: {
-              Authorization: accessToken,
-            },
-            ...rest,
+        const res: Response = await fetch(`/api${url}`, {
+          headers: {
+            Authorization: accessToken,
           },
-        );
+          ...rest,
+        });
 
         result = await res.json();
         setData(result);
