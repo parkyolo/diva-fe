@@ -95,6 +95,9 @@ def calculate_score(request):
         us = UltraSinger(scoreSettings)
 
         def get_result(number):
+            os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+            os.environ["CUDA_VISIBLE_DEVICES"] = "6"
+
             number = us.analyze()
             return number
 
