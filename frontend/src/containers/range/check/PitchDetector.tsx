@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import Wiggle from '/public/images/wiggle1.png';
 
 interface PitchDetectorProps {
   audioStream: MediaStream | null;
@@ -15,7 +14,6 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({
   const [valueToDisplay, setValueToDisplay] = useState<number>(0);
   const audioContextRef = useRef(new AudioContext());
   const analyserRef = useRef(audioContextRef.current.createAnalyser());
-  const [hasInputVoice, setHasInputVoice] = useState(false);
   useEffect(() => {
     if (audioStream) {
       let source = audioContextRef.current.createMediaStreamSource(audioStream);
@@ -41,6 +39,10 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({
       );
       let valueToDisplay = autoCorrelateValue;
       valueToDisplay = Math.round(valueToDisplay);
+      if (autoCorrelateValue < 60) {
+        setValueToDisplay(0)
+      } 
+
       function noteIsSimilarEnough() {
         if (typeof valueToDisplay == 'number') {
           return (
@@ -67,7 +69,6 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({
       pitchArr.push(valueToDisplay);
       setValueToDisplay(valueToDisplay);
       updatePitchArray([...pitchArr, valueToDisplay]);
-      setHasInputVoice(true)
     };
     drawNote();
   };
