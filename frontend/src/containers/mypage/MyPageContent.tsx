@@ -13,14 +13,22 @@ const MyPageContent = ({ user }: myPageProps) => {
       <div className="flex flex-row justify-start items-center">
         <div className="rounded-full w-1/2">
           {/* TODO: default profile image 설정 필요 */}
-          {user.profileImg && (
+          {user.profileImg ? (
             <Image
-              src={user.profileImg}
+              src="/images/cactus.png"
+              // src={user.profileImg}
               alt={user.nickname}
               width={350}
               height={350}
             />
-          )}
+          ): (<Image
+              src="/images/cactus.png"
+              // src={user.profileImg}
+              alt={user.nickname}
+              width={350}
+              height={350}
+            />)
+          }
         </div>
         <div className="flex w-full justify-center itmes-center">
           <div className="text-center text-2xl font-bold">{user.nickname}</div>
