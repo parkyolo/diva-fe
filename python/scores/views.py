@@ -16,7 +16,7 @@ from UltraSingerCustom.src.UltraSinger import UltraSinger
 
 import os
 import json
-import multiprocessing
+import threading
 
 from unicodedata import normalize
 
@@ -92,16 +92,18 @@ def calculate_score(request):
                                       output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
         us = UltraSinger(scoreSettings)
 
-        manager = multiprocessing.Manager()
-        return_dict = manager.dict()
+        def get_value(return_value):
+            return_value = us.analyze()
+            return return_value
 
-        process = multiprocessing.Process(target=us.analyze)
+        return_value = None
+        thread = threading.Thread(target=get_value, args=return_value)
 
-        process.start()
+        thread.start()
 
-        process.join()
+        thread.join()
 
-        final_score = return_dict['final_score']
+        final_score = return_value
 
         # GPU 할당 해제
         # torch
