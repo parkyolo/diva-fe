@@ -3,6 +3,7 @@ package com.diva.backend.member.entity;
 import com.diva.backend.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +22,7 @@ public class VocalRange extends BaseEntity {
     @Column(name = "highest_note", length = 10)
     private String highestNote;
 
+    @NotNull
     @Column(name = "highest_midi")
     private Integer highestMidi;
 
@@ -28,6 +30,7 @@ public class VocalRange extends BaseEntity {
     @Column(name = "lowest_note", length = 10)
     private String lowestNote;
 
+    @NotNull
     @Column(name = "lowest_midi")
     private Integer lowestMidi;
 

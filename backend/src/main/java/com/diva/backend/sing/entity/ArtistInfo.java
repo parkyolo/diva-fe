@@ -27,16 +27,16 @@ public class ArtistInfo extends BaseEntity {
     @Column(name="name")
     private String name;
 
-    @Column(name="min_pitch")
-    private String minPitch;
+    @Column(name="min_note", length = 5)
+    private String minNote;
 
     @Column(name="min_midi")
-    private int minMidi;
+    private Integer minMidi;
 
-    @Column(name="max_pitch")
-    private String maxPitch;
+    @Column(name="max_note", length = 5)
+    private String maxNote;
 
     @Column(name="max_midi")
-    private int maxMidi;
+    private Integer maxMidi;
 
 }
