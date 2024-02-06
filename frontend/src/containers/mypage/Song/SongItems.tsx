@@ -2,14 +2,14 @@ import { Song } from '@/types/song';
 import Image, { StaticImageData } from 'next/image';
 import Link from 'next/link';
 import { useSetAtom } from 'jotai';
-import { songAtom, feedPageAtom  } from '@/store/atom';
+import { songAtom, feedPageAtom } from '@/store/feed';
 
 interface ContentProps {
   song: Song;
 }
 
 const SongItems = ({ song }: ContentProps) => {
-  const setFeedPageAtom = useSetAtom(feedPageAtom)
+  const setFeedPageAtom = useSetAtom(feedPageAtom);
   const setSongData = useSetAtom(songAtom);
   const sendDatatoJotaiStore = () => {
     if (
@@ -25,7 +25,7 @@ const SongItems = ({ song }: ContentProps) => {
         artist: song.artist,
         coverImg: song.coverImg,
         similarity: song.similarity,
-        createDate : song.createDate,
+        createDate: song.createDate,
         difficulty: song.difficulty,
       };
       setSongData(dataTosend);
@@ -36,7 +36,12 @@ const SongItems = ({ song }: ContentProps) => {
   return (
     <>
       <div className="w-1/3 aspect-square p-1 relative">
-        <div className="relative" onClick={() => {sendDatatoJotaiStore()}}>
+        <div
+          className="relative"
+          onClick={() => {
+            sendDatatoJotaiStore();
+          }}
+        >
           <Link href="/feed">
             <Image
               src={song.coverImg}

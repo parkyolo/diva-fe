@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
-import { songAtom } from '@/store/atom';
+import { songAtom } from '@/store/feed';
 import Header from '@/components/Header';
 import LeftArrow from '/public/svgs/left_arrow.svg';
 import { useAtom, useSetAtom } from 'jotai';
-import { feedPageAtom } from '@/store/atom';
+import { feedPageAtom } from '@/store/feed';
 interface user {
   profileImg: string;
   nickname: string;
@@ -35,7 +35,7 @@ const UploadContent = () => {
   };
   const setFeedPageAtom = useSetAtom(feedPageAtom);
   const handleCurrentPage = () => {
-    setFeedPageAtom(0b0) 
+    setFeedPageAtom(0b0);
   };
   const handleUpload = async () => {
     const postUploadData = {
