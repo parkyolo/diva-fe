@@ -3,44 +3,32 @@
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
 import { userAtom } from '@/store/user';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import Link from 'next/link';
-import { useState } from 'react';
 import MyPageContent from './MyPageContent';
 import SettingPage from './SettingPage';
-import LeftArrow from '/public/svgs/left_arrow.svg';
 import MainLogo from '/public/svgs/logo.svg';
 import SettingIcon from '/public/svgs/setting.svg';
+import myPageAtom from '@/store/myPage';
 
-interface user {
-  profileImg: string;
-  nickname: string;
-}
+
 
 const MyPage = () => {
   const user = useAtomValue(userAtom);
   console.log(user);
 
-  const myPage = 0b00;
-  const settingPage = 0b01;
-  const [page, setPage] = useState<number>(myPage);
+  const myPage = 0b0;
+  const settingPage = 0b1;
+  const [isMyPage] = useAtom(myPageAtom);
+  const setMyPageAtom = useSetAtom(myPageAtom);
 
   const handleMyPageToSetting = () => {
-    setPage(settingPage);
-  };
-
-  const handleSettingToMyPage = () => {
-    setPage(myPage);
-  };
-
-  const handleUpdateProfile = () => {
-    // 프로필 업데이트 fetch
-    setPage(myPage);
+    setMyPageAtom(settingPage);
   };
 
   return (
     <>
-      {user && page === myPage && (
+      {user && isMyPage === myPage && (
         <>
           <Header
             LeftComponent={
@@ -59,20 +47,8 @@ const MyPage = () => {
           </main>
         </>
       )}
-      {user && page === settingPage && (
+      {user && isMyPage === settingPage && (
         <>
-          <Header
-            LeftComponent={
-              <button onClick={handleSettingToMyPage}>
-                <LeftArrow />
-              </button>
-            }
-            RightComponent={
-              <button onClick={handleUpdateProfile}>
-                <span className=" font-samlip text-skyblue">완료</span>
-              </button>
-            }
-          />
           <SettingPage userinfo={user}></SettingPage>
         </>
       )}

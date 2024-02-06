@@ -1,11 +1,10 @@
-import Image from 'next/image';
-import { useState, useEffect } from 'react';
-import { feedPage, songAtom } from '@/store/feed';
 import Header from '@/components/Header';
-import LeftArrow from '/public/svgs/left_arrow.svg';
+import { feedPage, feedPageAtom, songAtom } from '@/store/feed';
+import { SangSong } from '@/types/song';
 import { useAtomValue, useSetAtom } from 'jotai';
-import { feedPageAtom } from '@/store/feed';
-import { Song } from '@/types/song';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import LeftArrow from '/public/svgs/left_arrow.svg';
 
 interface user {
   profileImg: string;
@@ -18,7 +17,7 @@ const userinfo: user = {
 };
 
 const UploadForm = () => {
-  const songData: Song = useAtomValue(songAtom);
+  const songData: SangSong = useAtomValue(songAtom);
   const [inputValue, setInputValue] = useState<string>();
   const setFeedPageAtom = useSetAtom(feedPageAtom);
 
@@ -71,18 +70,20 @@ const UploadForm = () => {
               />
             </div>
             <div className="flex w-full justify-center itmes-center flex-col">
-              <div className="text-2xl font-bold px-2">{songData.title}</div>
-              <div className="text-start px-2">
-                {songData.createDate?.toLocaleDateString()}
+              <div className="text-2xl font-bold px-2">
+                {songData.songTitle}
               </div>
-              <div className="flex justify-end">{}/100</div>
+              <div className="text-start px-2">
+                {songData.createdDate.substring(0,10)}
+              </div>
+              <div className="flex justify-end">{songData.score}/100</div>
             </div>
           </div>
 
           <div className="flex justify-center items-center">
             <Image
               src={songData.coverImg}
-              alt={songData.title}
+              alt={songData.songTitle}
               width={0}
               height={0}
               sizes="100vw"

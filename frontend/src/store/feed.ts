@@ -1,19 +1,18 @@
 import { atom } from 'jotai';
-import { Song } from '@/types/song';
+import { SangSong } from '@/types/song';
 
-const initialSong: Song = {
-  id: '',
-  title: '',
+const initialSong: SangSong = {
+  practiceResultId: 0,
+  songTitle: '',
   artist: '',
   coverImg: '',
-  similarity: '',
-  difficulty: 1,
-  createDate: new Date(),
+  createdDate: '',
+  score: 0,
 };
 
 const feedPage = 0b0;
 const uploadForm = 0b1;
 const feedPageAtom = atom<number>(feedPage);
-const songAtom = atom<Song>(initialSong);
+const songAtom = atom<SangSong>(initialSong);
 
 export { feedPage, uploadForm, songAtom, feedPageAtom };
