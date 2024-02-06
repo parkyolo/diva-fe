@@ -98,7 +98,7 @@ def calculate_score(request):
 
         get_result(result, us)
 
-        multiprocessing.set_start_method('spawn')
+        # multiprocessing.set_start_method('spawn')
         process = multiprocessing.Process(target=get_result, args=(result,))
         process.start()
         process.join()
@@ -115,8 +115,9 @@ def calculate_score(request):
         gc.collect()
 
         # muted 파일을 S3에 저장한다.
-        bucket.upload_file(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "/" + "cache" + "/" + artist + "-" + title + "_mute.wav",
-                           practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "_vocal.wav")
+        bucket.upload_file(
+            current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "/" + "cache" + "/" + artist + "-" + title + "_mute.wav",
+            practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + "_vocal.wav")
 
         # PracticeResult에 PracticeResultId 폴더를 지운다.
         shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
