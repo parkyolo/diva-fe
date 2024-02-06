@@ -71,9 +71,9 @@ def calculate_score(request):
         # tensorflow
 
         gpus = tf.config.list_physical_devices('GPU')
-        tf.config.set_logical_device_configuration(
-            gpus[0],
-            [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
+        # tf.config.set_logical_device_configuration(
+        #     gpus[0],
+        #     [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
 
         tf.config.experimental.set_memory_growth(gpus[0], True)
 
