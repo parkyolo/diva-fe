@@ -1,5 +1,6 @@
 from multiprocessing import Process, Manager
 import os
+import tensorflow as tf
 
 
 class TensorProcess(Process):
@@ -11,5 +12,10 @@ class TensorProcess(Process):
     def run(self):
         os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
         os.environ["CUDA_VISIBLE_DEVICES"] = "6"
+
+        gpus = tf.config.list_physical_devices('GPU')
+        tf.config.set_logical_device_configuration(
+            gpus[0],
+            [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
 
         self.result_dict['result'] = self.us.analyze()
