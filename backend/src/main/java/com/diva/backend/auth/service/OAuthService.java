@@ -26,8 +26,8 @@ public class OAuthService {
     @Value("${KAKAO.CLIENT.SECRET}")
     private String kakaoClientSecret;
 
-    @Value("${allowed-origin}")
-    private String allowedOrigin;
+    @Value("${FRONTEND}")
+    private String frontend;
 
     public KakaoOAuthResponse requestKakao(String provider, String code) throws IOException {
         KakaoTokenResponse kakaoTokenResponse = requestKakaoTokenResponse(provider, code);
@@ -60,7 +60,7 @@ public class OAuthService {
         try (OutputStream os = connection.getOutputStream()) {
             String encoded = String.format("grant_type=authorization_code&client_id=%s&redirect_uri=%s:3000/auth/login/oauth2/code/%s&code=%s&client_secret=%s",
                 kakaoClientId,
-                allowedOrigin,
+                frontend,
                 provider,
                 code,
                 kakaoClientSecret
