@@ -11,8 +11,6 @@ import MainLogo from '/public/svgs/logo.svg';
 import SettingIcon from '/public/svgs/setting.svg';
 import myPageAtom from '@/store/myPage';
 
-
-
 const MyPage = () => {
   const user = useAtomValue(userAtom);
 
@@ -48,7 +46,7 @@ const MyPage = () => {
       )}
       {user && isMyPage === settingPage && (
         <>
-          <SettingPage userinfo={user}></SettingPage>
+          <SettingPage user={user}></SettingPage>
         </>
       )}
       <Navigation />
