@@ -1,5 +1,6 @@
 'use client';
 
+import { setAccessTokenCookie } from '@/app/action';
 import { accessTokenAtom, userAtom } from '@/store/user';
 import { useAtom, useSetAtom } from 'jotai';
 import { NextPage } from 'next';
@@ -26,6 +27,8 @@ const KakaoLogin: NextPage = () => {
       // TODO: 리프레쉬 토큰 활용 필요
       const refreshToken: string =
         response.headers.get('authorizationrefresh') ?? '';
+      // 쿠키에 저장
+      setAccessTokenCookie(accessToken);
 
       // 전역 상태에 저장
       setAccessTokenWithLocalStorage(accessToken);
