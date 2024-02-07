@@ -20,10 +20,16 @@ export const useFetch = <T>(
       try {
         let result;
 
-        const { url, ...rest } = requestConfigResolver(params);
+        const { url, ...rest } = requestConfigResolver(params[0]);
+
+        console.log(rest);
+        console.log(rest.body);
+        console.log(typeof rest.body);
+
         const res: Response = await fetch(`/api${url}`, {
           headers: {
             Authorization: accessToken,
+            'Content-Type': 'application/json',
           },
           ...rest,
         });
