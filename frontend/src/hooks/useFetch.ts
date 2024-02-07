@@ -1,5 +1,5 @@
 import { accessTokenAtom } from '@/store/user';
-import { IRequestConfigResolver } from '@/services';
+import { IRequestConfigResolver, req } from '@/services';
 import { useAtomValue } from 'jotai';
 import { useCallback, useState } from 'react';
 
@@ -22,14 +22,15 @@ export const useFetch = <T>(
 
         const { url, ...rest } = requestConfigResolver(params[0]);
 
-        console.log(rest);
-        console.log(rest.body);
-        console.log(typeof rest.body);
-
         const res: Response = await fetch(`/api${url}`, {
           headers: {
             Authorization: accessToken,
-            'Content-Type': 'application/json',
+            'Content-Type': Object.is(
+              requestConfigResolver,
+              req.sing.saveTestResult,
+            )
+              ? 'multipart/form-data'
+              : 'application/json',
           },
           ...rest,
         });
