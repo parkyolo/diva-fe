@@ -1,7 +1,7 @@
 'use client';
+import { User } from '@/types/user';
 import Image from 'next/image';
 import MyPageTab from './MyPageTab';
-import { User } from '@/types/user';
 
 interface myPageProps {
   user: User;
@@ -21,14 +21,15 @@ const MyPageContent = ({ user }: myPageProps) => {
               width={350}
               height={350}
             />
-          ): (<Image
+          ) : (
+            <Image
               src="/images/cactus.png"
               // src={user.profileImg}
               alt={user.nickname}
               width={350}
               height={350}
-            />)
-          }
+            />
+          )}
         </div>
         <div className="flex w-full justify-center itmes-center">
           <div className="text-center text-2xl font-bold">{user.nickname}</div>

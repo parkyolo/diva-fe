@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react';
 import DotsThreeVertical from '/public/svgs/dots-three-vertical.svg';
 import useModal from '@/hooks/useModal';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
-import {  useAtomValue } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { userAtom } from '@/store/user';
 
 interface ContentProps {
@@ -37,13 +37,14 @@ const ShareItems = ({ song }: ContentProps) => {
     <div className="flex flex-col gap-2 w-full">
       <div className="flex justify-between items-center w-full">
         <div className="flex gap-2 justify-start items-center">
-          <Image
+          {/* TODO: 유저 이미지 추가 */}
+          {/* <Image
             src={user.profileImg}
             alt="profile-img"
             width={54}
             height={54}
             className="rounded-full"
-          ></Image>
+          ></Image> */}
 
           <div>
             <div className="font-bold text-xl">{user.nickname}</div>
