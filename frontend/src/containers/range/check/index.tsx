@@ -9,19 +9,32 @@ import Link from 'next/link';
 import Timer from '@/containers/range/check/Timer';
 import PitchDetector from '@/containers/range/check/PitchDetector';
 import Header from '@/components/Header';
-import LeftArrow from '/public/svgs/left_arrow.svg';
-import { useRouter } from 'next/navigation';
+import { LeftArrowIcon } from '../../../../public/svgs';
 import { convertHztoNote } from '@/utils/convertHztoNote';
+import { useFetch } from '@/hooks/useFetch';
+import { req } from '@/services';
+import { useAtomValue } from 'jotai';
+import { userAtom } from '@/store/user';
 
 const RangeCheckPage: React.FC = () => {
+  const GuidePhase = 0b00;
+  const RecordingPhase = 0b01;
+  const LoadingPhase = 0b10;
+  const [currentPhase, setCurrentPhase] = useState(GuidePhase);
+
   const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
   const [pitchArray, setPitchArray] = useState<number[]>([]);
-  
-  useEffect(() => {
+  const [isPostLoading, postResponse, postError, postRange] = useFetch(
+    req.sing.saveTestResult,
+  );
+
+  const [isResultLoading, setIsResultLoading] = useState(true);
+
+  const handleStartRecording = () => {
+    setCurrentPhase(RecordingPhase);
     const getAudioStream = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: false,
           audio: true,
         });
         setAudioStream(stream);
@@ -30,9 +43,8 @@ const RangeCheckPage: React.FC = () => {
       }
     };
     getAudioStream();
-  }, []);
+  };
 
-  
   const handleStopRecording = () => {
     if (audioStream) {
       audioStream.getTracks().forEach((track) => track.stop());
@@ -41,37 +53,10 @@ const RangeCheckPage: React.FC = () => {
       setCurrentPhase(LoadingPhase);
       const { minNoteName, maxNoteName } = convertHztoNote(pitchArray);
 
-      const handlePost = async () => {
-        console.log('post 보내는 중 ...')
-        const postUploadData = {
-          highestNote: maxNoteName,
-          lowestNote: minNoteName,
-        };
-        try {
-          const response = await fetch('', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(postUploadData),
-          });
-        } catch (error) {
-          console.error('Error during upload:', error);
-        }
-      };
-      handlePost()
-      console.log(minNoteName, maxNoteName);
+      postRange({ highestNote: maxNoteName, lowestNote: minNoteName });
       setCurrentPhase(LoadingPhase);
     }
   };
-
-  const router = useRouter();
-  const GuidePhase = 0b00;
-  const RecordingPhase = 0b01;
-  const LoadingPhase = 0b10;
-
-  const [currentPhase, setCurrentPhase] = useState(GuidePhase);
-  const [isResultLoading, setIsResultLoading] = useState(true);
 
   // 결과 로딩할 때 일정 시간 후 '결과 확인하기' 버튼 렌더링
   useEffect(() => {
@@ -85,7 +70,12 @@ const RangeCheckPage: React.FC = () => {
   }, [currentPhase]);
 
   // 처음 측정 or 재측정인지 판단
-  const hasUserResult = true;
+  const [hasUserResult, setDefaultResult] = useState<boolean>(false);
+  const userInfo = useAtomValue(userAtom);
+
+  useEffect(() => {
+    if (userInfo?.vocalRange) setDefaultResult(true);
+  }, [userInfo]);
 
   return (
     <>
@@ -94,24 +84,16 @@ const RangeCheckPage: React.FC = () => {
           {hasUserResult && (
             <Header
               LeftComponent={
-                <button
-                  onClick={() => {
-                    router.back();
-                  }}
-                >
-                  <LeftArrow></LeftArrow>
-                </button>
+                <Link href={'/range'}>
+                  <LeftArrowIcon></LeftArrowIcon>
+                </Link>
               }
             ></Header>
           )}
 
           <main className="flex flex-col justify-evenly items-center">
             <RangeCheckGuide></RangeCheckGuide>
-            <ClayButton
-              onClick={() => {
-                setCurrentPhase(RecordingPhase);
-              }}
-            >
+            <ClayButton onClick={handleStartRecording}>
               테스트 시작하기
             </ClayButton>
           </main>
@@ -127,7 +109,7 @@ const RangeCheckPage: React.FC = () => {
                   setCurrentPhase(GuidePhase);
                 }}
               >
-                <LeftArrow></LeftArrow>
+                <LeftArrowIcon></LeftArrowIcon>
               </button>
             }
           ></Header>

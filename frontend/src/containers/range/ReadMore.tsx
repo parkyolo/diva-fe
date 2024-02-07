@@ -5,24 +5,38 @@ type Range = {
   highRange: string;
 };
 
-import { useRef } from 'react';
-import { convertRange2Num } from '.';
-import BottomARrow from '/public/svgs/bottom_arrow.svg';
-import TopArrow from '/public/svgs/top_arrow.svg';
+import { useEffect, useRef, useState } from 'react';
+import { UpArrowIcon, DownArrowIcon } from '../../../public/svgs';
+import { convertRange2Num } from '@/utils/convertRange';
+import { rangeChart, vocalRange } from '@/types/range';
 
 const distFromTop = (highRange: string) => {
   return Math.floor((100 / 32) * (32 - convertRange2Num(highRange)));
 };
 
-const rangeHeight = (lowRange: string, highRange: string) => {
+const rangeHeight = (range: vocalRange) => {
   return Math.floor(
-    (100 / 32) * (convertRange2Num(highRange) - convertRange2Num(lowRange)),
+    (100 / 32) *
+      (convertRange2Num(range.highestNote) -
+        convertRange2Num(range.lowestNote)),
   );
 };
 
 const ReadMore = ({ lowRange, highRange }: Range) => {
   const womanAverageRange = ['E3', 'C5'];
   const manAverageRange = ['A2', 'F4'];
+  const [manRangeChart, setManRangeChart] = useState<rangeChart>({
+    distFromTop: 0,
+    rangeHeight: 0,
+  });
+  const [womanRangeChart, setWomanRangeChart] = useState<rangeChart>({
+    distFromTop: 0,
+    rangeHeight: 0,
+  });
+  const [userRangeChart, setUserRangeChart] = useState<rangeChart>({
+    distFromTop: 0,
+    rangeHeight: 0,
+  });
 
   const resultRef = useRef<HTMLDivElement>(null);
 
@@ -33,6 +47,30 @@ const ReadMore = ({ lowRange, highRange }: Range) => {
     });
   };
 
+  useEffect(() => {
+    setUserRangeChart({
+      distFromTop: distFromTop(highRange),
+      rangeHeight: rangeHeight({
+        lowestNote: lowRange,
+        highestNote: highRange,
+      }),
+    });
+    setManRangeChart({
+      distFromTop: distFromTop(manAverageRange[1]),
+      rangeHeight: rangeHeight({
+        lowestNote: manAverageRange[0],
+        highestNote: manAverageRange[1],
+      }),
+    });
+    setWomanRangeChart({
+      distFromTop: distFromTop(womanAverageRange[1]),
+      rangeHeight: rangeHeight({
+        lowestNote: womanAverageRange[0],
+        highestNote: womanAverageRange[1],
+      }),
+    });
+  }, []);
+
   return (
     <ul className="w-full">
       <span id="readmore" className="peer"></span>
@@ -42,7 +80,7 @@ const ReadMore = ({ lowRange, highRange }: Range) => {
             <div>
               <h5>결과 자세히 보기</h5>
             </div>
-            <BottomARrow />
+            <DownArrowIcon />
           </div>
         </a>
       </li>
@@ -53,7 +91,7 @@ const ReadMore = ({ lowRange, highRange }: Range) => {
             <div>
               <h5>결과 자세히 보기</h5>
             </div>
-            <TopArrow />
+            <UpArrowIcon />
           </div>
         </a>
       </li>
@@ -82,54 +120,46 @@ const ReadMore = ({ lowRange, highRange }: Range) => {
               <div
                 className="absolute w-[15px] rounded-xl left-[48%] bg-blue/50"
                 style={{
-                  top: `${distFromTop(manAverageRange[1])}%`,
-                  height: `${rangeHeight(
-                    manAverageRange[0],
-                    manAverageRange[1],
-                  )}%`,
+                  top: `${manRangeChart.distFromTop}%`,
+                  height: `${manRangeChart.rangeHeight}%`,
                 }}
               ></div>
               <hr
                 className="absolute w-[15px] bg-white left-[48%] h-0.5"
                 style={{
                   top: `${
-                    distFromTop(manAverageRange[1]) +
-                    rangeHeight(manAverageRange[0], manAverageRange[1]) / 2
+                    manRangeChart.distFromTop + manRangeChart.rangeHeight / 2
                   }%`,
                 }}
               />
               <div
                 className="absolute w-[15px] rounded-xl left-[63%] bg-green/30"
                 style={{
-                  top: `${distFromTop(highRange)}%`,
-                  height: `${rangeHeight(lowRange, highRange)}%`,
+                  top: `${userRangeChart.distFromTop}%`,
+                  height: `${userRangeChart.rangeHeight}%`,
                 }}
               ></div>
               <hr
                 className="absolute w-[15px] bg-white left-[63%] h-0.5"
                 style={{
                   top: `${
-                    distFromTop(highRange) +
-                    rangeHeight(lowRange, highRange) / 2
+                    userRangeChart.distFromTop + userRangeChart.rangeHeight / 2
                   }%`,
                 }}
               />
               <div
                 className="absolute w-[15px] rounded-xl left-[78%] bg-pink/70"
                 style={{
-                  top: `${distFromTop(womanAverageRange[1])}%`,
-                  height: `${rangeHeight(
-                    womanAverageRange[0],
-                    womanAverageRange[1],
-                  )}%`,
+                  top: `${womanRangeChart.distFromTop}%`,
+                  height: `${womanRangeChart.rangeHeight}%`,
                 }}
               ></div>
               <hr
                 className="absolute w-[15px] bg-white left-[78%] h-0.5"
                 style={{
                   top: `${
-                    distFromTop(womanAverageRange[1]) +
-                    rangeHeight(womanAverageRange[0], womanAverageRange[1]) / 2
+                    womanRangeChart.distFromTop +
+                    womanRangeChart.rangeHeight / 2
                   }%`,
                 }}
               />
