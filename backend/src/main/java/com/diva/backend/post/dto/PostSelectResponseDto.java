@@ -23,15 +23,15 @@ public class PostSelectResponseDto {
     private PracticeResultResponseDto practiceResult;
 
     @NotNull
-    private Integer likesCount;
+    private Integer heartCount;
 
     @Builder
-    protected PostSelectResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Integer likesCount) {
+    protected PostSelectResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Integer heartCount) {
         this.postId = postId;
         this.content = content;
         this.member = member;
         this.practiceResult = practiceResult;
-        this.likesCount = likesCount;
+        this.heartCount = heartCount;
     }
 
     // Post 엔티티를 PostResponseDto로 변환
@@ -58,7 +58,7 @@ public class PostSelectResponseDto {
                 .content(post.getContent())
                 .member(memberResponseDto)
                 .practiceResult(practiceResultResponseDto)
-                .likesCount(post.getLikes().size())
+                .heartCount(post.getHearts().size())
             .build();
     }
 }
