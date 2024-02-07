@@ -17,6 +17,10 @@ import boto3
 
 from scores.middleware import SingleRequestOnlyMiddleware
 
+import multiprocessing
+# multiProcessing
+multiprocessing.set_start_method('spawn')
+
 ssm = boto3.client('ssm')
 path = "/Score/Django/"
 parameters = ssm.get_parameters_by_path(Path=path, Recursive=True, WithDecryption=True)
