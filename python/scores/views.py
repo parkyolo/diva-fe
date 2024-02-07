@@ -66,9 +66,6 @@ def calculate_score(request):
         print('Current cuda device:', torch.cuda.current_device())
         print('Count of using GPUs:', torch.cuda.device_count())
 
-        # multiProcessing
-        multiprocessing.set_start_method('spawn')
-
         # GPU Memory 최대 4GB로 제한
         # torch
         torch.cuda.set_per_process_memory_fraction(0.125)
