@@ -4,6 +4,7 @@ import com.diva.backend.post.entity.Post;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -17,11 +18,9 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
     @Override
     public List<Post> findByPracticeResultIsNotNull() {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-
         return queryFactory
             .selectFrom(post)
             .where(post.practiceResult.isNotNull())
             .fetch();
     }
 }
-
