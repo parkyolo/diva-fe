@@ -10,6 +10,7 @@ import lombok.Getter;
 @Getter
 
 public class MemberResponseDto {
+    private final Long memberId;
 
     private final String nickname;
     private final String email;
@@ -17,7 +18,8 @@ public class MemberResponseDto {
     private final VocalRangeDto vocalRange;
 
     @Builder
-    public MemberResponseDto(String nickname, String email, Boolean profileImg, VocalRangeDto vocalRange) {
+    public MemberResponseDto(Long memberId, String nickname, String email, Boolean profileImg, VocalRangeDto vocalRange) {
+        this.memberId = memberId;
         this.nickname = nickname;
         this.email = email;
         this.profileImg = profileImg;
@@ -26,6 +28,7 @@ public class MemberResponseDto {
 
     public static MemberResponseDto from (Member member, VocalRangeDto vocalRangeDto) {
         return MemberResponseDto.builder()
+            .memberId(member.getId())
             .nickname(member.getNickname())
             .email(member.getEmail())
             .profileImg(member.getProfileImg())

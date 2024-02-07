@@ -15,7 +15,9 @@ public class BackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
-
+    static {
+        System.setProperty("com.amazonaws.sdk.disableEc2Metadata", "true");
+    }
     @Bean
     public AuditorAware<String> auditorProvider() {
         return () -> Optional.of(UUID.randomUUID().toString());

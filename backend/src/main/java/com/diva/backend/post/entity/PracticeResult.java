@@ -7,6 +7,8 @@ import com.diva.backend.song.entity.Song;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicUpdate;
 
 import static jakarta.persistence.FetchType.LAZY;
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -21,7 +23,9 @@ public class PracticeResult extends BaseEntity {
     @Column(name = "practice_result_id")
     private Long id;
 
-    @NotNull
+    //@NotNull
+    @ColumnDefault("0")
+    @Setter
     @Column(name = "score")
     private Integer score;
 
