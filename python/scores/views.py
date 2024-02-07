@@ -41,8 +41,13 @@ def calculate_score(request):
     # request에서 artist를 받아온다.
     artist: str = data['artist']
 
+
     # request에서 title을 받아온다.
     title: str = data['title']
+
+    # practice_result_id, artist, title 중 하나라도 없으면 400을 반환한다.
+    if not practice_result_id or not artist or not title:
+        return Response('{"error": "PracticeResultId, Artist, Title is required."}', status=status.HTTP_400_BAD_REQUEST)
 
     # 구조는 다음과 같다.
     bucket_name = "diva-s3"
@@ -128,6 +133,9 @@ def calculate_score(request):
 
         # 점수를 보정한다.
         score.score = min(100, 50 + score.score)
+
+        # 점수를 소수 첫번째 자리에서 반올림한다.
+        score.score = round(score.score, 1)
 
         # score 객체를 json으로 변환한다.
         dumps = json.dumps(score.__dict__)
