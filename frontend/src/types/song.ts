@@ -17,7 +17,7 @@ export interface SharedSong {
   recordUrl: string;
 }
 
-export interface letsUploadSongs extends SharedSong {
+export interface letsUploadSongs extends SangSong {
   content: string;
 }
 
