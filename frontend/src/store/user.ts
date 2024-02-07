@@ -1,10 +1,22 @@
-import { atom } from 'jotai';
+import { Getter, atom } from 'jotai';
 import { atomWithStorage } from 'jotai/utils';
 
 export const accessTokenAtom = atomWithStorage('accessToken', '');
 
+export function atomWithRefresh<T>(fn: (get: Getter) => T) {
+  const refreshCounter = atom(0);
+
+  return atom(
+    (get) => {
+      get(refreshCounter);
+      return fn(get);
+    },
+    (_, set) => set(refreshCounter, (i) => i + 1),
+  );
+}
+
 // TODO: setUserAtom
-export const userAtom = atom(async (get, { signal }) => {
+export const userAtom = atomWithRefresh(async (get) => {
   const accessToken = get(accessTokenAtom);
 
   if (accessToken) {
@@ -12,10 +24,10 @@ export const userAtom = atom(async (get, { signal }) => {
       headers: {
         Authorization: accessToken,
       },
-      signal,
     });
 
-    return response.json();
+    const data = await response.json();
+    return data;
   }
 
   return;
