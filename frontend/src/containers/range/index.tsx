@@ -135,7 +135,10 @@ const Range = () => {
             <p>추천 노래 살펴보기</p>
             <RightArrowIcon />
           </Link>
-          <ReadMore lowRange={note.lowestNote} highRange={note.highestNote} />
+          <ReadMore
+            lowestNote={note.lowestNote}
+            highestNote={note.highestNote}
+          />
         </section>
       </main>
       <Navigation />
