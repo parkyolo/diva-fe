@@ -106,6 +106,7 @@ def calculate_score(request):
             tensor_process.start()
             tensor_process.join()
             print(result_dict['result'])  # Prints the result of us.analyze()
+            print(result_dict['error'])
 
         final_score = result_dict['result']
 
