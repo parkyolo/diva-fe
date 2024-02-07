@@ -1,5 +1,5 @@
 import ShareItems from './ShareItems';
-import { SharedSong, Song } from '@/types/song';
+import { SharedSong } from '@/types/song';
 import { useEffect } from 'react';
 import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
