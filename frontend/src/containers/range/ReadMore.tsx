@@ -1,17 +1,12 @@
 'use client';
 
-type Range = {
-  lowRange: string;
-  highRange: string;
-};
-
 import { useEffect, useRef, useState } from 'react';
 import { UpArrowIcon, DownArrowIcon } from '../../../public/svgs';
 import { convertRange2Num } from '@/utils/convertRange';
 import { rangeChart, vocalRange } from '@/types/range';
 
-const distFromTop = (highRange: string) => {
-  return Math.floor((100 / 32) * (32 - convertRange2Num(highRange)));
+const distFromTop = (highestNote: string) => {
+  return Math.floor((100 / 32) * (32 - convertRange2Num(highestNote)));
 };
 
 const rangeHeight = (range: vocalRange) => {
@@ -22,7 +17,7 @@ const rangeHeight = (range: vocalRange) => {
   );
 };
 
-const ReadMore = ({ lowRange, highRange }: Range) => {
+const ReadMore = ({ lowestNote, highestNote }: vocalRange) => {
   const womanAverageRange = ['E3', 'C5'];
   const manAverageRange = ['A2', 'F4'];
   const [manRangeChart, setManRangeChart] = useState<rangeChart>({
@@ -49,10 +44,10 @@ const ReadMore = ({ lowRange, highRange }: Range) => {
 
   useEffect(() => {
     setUserRangeChart({
-      distFromTop: distFromTop(highRange),
+      distFromTop: distFromTop(highestNote),
       rangeHeight: rangeHeight({
-        lowestNote: lowRange,
-        highestNote: highRange,
+        lowestNote: lowestNote,
+        highestNote: highestNote,
       }),
     });
     setManRangeChart({
@@ -69,7 +64,7 @@ const ReadMore = ({ lowRange, highRange }: Range) => {
         highestNote: womanAverageRange[1],
       }),
     });
-  }, []);
+  }, [lowestNote]);
 
   return (
     <ul className="w-full">
