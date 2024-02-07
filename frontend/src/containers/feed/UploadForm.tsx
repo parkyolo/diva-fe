@@ -1,10 +1,12 @@
 import Header from '@/components/Header';
 import { feedPage, feedPageAtom, songAtom } from '@/store/feed';
-import { SangSong } from '@/types/song';
+import { SangSong, letsUploadSongs } from '@/types/song';
 import { useAtomValue, useSetAtom } from 'jotai';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import LeftArrow from '/public/svgs/left_arrow.svg';
+import { useFetch } from '@/hooks/useFetch';
+import { req } from '@/services';
 
 interface user {
   profileImg: string;
@@ -20,12 +22,11 @@ const UploadForm = () => {
   const songData: SangSong = useAtomValue(songAtom);
   const [inputValue, setInputValue] = useState<string>();
   const setFeedPageAtom = useSetAtom(feedPageAtom);
-
-  useEffect(() => {
-    return () => {
-      handleCurrentPage();
-    };
-  }, []);
+    useEffect(() => {
+      return () => {
+        handleCurrentPage();
+      };
+    }, []);
 
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
@@ -35,13 +36,31 @@ const UploadForm = () => {
     setFeedPageAtom(feedPage);
   };
 
-  const handleUpload = async () => {
-    const postUploadData = {
-      content: inputValue,
-      ...songData,
-    };
+  const [isLoading, sharedsongs, error, postSongFeed] = useFetch<
+    [letsUploadSongs]
+  >(req.post.writePost);
 
-    console.log('postUploadData', postUploadData);
+  const handleUpload = () => {
+    postSongFeed({
+      content: inputValue,
+      practiceResultId: songData.practiceResultId,
+      score: songData.score,
+      // TODO: songID?
+      // songId: songData.songTitle,
+      title: songData.songTitle,
+      artist: songData.artist,
+    });
+
+    console.log(
+      'postUploadData',
+      inputValue,
+      songData.practiceResultId,
+      songData.score,
+      songData.coverImg,
+      songData.songTitle,
+      new Date(),
+      songData.artist,
+    );
     handleCurrentPage();
   };
   return (
@@ -74,7 +93,7 @@ const UploadForm = () => {
                 {songData.songTitle}
               </div>
               <div className="text-start px-2">
-                {songData.createdDate.substring(0,10)}
+                {songData.createdDate.substring(0, 10)}
               </div>
               <div className="flex justify-end">{songData.score}/100</div>
             </div>
@@ -82,7 +101,7 @@ const UploadForm = () => {
 
           <div className="flex justify-center items-center">
             <Image
-              src={songData.coverImg}
+              src={`/images/${songData.coverImg}`}
               alt={songData.songTitle}
               width={0}
               height={0}
