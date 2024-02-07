@@ -1,6 +1,7 @@
 package com.diva.backend.post.entity;
 
 import com.diva.backend.entity.BaseEntity;
+import com.diva.backend.heart.entity.Heart;
 import com.diva.backend.member.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -39,9 +40,8 @@ public class Post extends BaseEntity {
     @OneToOne(mappedBy = "post")
     private PracticeResult practiceResult;
 
-    @NotNull
     @OneToMany(mappedBy = "post")
-    private List<Likes> likes = new ArrayList<>();
+    private List<Heart> hearts = new ArrayList<>();
 
     @Builder
     protected Post(String content, Member member, PracticeResult practiceResult) {

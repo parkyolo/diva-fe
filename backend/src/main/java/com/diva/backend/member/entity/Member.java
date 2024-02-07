@@ -6,7 +6,7 @@ import com.diva.backend.entity.BaseEntity;
 import com.diva.backend.entity.Notification;
 import com.diva.backend.enumstorage.role.MemberRole;
 import com.diva.backend.enumstorage.status.MemberStatus;
-import com.diva.backend.post.entity.Likes;
+import com.diva.backend.heart.entity.Heart;
 import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.song.entity.SavedSong;
@@ -69,7 +69,7 @@ public class Member extends BaseEntity {
 
     @NotNull
     @OneToMany(mappedBy = "member")
-    private List<Likes> likes = new ArrayList<>();
+    private List<Heart> hearts = new ArrayList<>();
 
     @NotNull
     @OneToMany(mappedBy = "member")

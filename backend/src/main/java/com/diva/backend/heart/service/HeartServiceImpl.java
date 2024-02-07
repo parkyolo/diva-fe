@@ -42,7 +42,9 @@ public class HeartServiceImpl implements HeartService {
                 .member(member)
             .build();
 
+        post.getHearts().add(heart);
         heartRepository.save(heart);
+        postRepository.save(post);
     }
 
     @Override
@@ -57,6 +59,8 @@ public class HeartServiceImpl implements HeartService {
         Heart heart = heartRepository.findByMemberAndPost(member, post)
             .orElseThrow(() -> new IllegalArgumentException("해당 좋아요 ID를 찾을 수 없습니다."));
 
+        post.getHearts().remove(heart);
         heartRepository.delete(heart);
+        postRepository.save(post);
     }
 }

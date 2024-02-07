@@ -1,15 +1,16 @@
 package com.diva.backend.song.entity;
 
 import com.diva.backend.entity.BaseEntity;
-import com.diva.backend.song.entity.Song;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class SongRange extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
