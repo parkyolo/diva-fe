@@ -8,7 +8,7 @@ import { PostInterface } from '@/types/post';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import PostContainer from '../../components/post/PostContainer';
+import PostContainer from './post/PostContainer';
 import UploadButton from './UploadButton';
 import { HeaderLogo } from '../../../public/svgs';
 

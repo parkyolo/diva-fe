@@ -30,8 +30,7 @@ const SongContent = () => {
   let sortedSongs;
   let groupedSongs: any;
   if (sangSongs) {
-    sortedSongs = sangSongs!
-    .slice()
+    sortedSongs = sangSongs
     .sort((a, b) => a.createdDate.localeCompare(b.createdDate));
     groupedSongs = groupBy(sortedSongs, 'createdDate');
   }

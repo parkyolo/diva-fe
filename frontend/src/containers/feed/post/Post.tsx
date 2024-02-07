@@ -6,7 +6,7 @@ import LikeIcon from '/public/svgs/like.svg';
 import PostContent from './PostContent';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import useModal from '@/hooks/useModal';
-import BottomSheet from '../BottomSheet/BottomSheet';
+import BottomSheet from '../../../components/BottomSheet/BottomSheet';
 import PlayIcon from '/public/svgs/polygon.svg';
 import { PostInterface } from '@/types/post';
 
