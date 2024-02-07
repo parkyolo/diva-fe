@@ -4,10 +4,13 @@ import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.entity.VocalRange;
 import com.diva.backend.member.repository.MemberRepository;
 import com.diva.backend.member.repository.VocalRangeRepository;
+import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.sing.dto.LiveResponseDto;
+import com.diva.backend.sing.dto.LiveUploadResponseDto;
 import com.diva.backend.sing.dto.TutorialResponseDto;
 import com.diva.backend.sing.dto.VocalTestRequestDto;
 import com.diva.backend.sing.dto.VocalTestResponseDto;
+import com.diva.backend.song.repository.PracticeResultRepository;
 import com.diva.backend.util.RecommendArtist;
 import com.diva.backend.song.entity.Song;
 import com.diva.backend.song.repository.SongRepository;
@@ -15,6 +18,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import com.diva.backend.util.S3Uploader;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -22,8 +27,11 @@ import org.springframework.stereotype.Service;
 public class SingServiceImpl implements SingService{
     private final MemberRepository memberRepository;
     private final VocalRangeRepository vocalRangeRepository;
-    private final RecommendArtist recommendArtist;
     private final SongRepository songRepository;
+    private final PracticeResultRepository practiceResultRepository;
+
+    private final RecommendArtist recommendArtist;
+    private final S3Uploader s3Uploader;
 
     @Transactional
     @Override
@@ -84,5 +92,32 @@ public class SingServiceImpl implements SingService{
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
         Song song = songRepository.findSongById(songId);
         return LiveResponseDto.from(song);
+    }
+
+    @Transactional
+    @Override
+    public LiveUploadResponseDto uploadFile(Long memberId, Long songId, MultipartFile multipartFile) {
+        Member member = memberRepository.findMemberById(memberId)
+            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Song song = songRepository.findSongById(songId);
+        PracticeResult practiceResult = PracticeResult.builder()
+                                        .member(member)
+                                        .song(song)
+                                        .build();
+
+        // S3에 파일 업로드
+        Long practiceResultId = practiceResultRepository.save(practiceResult).getId();
+        String artist = song.getArtist();
+        String title = song.getTitle();
+        String url = "PracticeResult/" + practiceResultId + "/" + artist + "-" + title + ".mp3";
+        s3Uploader.uploadFile(url, multipartFile);
+
+        // 파이썬 서버에 채점요청 보내기(practiceResultId, artist, title) -> response로 score 들어옴
+        int score = 99;
+        
+        // practiceResult의 score 업데이트
+        practiceResult.setScore(score);
+        PracticeResult newProjectResult = practiceResultRepository.save(practiceResult);
+        return LiveUploadResponseDto.from(newProjectResult);
     }
 }

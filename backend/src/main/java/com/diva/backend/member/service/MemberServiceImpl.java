@@ -41,13 +41,7 @@ public class MemberServiceImpl implements MemberService {
         if (vocalRange != null) {
             vocalRangeDto = VocalRangeDto.from(vocalRange);
         }
-
-        return MemberResponseDto.builder()
-            .nickname(member.getNickname())
-            .email(member.getEmail())
-            .profileImg(member.getProfileImg())
-            .vocalRange(vocalRangeDto)
-            .build();
+        return MemberResponseDto.from(member, vocalRangeDto);
     }
 
     @Transactional
@@ -80,7 +74,7 @@ public class MemberServiceImpl implements MemberService {
             PracticeResult practiceResult = practiceResultRepository.findByPostId(post.getId());
             String url = "PracticeResult/" + practiceResult.getId() + "/" + practiceResult.getSong().getArtist()
                 + "-" + practiceResult.getSong().getTitle() + "_vocal.wav";
-            memberPostList.add(MemberPostResponseDto.from(member,post, practiceResult, url));
+            memberPostList.add(MemberPostResponseDto.from(member,post, practiceResult));
         }
         return memberPostList;
     }
