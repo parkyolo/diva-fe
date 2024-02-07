@@ -98,6 +98,8 @@ def calculate_score(request):
                                       output_file_path=current_path + "/" + "scores" + "/" + practice_result_dir)
         us = UltraSinger(scoreSettings)
 
+        final_score = 0
+
         with Manager() as manager:
             result_dict = manager.dict()
             # 데이터를 받는 프로세스가 없음 -> subprocess.check_output()
@@ -109,17 +111,11 @@ def calculate_score(request):
                 print('An error occurred in the child process:', result_dict['error'])
             else:
                 print(result_dict['result'])  # Prints the result of us.analyze()
-
-        final_score = result_dict['result']
+                final_score = result_dict['result']
 
         # GPU 할당 해제
         # torch
         torch.cuda.empty_cache()
-
-        # tensorflow
-        tf.keras.backend.clear_session()
-
-        gc.collect()
 
         # muted 파일을 S3에 저장한다.
         bucket.upload_file(
