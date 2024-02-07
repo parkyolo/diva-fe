@@ -8,8 +8,6 @@ import { useState, ChangeEvent } from 'react';
 import LeftArrow from '/public/svgs/left_arrow.svg';
 import Header from '@/components/Header';
 import myPageAtom from '@/store/myPage';
-
-
 interface myPageProps {
   userinfo: User;
 }
@@ -41,7 +39,6 @@ const SettingPage = ({ userinfo }: myPageProps) => {
     setSelectImg(newProfileImg);
   };
   const setMyPageAtom = useSetAtom(myPageAtom);
-
   return (
     <>
       <Header
@@ -55,6 +52,7 @@ const SettingPage = ({ userinfo }: myPageProps) => {
             onClick={() => {
               patchUserinfo({
                 nickname: inputValue,
+                profileImg: true,
               });
               setMyPageAtom(0b0);
             }}
