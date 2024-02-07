@@ -1,3 +1,5 @@
+import { vocalRange } from './range';
+
 export interface User {
   nickname: string;
   profileImg: boolean;
@@ -9,8 +11,3 @@ export interface UserPatch {
   nickname: string;
   profileImg: boolean;
 }
-
-type vocalRange = {
-  highestNote: string;
-  lowestNote: string;
-};

@@ -3,7 +3,7 @@ import { atomWithStorage } from 'jotai/utils';
 
 export const accessTokenAtom = atomWithStorage('accessToken', '');
 
-// TODO: setUserAtom 
+// TODO: setUserAtom
 export const userAtom = atom(async (get, { signal }) => {
   const accessToken = get(accessTokenAtom);
 
