@@ -4,18 +4,20 @@ import { accessTokenAtom, userAtom } from '@/store/user';
 import { User, UserPatch } from '@/types/user';
 import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
-import { useState, ChangeEvent } from 'react';
+import { useState, ChangeEvent, useEffect } from 'react';
 import LeftArrow from '/public/svgs/left_arrow.svg';
 import Header from '@/components/Header';
 import myPageAtom from '@/store/myPage';
 interface myPageProps {
-  userinfo: User;
+  user: User;
 }
-const SettingPage = ({ userinfo }: myPageProps) => {
+const SettingPage = ({ user }: myPageProps) => {
   const router = useRouter();
-  const [inputValue, setInputValue] = useState(userinfo.nickname);
+  const [inputValue, setInputValue] = useState(user.nickname);
+  const setUserAtom = useSetAtom(userAtom);
+
   const handleInputClick = () => {
-    if (inputValue === userinfo.nickname) {
+    if (inputValue === user.nickname) {
       setInputValue('');
     }
   };
@@ -33,12 +35,22 @@ const SettingPage = ({ userinfo }: myPageProps) => {
     router.push('/');
   };
 
-  const [selectedImg, setSelectImg] = useState(userinfo.profileImg);
+  const [selectedImg, setSelectImg] = useState(user.profileImg);
   const handleImgSelection = (event: any) => {
     const newProfileImg = event?.target.files[0];
     setSelectImg(newProfileImg);
   };
   const setMyPageAtom = useSetAtom(myPageAtom);
+
+  // 유저 정보 업데이트 후 서버에 모두 반영이 되면 그 때 전역 유저를 갱신하고 마이페이지 메인으로 이동
+  useEffect(() => {
+    if (userInfo && !isLoading) {
+      console.log(userInfo);
+      setUserAtom();
+      setMyPageAtom(0b0);
+    }
+  }, [userInfo]);
+
   return (
     <>
       <Header
@@ -52,9 +64,9 @@ const SettingPage = ({ userinfo }: myPageProps) => {
             onClick={() => {
               patchUserinfo({
                 nickname: inputValue,
+                // TODO: 사용자가 선택한 이미지가 있으면 true, 없으면 false 보내기
                 profileImg: true,
               });
-              setMyPageAtom(0b0);
             }}
           >
             <span className=" font-samlip text-skyblue">완료</span>
