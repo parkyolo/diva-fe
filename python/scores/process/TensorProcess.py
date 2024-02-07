@@ -18,3 +18,5 @@ class TensorProcess(Process):
             gpus[0],
             [tf.config.LogicalDeviceConfiguration(memory_limit=4096)])
         self.result_dict['result'] = self.us.analyze()
+
+        print(self.result_dict['result'])
