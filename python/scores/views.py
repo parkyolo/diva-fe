@@ -100,6 +100,8 @@ def calculate_score(request):
 
         with Manager() as manager:
             result_dict = manager.dict()
+            # 데이터를 받는 프로세스가 없음 -> subprocess.check_output()
+            # 송신 프로세스 중 파이프가 끊어짐 -> 데이터를 보내기 전에 파이프가 유효한지 확인
             tensor_process = TensorProcess(result_dict=result_dict, us=us)
             tensor_process.start()
             tensor_process.join()
