@@ -1,6 +1,6 @@
 'use client';
 
-import Post from '@/components/post/Post';
+import Post from '@/containers/feed/post/Post';
 import { PostInterface } from '@/types/post';
 import { useState } from 'react';
 
