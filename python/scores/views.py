@@ -105,8 +105,10 @@ def calculate_score(request):
             tensor_process = TensorProcess(result_dict=result_dict, us=us)
             tensor_process.start()
             tensor_process.join()
-            print(result_dict['result'])  # Prints the result of us.analyze()
-            print(result_dict['error'])
+            if 'error' in result_dict:
+                print('An error occurred in the child process:', result_dict['error'])
+            else:
+                print(result_dict['result'])  # Prints the result of us.analyze()
 
         final_score = result_dict['result']
 
