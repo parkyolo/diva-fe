@@ -15,7 +15,6 @@ import myPageAtom from '@/store/myPage';
 
 const MyPage = () => {
   const user = useAtomValue(userAtom);
-  console.log(user);
 
   const myPage = 0b0;
   const settingPage = 0b1;
