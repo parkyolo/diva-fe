@@ -135,7 +135,7 @@ def calculate_score(request):
         score.score = min(100, 50 + score.score)
 
         # 점수를 소수 첫번째 자리에서 반올림한다.
-        score.score = round(score.score, 1)
+        score.score = round(score.score)
 
         # score 객체를 json으로 변환한다.
         dumps = json.dumps(score.__dict__)
