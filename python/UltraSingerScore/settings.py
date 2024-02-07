@@ -93,7 +93,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     # SingleRequestOnlyMiddleware 설정
-    'scores.middleware.SingleRequestOnlyMiddleware.SingleRequestOnlyMiddleware',
+    # 'scores.middleware.SingleRequestOnlyMiddleware.SingleRequestOnlyMiddleware',
 ]
 
 ROOT_URLCONF = 'UltraSingerScore.urls'
