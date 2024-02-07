@@ -8,6 +8,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 
+from django_ratelimit.decorators import ratelimit
+
 import torch
 import boto3
 
@@ -21,15 +23,14 @@ from multiprocessing import Manager
 
 from unicodedata import normalize
 
+from .process.TensorProcess import TensorProcess
 import tensorflow as tf
 import gc
 
 from .model.Score import Score
-from .process.TensorProcess import TensorProcess
 
 
-# Create your views here.
-
+@ratelimit(key='ip', rate='5/m', block=True)
 @api_view(['POST'])
 def calculate_score(request):
     data = json.loads(request.body)
