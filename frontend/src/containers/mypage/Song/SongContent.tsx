@@ -23,11 +23,9 @@ const SongContent = () => {
   const [isLoading, sangSongs, error, getsangSongs] = useFetch<SangSong[]>(
     req.song.getSangSong,
   );
-  console.log(sangSongs)
   useEffect(() => {
     getsangSongs();
   }, []);
-  console.log('새로운 생송:', sangSongs);
 
   let sortedSongs;
   let groupedSongs: any;
@@ -36,9 +34,7 @@ const SongContent = () => {
     .slice()
     .sort((a, b) => a.createdDate.localeCompare(b.createdDate));
     groupedSongs = groupBy(sortedSongs, 'createdDate');
-    console.log('sortedSongs : ', sortedSongs);
   }
-  // console.log('sortedSongs:', sortedSongs);
   return (
     <div>
       {groupedSongs && Object.keys(groupedSongs).map((date, index) => (
