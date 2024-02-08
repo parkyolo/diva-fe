@@ -23,6 +23,7 @@ export const userAtom = atomWithRefresh(async (get) => {
     const response = await fetch('/api/members', {
       headers: {
         Authorization: accessToken,
+        'Content-Type': 'application/json',
       },
     });
 
