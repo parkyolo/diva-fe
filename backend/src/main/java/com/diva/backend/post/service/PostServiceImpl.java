@@ -7,7 +7,9 @@ import com.diva.backend.post.dto.PostUpdateRequestDto;
 import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.post.repository.PostRepository;
+import com.diva.backend.song.entity.Song;
 import com.diva.backend.song.repository.PracticeResultRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,27 +18,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final PracticeResultRepository practiceResultRepository;
 
-    @Autowired
-    public PostServiceImpl(PostRepository postRepository, MemberRepository memberRepository, PracticeResultRepository practiceResultRepository) {
-        this.postRepository = postRepository;
-        this.memberRepository = memberRepository;
-        this.practiceResultRepository = practiceResultRepository;
-    }
-
     // 전체 게시글 조회
     @Override
     @Transactional
     public List<PostSelectResponseDto> getAllPosts() {
-        List<Post> posts = postRepository.findByPracticeResultIsNotNull();
+        List<Post> posts = postRepository.findAll();
 
         return posts.stream()
                 .map(PostSelectResponseDto::toPostResponseDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // 게시글 작성
@@ -46,8 +42,11 @@ public class PostServiceImpl implements PostService {
         Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원이 존재하지 않습니다."));
 
-        PracticeResult practiceResult = practiceResultRepository.findById(practiceResultId)
+        // Practice Result와 Song을 Join해서 가져온다.
+        PracticeResult practiceResult = practiceResultRepository.findByIdWithSong(practiceResultId)
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
+
+        Song song = practiceResult.getSong();
 
         Long practiceResultMemberId = practiceResult.getMember().getId();
         if(!practiceResultMemberId.equals(memberId))  {
@@ -58,6 +57,7 @@ public class PostServiceImpl implements PostService {
                 .content(content)
                 .member(member)
                 .practiceResult(practiceResult)
+                .song(song)
             .build();
 
         postRepository.save(post);
@@ -67,13 +67,20 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void deletePost(Long postId, Long memberId) {
-        Post post = postRepository.findById(postId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다."));
+        // postId를 갖고있는 practice result를 member와 post를 함께 찾는다.
+        PracticeResult practiceResult = practiceResultRepository.findByPostIdWithMemberAndPost(postId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
 
-        Long postMemberId = post.getMember().getId();
-        if (!postMemberId.equals(memberId)) {
+        Member member = practiceResult.getMember();
+        Post post = practiceResult.getPost();
+
+        // member의 id와 post의 member id가 같은지 확인한다.
+        if (!member.getId().equals(memberId)) {
             throw new IllegalArgumentException("게시글을 삭제할 수 있는 권한이 없습니다.");
         }
+
+        // practice result에서 post를 삭제한다.
+        practiceResult.removePost();
 
         postRepository.delete(post);
     }

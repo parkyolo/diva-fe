@@ -3,6 +3,7 @@ package com.diva.backend.song.entity;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import com.diva.backend.entity.BaseEntity;
+import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,6 +63,10 @@ public class Song extends BaseEntity {
     @OneToMany(mappedBy = "song")
     private List<PracticeResult> practiceResults = new ArrayList<>();
 
+    @NotNull
+    @OneToMany(mappedBy = "song")
+    private List<Post> posts = new ArrayList<>();
+
     @Builder
     protected Song(String title, String artist, String coverImg, String lyric, String mrUrl) {
         this.title = title;
@@ -74,5 +79,9 @@ public class Song extends BaseEntity {
     //==연관관계 메소드==//
     public void addPracticeResult(PracticeResult practiceResult) {
         this.practiceResults.add(practiceResult);
+    }
+
+    public void addPost(Post post) {
+        this.posts.add(post);
     }
 }
