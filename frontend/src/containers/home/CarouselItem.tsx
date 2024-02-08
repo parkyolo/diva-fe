@@ -1,6 +1,4 @@
-import { Song } from '@/types/song';
 import Image from 'next/image';
-import { useRef, useState } from 'react';
 
 export interface CardProps {
   index: number;
@@ -9,7 +7,8 @@ export interface CardProps {
   length: number;
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  song: Song;
+  // TODO: song 타입 지정 필요
+  song: any;
 }
 
 const CarouselItem = ({
