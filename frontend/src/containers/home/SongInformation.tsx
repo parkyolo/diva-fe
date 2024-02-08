@@ -1,7 +1,5 @@
-import { Song } from '@/types/song';
-
 interface SongInformationProps {
-  song: Song;
+  song: any;
 }
 
 const SongInformation = ({ song }: SongInformationProps) => {
