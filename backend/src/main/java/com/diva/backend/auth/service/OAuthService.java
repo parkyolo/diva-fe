@@ -4,6 +4,7 @@ import com.diva.backend.auth.dto.KakaoOAuthResponse;
 import com.diva.backend.auth.dto.KakaoTokenResponse;
 import com.diva.backend.auth.dto.KakaoUserResponse;
 import com.diva.backend.auth.entity.Token;
+import com.diva.backend.auth.enumstorage.profile.SpringProfile;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -28,6 +29,12 @@ public class OAuthService {
 
     @Value("${FRONTEND}")
     private String frontend;
+
+    @Value("${FRONTEND.PORT}")
+    private String frontendPort;
+
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
 
     public KakaoOAuthResponse requestKakao(String provider, String code) throws IOException {
         KakaoTokenResponse kakaoTokenResponse = requestKakaoTokenResponse(provider, code);
@@ -56,11 +63,18 @@ public class OAuthService {
         // OutputStream으로 POST 데이터를 넘겨주겠다는 옵션.
         connection.setDoOutput(true);
 
+        String front = frontend;
+
+        // local
+        if (activeProfile.equals(SpringProfile.LOCAL.getProfile())) {
+            front += ":" + frontendPort;
+        }
+
         // POST 데이터를 넘겨주기 위한 OutputStream
         try (OutputStream os = connection.getOutputStream()) {
-            String encoded = String.format("grant_type=authorization_code&client_id=%s&redirect_uri=%s:3000/auth/login/oauth2/code/%s&code=%s&client_secret=%s",
+            String encoded = String.format("grant_type=authorization_code&client_id=%s&redirect_uri=%s/auth/login/oauth2/code/%s&code=%s&client_secret=%s",
                 kakaoClientId,
-                frontend,
+                front,
                 provider,
                 code,
                 kakaoClientSecret
