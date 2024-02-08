@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +31,7 @@ import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 import static org.springframework.http.HttpStatus.GONE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@Slf4j
 @RestController
 @RequestMapping(value = "/api/auth")
 @RequiredArgsConstructor
@@ -65,6 +67,8 @@ public class AuthRestController {
 
     @GetMapping(value = "/login/oauth2/code/{provider}")
     public ResponseEntity<?> oAuth2CodeV1(@PathVariable(name = "provider") String provider, @RequestParam(name = "code") String code, HttpServletResponse response) throws IOException {
+        log.info("code: " + code);
+
         // Kakao에 Access Token을 요청한다.
         KakaoOAuthResponse kakaoOAuthResponse = oauthService.requestKakao(provider, code);
 
