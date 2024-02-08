@@ -55,11 +55,10 @@ public class SecurityConfig {
                 .requestMatchers("/", "/css/**", "/img/**", "/js/**", "/favicon.ico", "/error/**")
                 .permitAll()
                 .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/members/**").permitAll()
-                .requestMatchers("/posts/**").permitAll()
-                .requestMatchers("/vocal-test").permitAll()
-                .requestMatchers("/sing/**").permitAll()
+                .requestMatchers("/api/members/**").permitAll()
+                .requestMatchers("/api/posts/**").permitAll()
+                .requestMatchers("/api/vocal-test").permitAll()
+                .requestMatchers("/api/sing/**").permitAll()
                 .anyRequest().authenticated()
 
             );

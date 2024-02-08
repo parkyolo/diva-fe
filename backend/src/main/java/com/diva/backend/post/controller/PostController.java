@@ -5,21 +5,20 @@ import com.diva.backend.post.dto.PostSelectResponseDto;
 import com.diva.backend.post.dto.PostUpdateRequestDto;
 import com.diva.backend.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+
 @RestController
-@RequestMapping("/posts")
+@RequestMapping(value = "/api/posts", consumes = APPLICATION_JSON_VALUE)
+@RequiredArgsConstructor
 public class PostController {
     private final PostService postService;
-
-    @Autowired
-    public PostController(PostService postService) {
-        this.postService = postService;
-    }
 
     // 전체 게시글 조회
     @GetMapping("/list")

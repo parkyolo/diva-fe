@@ -1,24 +1,18 @@
 package com.diva.backend.sing.controller;
 
-import com.diva.backend.sing.dto.LiveResponseDto;
-import com.diva.backend.sing.dto.LiveUploadResponseDto;
-import com.diva.backend.sing.dto.TutorialResponseDto;
-import com.diva.backend.sing.dto.VocalTestRequestDto;
-import com.diva.backend.sing.dto.VocalTestResponseDto;
+import com.diva.backend.sing.dto.*;
 import com.diva.backend.sing.service.SingService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping(value = "/api", consumes = APPLICATION_JSON_VALUE)
 public class SingController {
     private final SingService singService;
 
@@ -47,8 +41,7 @@ public class SingController {
         return singService.getLiveMode(memberId, songId);
     }
 
-    // , consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE}
-    @PostMapping("/sing/{songId}/live")
+    @PostMapping(value = "/sing/{songId}/live", consumes = MULTIPART_FORM_DATA_VALUE)
     public LiveUploadResponseDto uploadFileToS3(HttpServletRequest request, @PathVariable("songId") Long songId, @RequestPart(value = "file", required = false) MultipartFile multipartFile) {
         Long memberId = (Long) request.getAttribute("memberId");
         return singService.uploadFile(memberId, songId, multipartFile);
