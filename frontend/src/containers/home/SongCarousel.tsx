@@ -1,6 +1,5 @@
 import { useCarousel } from '@/hooks/useCarousel';
 import ImageCarousel from './ImageCarousel';
-import { Song } from '@/types/song';
 import SimilarityCounter from './SimilarityCounter';
 import SongInformation from './SongInformation';
 import { useRef, useState } from 'react';
@@ -9,7 +8,7 @@ import { RoundedUpArrowIcon, VolumeOff, VolumeOn } from '../../../public/svgs';
 interface SongCarouselProps {
   interval: number;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
-  songs: Song[];
+  songs: any[];
 }
 
 // TODO: 모달 떠있는 상태에서 캐러셀 넘어가는 문제
