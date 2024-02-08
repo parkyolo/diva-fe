@@ -23,12 +23,18 @@ public class Heart extends BaseEntity {
     private Long id;
 
     @NotNull
+    @Column(name = "liked")
+    private Boolean liked;
+
+    @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Setter
     @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
 }

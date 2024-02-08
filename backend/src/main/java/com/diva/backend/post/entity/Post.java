@@ -44,17 +44,23 @@ public class Post extends BaseEntity {
     private List<Heart> hearts = new ArrayList<>();
 
     @Builder
-    protected Post(String content, Member member, PracticeResult practiceResult) {
+    protected Post(String content, Member member, PracticeResult practiceResult, List<Heart> hearts) {
         this.content = content;
         this.member = member;
         this.member.addPost(this);
         this.setPracticeResult(practiceResult);
+        this.hearts = hearts;
     }
 
     // 연관관계 메소드
     public void setPracticeResult(PracticeResult practiceResult) {
         this.practiceResult = practiceResult;
         practiceResult.setPost(this);
+    }
+
+    public void addHeart(Heart heart) {
+        this.hearts.add(heart);
+        heart.setPost(this);
     }
 
     // 게시글 수정

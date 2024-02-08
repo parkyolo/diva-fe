@@ -40,6 +40,7 @@ public class HeartServiceImpl implements HeartService {
         Heart heart = Heart.builder()
                 .post(post)
                 .member(member)
+                .liked(true)
             .build();
 
         post.getHearts().add(heart);
