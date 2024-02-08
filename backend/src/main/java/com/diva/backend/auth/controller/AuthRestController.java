@@ -2,6 +2,7 @@ package com.diva.backend.auth.controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.diva.backend.auth.dto.KakaoOAuthResponse;
+import com.diva.backend.auth.enumstorage.profile.SpringProfile;
 import com.diva.backend.auth.exception.NoSuchRefreshTokenInDBException;
 import com.diva.backend.auth.service.AuthService;
 import com.diva.backend.auth.service.OAuthService;
@@ -47,9 +48,19 @@ public class AuthRestController {
     @Value("${FRONTEND.PORT}")
     private String frontendPort;
 
+    @Value("${spring.profiles.active}")
+    private String activeProfile;
+
     @GetMapping(value = "/login/oauth2/authorization/{provider}")
     public void oAuth2AuthorizationV1(@PathVariable(name = "provider") String provider, HttpServletResponse response) throws IOException {
-        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + frontend + ":" + frontendPort + "/auth/login/oauth2/code/" + provider);
+        String frontPort = "";
+
+        // local
+        if (activeProfile.equals(SpringProfile.LOCAL.getProfile())) {
+            frontPort += ":" + frontendPort;
+        }
+
+        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + frontend + frontPort + "/auth/login/oauth2/code/" + provider);
     }
 
     @GetMapping(value = "/login/oauth2/code/{provider}")
