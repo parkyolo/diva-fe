@@ -1,5 +1,6 @@
 package com.diva.backend.post.dto;
 
+import com.diva.backend.heart.entity.Heart;
 import com.diva.backend.post.entity.Post;
 import com.google.firebase.database.annotations.NotNull;
 import lombok.AccessLevel;
@@ -23,14 +24,18 @@ public class PostSelectResponseDto {
     private PracticeResultResponseDto practiceResult;
 
     @NotNull
+    private Boolean liked;
+
+    @NotNull
     private Integer heartCount;
 
     @Builder
-    protected PostSelectResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Integer heartCount) {
+    protected PostSelectResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Boolean liked, Integer heartCount) {
         this.postId = postId;
         this.content = content;
         this.member = member;
         this.practiceResult = practiceResult;
+        this.liked = liked;
         this.heartCount = heartCount;
     }
 
@@ -53,11 +58,20 @@ public class PostSelectResponseDto {
                     .build())
             .build();
 
+        Boolean liked = false;
+        for (Heart h : post.getHearts()) {
+            if (h.getMember().getId().equals(post.getMember().getId())) {
+                liked = h.getLiked();
+                break;
+            }
+        }
+
         return PostSelectResponseDto.builder()
                 .postId(post.getId())
                 .content(post.getContent())
                 .member(memberResponseDto)
                 .practiceResult(practiceResultResponseDto)
+                .liked(liked)
                 .heartCount(post.getHearts().size())
             .build();
     }
