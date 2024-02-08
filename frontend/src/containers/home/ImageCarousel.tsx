@@ -1,10 +1,9 @@
 import { SwipeableHandlers } from 'react-swipeable';
 import CarouselItem from './CarouselItem';
 import { CSSProperties } from 'react';
-import { Song } from '@/types/song';
 
 interface ImageCarouselProps {
-  songs: Song[];
+  songs: any[];
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   active: number;
   style: CSSProperties;

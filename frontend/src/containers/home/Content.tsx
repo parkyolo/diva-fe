@@ -1,11 +1,11 @@
 'use client';
 import useModal from '@/hooks/useModal';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
-import { Song } from '@/types/song';
 import Main from '@/components/Main';
 import SongCarousel from './SongCarousel';
 
-const SongRecommendations: Song[] = [
+// TODO: 타입지정 필요
+const SongRecommendations: any[] = [
   {
     id: '0',
     title: '서울의 달',
