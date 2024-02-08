@@ -91,11 +91,11 @@ const req: IRequests = {
     }),
     doLike: ({ postId }: { postId: number }) => ({
       method: 'POST',
-      url: `/posts/${postId}/likes`,
+      url: `/posts/${postId}/heart`,
     }),
     doUnlike: ({ postId }: { postId: number }) => ({
       method: 'DELETE',
-      url: `/posts/${postId}/likes`,
+      url: `/posts/${postId}/heart`,
     }),
   },
   song: {
