@@ -10,7 +10,9 @@ import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.post.repository.PostRepository;
 import com.diva.backend.song.dto.PracticeResultResponseDto;
+import com.diva.backend.song.entity.Song;
 import com.diva.backend.song.repository.PracticeResultRepository;
+import com.querydsl.core.Tuple;
 import jakarta.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,13 +70,17 @@ public class MemberServiceImpl implements MemberService {
         Member member = memberRepository.findMemberByEmail(email)
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
         Long memberId = member.getId();
-        List<Post> list = postRepository.findAllByMemberId(memberId);
+        List<Post> list = postRepository.findAllByMemberIdWithSongWithPost(memberId);
         List<MemberPostResponseDto> memberPostList = new ArrayList<>();
-        for (Post post : list) {
-            PracticeResult practiceResult = practiceResultRepository.findByPostId(post.getId());
-            String url = "PracticeResult/" + practiceResult.getId() + "/" + practiceResult.getSong().getArtist()
-                + "-" + practiceResult.getSong().getTitle() + "_vocal.wav";
-            memberPostList.add(MemberPostResponseDto.from(member,post, practiceResult, url));
+        for(Post post : list) {
+            Song song = post.getSong();
+            String songTitle = post.getSong().getTitle();
+            String artist = post.getSong().getArtist();
+            Integer score = post.getPracticeResult().getScore();
+            Long practiceResultId = post.getPracticeResult().getId();
+            String recordUrl = "PracticeResult/" + practiceResultId + "/" + artist
+                + "-" + songTitle + ".mp3";
+            memberPostList.add(MemberPostResponseDto.from(member, post, song, score, recordUrl));
         }
         return memberPostList;
     }
