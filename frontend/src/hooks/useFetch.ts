@@ -25,12 +25,11 @@ export const useFetch = <T>(
         const res: Response = await fetch(`/api${url}`, {
           headers: {
             Authorization: accessToken,
-            'Content-Type': Object.is(
-              requestConfigResolver,
-              req.sing.saveTestResult,
-            )
-              ? 'multipart/form-data'
-              : 'application/json',
+            'Content-Type':
+              Object.is(requestConfigResolver, req.sing.saveLiveResult) ||
+              Object.is(requestConfigResolver, req.member.updateMember)
+                ? 'multipart/form-data'
+                : 'application/json',
           },
           ...rest,
         });
