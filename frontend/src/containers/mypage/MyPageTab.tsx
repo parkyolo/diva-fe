@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import SongContent from './Song/SongContent';
-import LikeContent from './Like/LikeContent';
 import ShareContent from './Share/ShareContent';
 
 const myPageTab = () => {
@@ -56,8 +55,6 @@ const myPageTab = () => {
           <>
             <SongContent />
           </>
-        ) : mode === like ? (
-          <LikeContent />
         ) : (
           <ShareContent />
         )}
