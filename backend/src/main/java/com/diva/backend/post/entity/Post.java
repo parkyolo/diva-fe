@@ -3,6 +3,7 @@ package com.diva.backend.post.entity;
 import com.diva.backend.entity.BaseEntity;
 import com.diva.backend.heart.entity.Heart;
 import com.diva.backend.member.entity.Member;
+import com.diva.backend.song.entity.Song;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -40,15 +41,22 @@ public class Post extends BaseEntity {
     @OneToOne(mappedBy = "post")
     private PracticeResult practiceResult;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Heart> hearts = new ArrayList<>();
 
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "song_id")
+    private Song song;
+
     @Builder
-    protected Post(String content, Member member, PracticeResult practiceResult) {
+    protected Post(String content, Member member, PracticeResult practiceResult, Song song) {
         this.content = content;
         this.member = member;
         this.member.addPost(this);
         this.setPracticeResult(practiceResult);
+
+        this.song = song;
+        this.song.addPost(this);
     }
 
     // 연관관계 메소드
