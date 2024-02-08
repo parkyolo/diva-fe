@@ -59,4 +59,9 @@ public class PracticeResult extends BaseEntity {
                 .score(this.score)
             .build();
     }
+
+    //== 연관관계 메서드 ==//
+    public void removePost() {
+        this.post = null;
+    }
 }
