@@ -1,14 +1,10 @@
 package com.diva.backend.member.dto;
 
 import com.diva.backend.member.entity.Member;
-import com.diva.backend.member.entity.VocalRange;
-import com.diva.backend.song.dto.SavedSongsResponseDto;
-import com.diva.backend.song.entity.Song;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-
 public class MemberResponseDto {
     private final Long memberId;
 
