@@ -1,4 +1,4 @@
-package com.diva.backend;
+package com.diva.backend.s3;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
