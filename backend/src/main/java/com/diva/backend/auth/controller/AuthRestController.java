@@ -48,8 +48,8 @@ public class AuthRestController {
     private String frontendPort;
 
     @GetMapping(value = "/login/oauth2/authorization/{provider}")
-    public String oAuth2AuthorizationV1(@PathVariable(name = "provider") String provider) {
-        return "redirect:" + "https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + frontend + ":" + frontendPort + "/auth/login/oauth2/code/" + provider;
+    public void oAuth2AuthorizationV1(@PathVariable(name = "provider") String provider, HttpServletResponse response) throws IOException {
+        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + frontend + ":" + frontendPort + "/auth/login/oauth2/code/" + provider);
     }
 
     @GetMapping(value = "/login/oauth2/code/{provider}")
