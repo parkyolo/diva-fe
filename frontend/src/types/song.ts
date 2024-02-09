@@ -17,6 +17,19 @@ export interface SharedSong {
   recordUrl: string;
 }
 
+export interface RecommendedSong {
+  songId: number;
+  songTitle: string;
+  artist: string;
+  similarity: string;
+  coverUrl: string;
+}
+
+export interface S3SongInfo {
+  artist: string;
+  songTitle: string;
+}
+
 export interface letsUploadSongs extends SangSong {
   content: string;
 }

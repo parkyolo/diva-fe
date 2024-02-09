@@ -4,22 +4,19 @@ import Content from '@/containers/home/Content';
 import Navigation from '@/components/Navigation';
 import { useRef, useState } from 'react';
 import Header from '@/components/Header';
-import MainLogo from '/public/svgs/logo.svg';
-import LeftArrow from '/public/svgs/left_arrow.svg';
 import Link from 'next/link';
 import PlayResult from '../play/PlayResult';
 import RealMode from '../play/RealMode';
 import TutorialMode from '../play/TutorialMode';
-import CloseButton from '/public/svgs/close_button.svg';
+import { CloseButton, LeftArrowIcon, HeaderLogo } from '../../../public/svgs';
+
+export const homePage = 0b00;
+export const realMode = 0b01;
+export const tutorialMode = 0b10;
 
 const Home = () => {
-  const homePage = 0b00;
-  const realMode = 0b01;
-  const tutorialMode = 0b10;
-
-  const audioRef = useRef<HTMLAudioElement>(null);
   const [mode, setMode] = useState(homePage);
-  // const [musicId, setMusicId]
+  const [activeMusic, setActiveMusic] = useState<number>(0);
 
   const handleModeChange = (newMode: number) => {
     setMode(newMode);
@@ -36,11 +33,14 @@ const Home = () => {
           <Header
             LeftComponent={
               <Link href="/">
-                <MainLogo />
+                <HeaderLogo />
               </Link>
             }
           />
-          <Content onModeChange={handleModeChange} />
+          <Content
+            onModeChange={handleModeChange}
+            setActiveSongId={setActiveMusic}
+          />
           <Navigation />
         </>
       ) : mode === realMode ? (
@@ -50,10 +50,7 @@ const Home = () => {
               <div className="text-skyblue font-bold text-xl">실전모드</div>
             }
           />
-          <RealMode audioRef={audioRef} />
-          <audio autoPlay ref={audioRef}>
-            <source src={'/audio/폰서트.m4a'} type={'audio/mp3'} />
-          </audio>
+          {/* <RealMode song={activeMusic} /> */}
         </>
       ) : mode === tutorialMode ? (
         <>
@@ -67,17 +64,14 @@ const Home = () => {
               </button>
             }
           />
-          <TutorialMode audioRef={audioRef} />
-          <audio autoPlay ref={audioRef}>
-            <source src={'/audio/폰서트.m4a'} type={'audio/mp3'} />
-          </audio>
+          {/* <TutorialMode onModeChange={handleModeChange} song={activeMusic} /> */}
         </>
       ) : (
         <>
           <Header
             LeftComponent={
               <button onClick={handleGoBack}>
-                <LeftArrow />
+                <LeftArrowIcon />
               </button>
             }
           />
