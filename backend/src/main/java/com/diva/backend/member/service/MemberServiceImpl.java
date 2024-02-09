@@ -31,8 +31,6 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
-    private final PracticeResultRepository practiceResultRepository;
-    private final VocalRangeRepository vocalRangeRepository;
     private final S3Uploader s3Uploader;
 
     @Transactional
@@ -72,15 +70,17 @@ public class MemberServiceImpl implements MemberService {
         member.setProfileImg(profileImg);
         Member newMember = memberRepository.save(member);
 
+        // 이미지 파일이 유효한지 확인
+        if(file.isEmpty()) {
+            throw new RuntimeException("선택된 파일이 없음");
+        }
         // 사용자가 프로필 이미지로 설정한 파일이 있다면 S3에 저장
         String profileImgUrl;
-        if(profileImg && !file.isEmpty()) {
+        if(profileImg) {
             profileImgUrl = "profileImg/" + member.getId() + "/profileImg.jpg";
             s3Uploader.uploadFile(profileImgUrl, file);
-        } else if(!profileImg && file.isEmpty()) {
+        } else {
             profileImgUrl = null;
-        } else{
-            throw new RuntimeException("선택된 파일이 없음");
         }
         return MemberInfoUpdateResponseDto.from(newMember, profileImgUrl);
     }
