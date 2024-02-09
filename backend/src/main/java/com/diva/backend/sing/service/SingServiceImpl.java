@@ -120,4 +120,6 @@ public class SingServiceImpl implements SingService{
         PracticeResult newProjectResult = practiceResultRepository.save(practiceResult);
         return LiveUploadResponseDto.from(newProjectResult);
     }
+
+
 }
