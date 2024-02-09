@@ -1,51 +1,71 @@
 'use client';
+
 import useModal from '@/hooks/useModal';
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import Main from '@/components/Main';
 import SongCarousel from './SongCarousel';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { RecommendedSong } from '@/types/song';
+import { useFetch } from '@/hooks/useFetch';
+import { realMode, tutorialMode } from '.';
 
-// TODO: 타입지정 필요
-const SongRecommendations: any[] = [
-  {
-    id: '0',
-    title: '서울의 달',
-    artist: '김건모',
-    similarity: '90',
-    coverImg: '/images/3.jpg',
-    difficulty: 4,
-    isLiked: false,
-    mrUrl: '/audio/폰서트.mp3',
-  },
-  {
-    id: '1',
-    title: '오랜만에',
-    artist: '죠지',
-    similarity: '70',
-    coverImg: '/images/4.jpg',
-    difficulty: 5,
-    isLiked: false,
-    mrUrl: '/audio/형.mp3',
-  },
-  {
-    id: '2',
-    title: '부럽지가 않어',
-    artist: '장기하',
-    similarity: '50',
-    coverImg: '/images/5.jpg',
-    difficulty: 3,
-    isLiked: true,
-    mrUrl: '/audio/흰수염고래.mp3',
-  },
-];
-
-const Content = ({ onModeChange }: { onModeChange: Function }) => {
+const Content = ({
+  onModeChange,
+  setActiveSongId,
+}: {
+  onModeChange: Function;
+  setActiveSongId: Dispatch<SetStateAction<number>>;
+}) => {
   const [isOpen, open, close] = useModal();
+  const [activeMusicIdx, setActiveMusicIdx] = useState<number>(0);
+  const [recommendedSongs, setRecommendSongs] = useState<RecommendedSong[]>([
+    {
+      songId: 1,
+      songTitle: '서울의달',
+      artist: '김건모',
+      similarity: '90',
+      coverUrl: '/images/3.jpg',
+    },
+    {
+      songId: 2,
+      songTitle: '퀸카(Queencard)',
+      artist: '(여자)아이들',
+      similarity: '70',
+      coverUrl: '/images/4.jpg',
+    },
+    {
+      songId: 3,
+      songTitle: '예뻤어',
+      artist: '데이식스',
+      similarity: '50',
+      coverUrl: '/images/5.jpg',
+    },
+    {
+      songId: 4,
+      songTitle: '폰서트',
+      artist: '10cm',
+      similarity: '50',
+      coverUrl: '/images/5.jpg',
+    },
+  ]);
+  // const [isLoading, recommendedSongs, err, getRecommendedSongs] = useFetch(req.recommend.getSongRecommendation)
+
   const changeModeToReal = () => {
-    onModeChange(0b01);
+    setActiveSongId(recommendedSongs[activeMusicIdx].songId);
+    onModeChange(realMode);
   };
+
   const changeModetoTutorial = () => {
-    onModeChange(0b10);
+    setActiveSongId(recommendedSongs[activeMusicIdx].songId);
+    onModeChange(tutorialMode);
   };
+
+  useEffect(() => {
+    // TODO: 노래 추천 get api
+    // try {
+    //   getRecommendedSongs();
+    // }
+  });
 
   return (
     <>
@@ -53,7 +73,8 @@ const Content = ({ onModeChange }: { onModeChange: Function }) => {
         <SongCarousel
           interval={50000}
           onClick={open}
-          songs={SongRecommendations}
+          songs={recommendedSongs}
+          setActiveMusicIdx={setActiveMusicIdx}
         ></SongCarousel>
       </Main>
 

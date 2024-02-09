@@ -2,13 +2,16 @@ import { useCarousel } from '@/hooks/useCarousel';
 import ImageCarousel from './ImageCarousel';
 import SimilarityCounter from './SimilarityCounter';
 import SongInformation from './SongInformation';
-import { useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { RoundedUpArrowIcon, VolumeOff, VolumeOn } from '../../../public/svgs';
+import { RecommendedSong } from '@/types/song';
+import { mrUrl } from '@/utils/getS3URL';
 
 interface SongCarouselProps {
   interval: number;
   onClick: React.MouseEventHandler<HTMLButtonElement>;
-  songs: any[];
+  setActiveMusicIdx: Dispatch<SetStateAction<number>>;
+  songs: RecommendedSong[];
 }
 
 // TODO: 모달 떠있는 상태에서 캐러셀 넘어가는 문제
@@ -16,6 +19,7 @@ interface SongCarouselProps {
 const SongCarousel = ({
   interval = 5000,
   onClick,
+  setActiveMusicIdx,
   songs,
 }: SongCarouselProps) => {
   const length = songs.length;
@@ -24,6 +28,10 @@ const SongCarousel = ({
   // 오디오 오토플레이
   const [isMusicPreviewOn, setIsMusicPreviewOn] = useState<boolean>(false);
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  useEffect(() => {
+    setActiveMusicIdx(active);
+  }, [active]);
 
   return (
     length > 0 && (
@@ -70,7 +78,10 @@ const SongCarousel = ({
         </section>
 
         <audio
-          src={songs[active].mrUrl}
+          src={mrUrl({
+            artist: songs[active].artist,
+            songTitle: songs[active].songTitle,
+          })}
           muted
           autoPlay
           ref={audioRef}

@@ -1,3 +1,4 @@
+import { RecommendedSong } from '@/types/song';
 import Image from 'next/image';
 
 export interface CardProps {
@@ -7,8 +8,7 @@ export interface CardProps {
   length: number;
   children?: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  // TODO: song 타입 지정 필요
-  song: any;
+  song: RecommendedSong;
 }
 
 const CarouselItem = ({
@@ -34,8 +34,6 @@ const CarouselItem = ({
   }
   const absOffset = Math.abs(offset);
 
-  // const buttonRef = useRef<HTMLButtonElement>(null);
-
   const cssTransformProperties = `
         rotateY(calc(${offset} * 55deg))
         scaleY(calc(1 +  ${absOffset}  * -0.9))
@@ -58,8 +56,8 @@ const CarouselItem = ({
         className="w-full aspect-square"
         width={500}
         height={500}
-        src={song.coverImg}
-        alt={song.title}
+        src={song.coverUrl}
+        alt={song.songTitle}
       />
     </button>
   );
