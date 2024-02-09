@@ -48,7 +48,7 @@ public class Member extends BaseEntity {
 
     @Setter
     @Column(name = "profile_img")
-    private Boolean profileImg;
+    private Boolean profileImg = false;
 
     @NotNull
     @Enumerated(EnumType.STRING)
