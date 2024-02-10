@@ -6,7 +6,6 @@ import com.diva.backend.post.dto.PostUpdateRequestDto;
 import com.diva.backend.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +21,8 @@ public class PostController {
 
     // 전체 게시글 조회
     @GetMapping("/list")
-    public ResponseEntity<List<PostSelectResponseDto>> getAllPosts() {
-        return ResponseEntity.ok(postService.getAllPosts());
+    public ResponseEntity<List<PostSelectResponseDto>> getAllPosts(HttpServletRequest request) {
+        return ResponseEntity.ok(postService.getAllPosts(request));
     }
 
     // 게시글 작성

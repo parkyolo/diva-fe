@@ -9,8 +9,8 @@ import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.post.repository.PostRepository;
 import com.diva.backend.song.entity.Song;
 import com.diva.backend.song.repository.PracticeResultRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +27,13 @@ public class PostServiceImpl implements PostService {
     // 전체 게시글 조회
     @Override
     @Transactional
-    public List<PostSelectResponseDto> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
+    public List<PostSelectResponseDto> getAllPosts(HttpServletRequest request) {
+        List<Post> posts = postRepository.findByPracticeResultIsNotNull();
+        Long memberId = (Long) request.getAttribute("memberId");
 
         return posts.stream()
-                .map(PostSelectResponseDto::toPostResponseDto)
-                .toList();
+                .map(post -> PostSelectResponseDto.toPostResponseDto(post, memberId))
+                .collect(Collectors.toList());
     }
 
     // 게시글 작성
@@ -40,11 +41,11 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public void createPost(Long memberId, String content, Long practiceResultId) {
         Member member = memberRepository.findById(memberId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원이 존재하지 않습니다."));
 
         // Practice Result와 Song을 Join해서 가져온다.
         PracticeResult practiceResult = practiceResultRepository.findByIdWithSong(practiceResultId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
 
         Song song = practiceResult.getSong();
 
@@ -58,7 +59,7 @@ public class PostServiceImpl implements PostService {
                 .member(member)
                 .practiceResult(practiceResult)
                 .song(song)
-            .build();
+                .build();
 
         postRepository.save(post);
     }
@@ -90,7 +91,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostUpdateRequestDto updatePost(Long postId, Long memberId, PostUpdateRequestDto requestDto) {
         Post post = postRepository.findById(postId)
-            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다." + postId));
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다." + postId));
 
         Long postMemberId = post.getMember().getId();
         if (!postMemberId.equals(memberId)) {
