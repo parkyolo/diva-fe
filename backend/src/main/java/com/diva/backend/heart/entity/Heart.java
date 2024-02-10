@@ -27,8 +27,10 @@ public class Heart extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Setter
     @NotNull
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
 }
