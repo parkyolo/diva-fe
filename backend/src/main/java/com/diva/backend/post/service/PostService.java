@@ -2,12 +2,13 @@ package com.diva.backend.post.service;
 
 import com.diva.backend.post.dto.PostSelectResponseDto;
 import com.diva.backend.post.dto.PostUpdateRequestDto;
+import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
 public interface PostService {
     // 전체 게시글 조회
-    List<PostSelectResponseDto> getAllPosts();
+    List<PostSelectResponseDto> getAllPosts(HttpServletRequest request);
 
     // 게시글 작성
     void createPost(Long memberId, String content, Long practiceResultId);

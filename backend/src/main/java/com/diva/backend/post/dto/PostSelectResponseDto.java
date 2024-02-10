@@ -23,24 +23,28 @@ public class PostSelectResponseDto {
     private PracticeResultResponseDto practiceResult;
 
     @NotNull
+    private Boolean liked;
+
+    @NotNull
     private Integer heartCount;
 
     @Builder
-    protected PostSelectResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Integer heartCount) {
+    protected PostSelectResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Boolean liked, Integer heartCount) {
         this.postId = postId;
         this.content = content;
         this.member = member;
         this.practiceResult = practiceResult;
+        this.liked = liked;
         this.heartCount = heartCount;
     }
 
     // Post 엔티티를 PostResponseDto로 변환
-    public static PostSelectResponseDto toPostResponseDto(Post post) {
+    public static PostSelectResponseDto toPostResponseDto(Post post, Long memberId) {
         MemberResponseDto memberResponseDto = MemberResponseDto.builder()
                 .memberId(post.getMember().getId())
                 .nickname(post.getMember().getNickname())
                 .profileImg(post.getMember().getProfileImg())
-            .build();
+                .build();
 
         PracticeResultResponseDto practiceResultResponseDto = PracticeResultResponseDto.builder()
                 .practiceResultId(post.getPracticeResult().getId())
@@ -50,16 +54,18 @@ public class PostSelectResponseDto {
                         .title(post.getPracticeResult().getSong().getTitle())
                         .artist(post.getPracticeResult().getSong().getArtist())
                         .coverImg(post.getPracticeResult().getSong().getCoverImg())
-                    .build())
-            .build();
+                        .build())
+                .build();
+
+        Boolean liked = post.getHearts().stream().anyMatch(heart -> heart.getMember().getId().equals(memberId));
 
         return PostSelectResponseDto.builder()
                 .postId(post.getId())
                 .content(post.getContent())
                 .member(memberResponseDto)
                 .practiceResult(practiceResultResponseDto)
-                .heartCount(post.getHearts().size())
-            .build();
+                .liked(liked)
+                .heartCount(post.getHeartCount())
+                .build();
     }
 }
-
