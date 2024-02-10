@@ -35,8 +35,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public MemberResponseDto getMemberInfo(String email) {
-        Member member = memberRepository.findMemberByEmail(email)
+    public MemberResponseDto getMemberInfo(Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 // NULL일 경우 exception 처리
                 .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
         // profileImg가 ture인 경우에는 S3에 저장된 이미지의 주소를 함께 넘겨줘야함
@@ -58,8 +58,8 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public MemberInfoUpdateResponseDto updateInfo(String email, MemberInfoUpdateRequestDto requestDto, MultipartFile file) {
-        Member member = memberRepository.findMemberByEmail(email)
+    public MemberInfoUpdateResponseDto updateInfo(Long memberId, MemberInfoUpdateRequestDto requestDto, MultipartFile file) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
         String nickname = requestDto.getNickname();
         Boolean profileImg = requestDto.getProfileImg();
@@ -77,7 +77,7 @@ public class MemberServiceImpl implements MemberService {
         // 사용자가 프로필 이미지로 설정한 파일이 있다면 S3에 저장
         String profileImgUrl;
         if(profileImg) {
-            profileImgUrl = "profileImg/" + member.getId() + "/profileImg.jpg";
+            profileImgUrl = "profileImg/" + memberId + "/profileImg.jpg";
             s3Uploader.uploadFile(profileImgUrl, file);
         } else {
             profileImgUrl = null;
@@ -87,10 +87,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public List<MemberPostResponseDto> getMemberPosts(String email) {
-        Member member = memberRepository.findMemberByEmail(email)
+    public List<MemberPostResponseDto> getMemberPosts(Long memberId) {
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
-        Long memberId = member.getId();
         List<Post> list = postRepository.findAllByMemberIdWithSongWithPost(memberId);
         List<MemberPostResponseDto> memberPostList = new ArrayList<>();
         for (Post post : list) {

@@ -5,7 +5,7 @@ import com.diva.backend.song.dto.SavedSongsResponseDto;
 import java.util.List;
 
 public interface SongService {
-    List<SavedSongsResponseDto> getSavedSongs(String email);
+    List<SavedSongsResponseDto> getSavedSongs(Long memberId);
 
-    List<PracticeResultResponseDto> getPracticeResults(String email);
+    List<PracticeResultResponseDto> getPracticeResults(Long memberId);
 }
