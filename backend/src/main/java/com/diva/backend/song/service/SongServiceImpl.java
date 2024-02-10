@@ -25,10 +25,9 @@ public class SongServiceImpl implements SongService{
 
     @Transactional
     @Override
-    public List<SavedSongsResponseDto> getSavedSongs(String email) {
-        Member member = memberRepository.findMemberByEmail(email)
+    public List<SavedSongsResponseDto> getSavedSongs(Long memberId) {
+        Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
-        Long memberId = member.getId();
 
         List<SavedSong> list = savedSongRepository.findByMemberId(memberId);
 
@@ -46,10 +45,9 @@ public class SongServiceImpl implements SongService{
 
     @Transactional
     @Override
-    public List<PracticeResultResponseDto> getPracticeResults(String email) {
-        Member member = memberRepository.findMemberByEmail(email)
+    public List<PracticeResultResponseDto> getPracticeResults(Long memberId) {
+        Member member = memberRepository.findById(memberId)
             .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
-        Long memberId = member.getId();
 
         List<PracticeResult> list = practiceResultRepository.findByMemberId(memberId);
         // log

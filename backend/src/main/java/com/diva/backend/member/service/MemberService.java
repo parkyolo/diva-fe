@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface MemberService {
 
-    MemberResponseDto getMemberInfo(String email);
+    MemberResponseDto getMemberInfo(Long memberId);
 
-    MemberInfoUpdateResponseDto updateInfo(String email, MemberInfoUpdateRequestDto requestDto, MultipartFile file);
+    MemberInfoUpdateResponseDto updateInfo(Long memberId, MemberInfoUpdateRequestDto requestDto, MultipartFile file);
 
-    List<MemberPostResponseDto> getMemberPosts(String email);
+    List<MemberPostResponseDto> getMemberPosts(Long memberId);
 }
