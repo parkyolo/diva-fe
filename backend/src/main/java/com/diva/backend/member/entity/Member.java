@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.hibernate.annotations.ColumnDefault;
 
 import static com.diva.backend.enumstorage.role.MemberRole.MEMBER;
 import static com.diva.backend.enumstorage.status.MemberStatus.ACTIVE;

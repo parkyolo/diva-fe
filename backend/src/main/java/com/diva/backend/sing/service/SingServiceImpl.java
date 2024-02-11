@@ -4,6 +4,8 @@ import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.entity.VocalRange;
 import com.diva.backend.member.repository.MemberRepository;
 import com.diva.backend.member.repository.VocalRangeRepository;
+import com.diva.backend.member.service.MemberService;
+import com.diva.backend.member.service.MemberServiceImpl;
 import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.sing.dto.LiveResponseDto;
 import com.diva.backend.sing.dto.LiveUploadResponseDto;
@@ -25,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 @RequiredArgsConstructor
 public class SingServiceImpl implements SingService{
+    private final MemberService memberService;
+
     private final MemberRepository memberRepository;
     private final VocalRangeRepository vocalRangeRepository;
     private final SongRepository songRepository;
@@ -36,8 +40,7 @@ public class SingServiceImpl implements SingService{
     @Transactional
     @Override
     public void saveTestResult(Long memberId, VocalTestRequestDto requestDto) {
-        Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Member member = memberService.findMember(memberId);
         String highestNote = requestDto.getHighestNote();
         String lowestNote = requestDto.getLowestNote();
         int highestMidi = recommendArtist.noteToMidi(highestNote, true);
@@ -60,8 +63,7 @@ public class SingServiceImpl implements SingService{
     @Transactional
     @Override
     public VocalTestResponseDto getTestResult(Long memberId) {
-        Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Member member = memberService.findMember(memberId);
         String highestNote = member.getVocalRange().getHighestNote();
         String lowestNote = member.getVocalRange().getLowestNote();
 
@@ -80,16 +82,14 @@ public class SingServiceImpl implements SingService{
 
     @Override
     public TutorialResponseDto getTutorialMode(Long memberId, Long songId) {
-        Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Member member = memberService.findMember(memberId);
         Song song = songRepository.findSongById(songId);
         return TutorialResponseDto.from(song);
     }
 
     @Override
     public LiveResponseDto getLiveMode(Long memberId, Long songId) {
-        Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Member member = memberService.findMember(memberId);
         Song song = songRepository.findSongById(songId);
         return LiveResponseDto.from(song);
     }
@@ -97,8 +97,7 @@ public class SingServiceImpl implements SingService{
     @Transactional
     @Override
     public LiveUploadResponseDto uploadFile(Long memberId, Long songId, MultipartFile multipartFile) {
-        Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Member member = memberService.findMember(memberId);
         Song song = songRepository.findSongById(songId);
         PracticeResult practiceResult = PracticeResult.builder()
                                         .member(member)

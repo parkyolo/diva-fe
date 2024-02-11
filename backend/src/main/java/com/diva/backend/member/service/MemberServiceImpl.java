@@ -1,19 +1,16 @@
 package com.diva.backend.member.service;
 
 
+import com.diva.backend.common.exception.CustomException;
 import com.diva.backend.member.dto.*;
 import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.entity.VocalRange;
+import com.diva.backend.member.exception.MemberErrorCode;
 import com.diva.backend.member.repository.MemberRepository;
-import com.diva.backend.member.repository.VocalRangeRepository;
 import com.diva.backend.post.entity.Post;
-import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.post.repository.PostRepository;
-import com.diva.backend.song.dto.PracticeResultResponseDto;
 import com.diva.backend.song.entity.Song;
-import com.diva.backend.song.repository.PracticeResultRepository;
 import com.diva.backend.util.S3Uploader;
-import com.querydsl.core.Tuple;
 import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
@@ -36,9 +33,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public MemberResponseDto getMemberInfo(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                // NULL일 경우 exception 처리
-                .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Member member = findMember(memberId);
         // profileImg가 ture인 경우에는 S3에 저장된 이미지의 주소를 함께 넘겨줘야함
         String profileImgUrl;
         if(member.getProfileImg()) {
@@ -59,8 +54,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public MemberInfoUpdateResponseDto updateInfo(Long memberId, MemberInfoUpdateRequestDto requestDto, MultipartFile file) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Member member = findMember(memberId);
         String nickname = requestDto.getNickname();
         Boolean profileImg = requestDto.getProfileImg();
         // 닉네임 유효성 확인
@@ -88,8 +82,8 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public List<MemberPostResponseDto> getMemberPosts(Long memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+        Member member = findMember(memberId);
+
         List<Post> list = postRepository.findAllByMemberIdWithSongWithPost(memberId);
         List<MemberPostResponseDto> memberPostList = new ArrayList<>();
         for (Post post : list) {
@@ -103,5 +97,12 @@ public class MemberServiceImpl implements MemberService {
             memberPostList.add(MemberPostResponseDto.from(member, post, song, score, recordUrl));
         }
         return memberPostList;
+    }
+
+    // memberId로 회원 조회
+    @Override
+    @Transactional
+    public Member findMember(Long memberId) {
+        return memberRepository.findMemberById(memberId).orElseThrow(() -> new CustomException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 }
