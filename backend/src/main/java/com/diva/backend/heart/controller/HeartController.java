@@ -19,7 +19,7 @@ public class HeartController {
     private final HeartService heartService;
 
     @PostMapping
-    public ResponseEntity<?> updateHeart(@PathVariable Long postId, HttpServletRequest request) {
+    public ResponseEntity<?> updateHeart(@PathVariable("postId") Long postId, HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
 
         heartService.updateHeart(postId, memberId);
