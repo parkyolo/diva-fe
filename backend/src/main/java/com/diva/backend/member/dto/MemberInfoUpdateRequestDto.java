@@ -18,4 +18,5 @@ public class MemberInfoUpdateRequestDto {
         this.profileImg = profileImg;
     }
 
+
 }
