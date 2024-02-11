@@ -32,8 +32,8 @@ public class PostServiceImpl implements PostService {
         Long memberId = (Long) request.getAttribute("memberId");
 
         return posts.stream()
-                .map(post -> PostSelectResponseDto.toPostResponseDto(post, memberId))
-                .collect(Collectors.toList());
+            .map(post -> PostSelectResponseDto.toPostResponseDto(post, memberId))
+            .collect(Collectors.toList());
     }
 
     // 게시글 작성
@@ -41,11 +41,11 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public void createPost(Long memberId, String content, Long practiceResultId) {
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원이 존재하지 않습니다."));
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원이 존재하지 않습니다."));
 
         // Practice Result와 Song을 Join해서 가져온다.
         PracticeResult practiceResult = practiceResultRepository.findByIdWithSong(practiceResultId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
 
         Song song = practiceResult.getSong();
 
@@ -59,7 +59,9 @@ public class PostServiceImpl implements PostService {
                 .member(member)
                 .practiceResult(practiceResult)
                 .song(song)
-                .build();
+                .liked(false)
+                .heartCount(0)
+            .build();
 
         postRepository.save(post);
     }
@@ -70,7 +72,7 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Long postId, Long memberId) {
         // postId를 갖고있는 practice result를 member와 post를 함께 찾는다.
         PracticeResult practiceResult = practiceResultRepository.findByPostIdWithMemberAndPost(postId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
 
         Member member = practiceResult.getMember();
         Post post = practiceResult.getPost();
@@ -91,7 +93,7 @@ public class PostServiceImpl implements PostService {
     @Transactional
     public PostUpdateRequestDto updatePost(Long postId, Long memberId, PostUpdateRequestDto requestDto) {
         Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다." + postId));
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 게시글이 존재하지 않습니다." + postId));
 
         Long postMemberId = post.getMember().getId();
         if (!postMemberId.equals(memberId)) {
