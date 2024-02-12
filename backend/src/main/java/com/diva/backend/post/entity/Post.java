@@ -6,7 +6,10 @@ import com.diva.backend.member.entity.Member;
 import com.diva.backend.song.entity.Song;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
@@ -45,17 +48,12 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Heart> hearts = new ArrayList<>();
 
-    @Setter
-    @NotNull
-    @Column(name = "liked")
-    private Boolean liked = false;
-
     @NotNull
     @Column(name = "heart_count")
     private Integer heartCount = 0;
 
     @Builder
-    protected Post(String content, Member member, PracticeResult practiceResult, Song song, List<Heart> hearts, Boolean liked, Integer heartCount) {
+    protected Post(String content, Member member, PracticeResult practiceResult, Song song, List<Heart> hearts, Integer heartCount) {
         this.content = content;
         this.member = member;
         this.member.addPost(this);
@@ -63,7 +61,6 @@ public class Post extends BaseEntity {
         this.song = song;
         this.song.addPost(this);
         this.hearts = hearts;
-        this.liked = liked;
         this.heartCount = heartCount;
     }
 
