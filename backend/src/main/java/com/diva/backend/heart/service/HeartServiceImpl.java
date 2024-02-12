@@ -38,15 +38,13 @@ public class HeartServiceImpl implements HeartService {
         if (heart.isPresent()) { // 이미 좋아요가 눌려있는 경우, 좋아요를 취소
             post.getHearts().remove(heart.get());
             heartRepository.delete(heart.get());
-            post.setLiked(false);
         } else { // 아직 좋아요가 눌려있지 않은 경우, 좋아요를 추가
             Heart newHeart = Heart.builder()
                     .post(post)
                     .member(member)
-                    .build();
+                .build();
             post.getHearts().add(newHeart);
             heartRepository.save(newHeart);
-            post.setLiked(true);
         }
 
         post.setHeartCount(post.getHearts().size());

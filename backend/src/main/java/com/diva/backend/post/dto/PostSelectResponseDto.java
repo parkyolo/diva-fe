@@ -44,7 +44,7 @@ public class PostSelectResponseDto {
                 .memberId(post.getMember().getId())
                 .nickname(post.getMember().getNickname())
                 .profileImg(post.getMember().getProfileImg())
-                .build();
+            .build();
 
         PracticeResultResponseDto practiceResultResponseDto = PracticeResultResponseDto.builder()
                 .practiceResultId(post.getPracticeResult().getId())
@@ -54,8 +54,8 @@ public class PostSelectResponseDto {
                         .title(post.getPracticeResult().getSong().getTitle())
                         .artist(post.getPracticeResult().getSong().getArtist())
                         .coverImg(post.getPracticeResult().getSong().getCoverImg())
-                        .build())
-                .build();
+                    .build())
+            .build();
 
         Boolean liked = post.getHearts().stream().anyMatch(heart -> heart.getMember().getId().equals(memberId));
 
@@ -66,6 +66,6 @@ public class PostSelectResponseDto {
                 .practiceResult(practiceResultResponseDto)
                 .liked(liked)
                 .heartCount(post.getHeartCount())
-                .build();
+            .build();
     }
 }
