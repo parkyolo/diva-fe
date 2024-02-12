@@ -1,5 +1,7 @@
 package com.diva.backend.song.service;
 
+import com.diva.backend.exception.NoPracticeResultException;
+import com.diva.backend.exception.NoSuchMemberException;
 import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.song.dto.PracticeResultResponseDto;
 import com.diva.backend.song.dto.SavedSongsResponseDto;
@@ -25,10 +27,9 @@ public class SongServiceImpl implements SongService{
 
     @Transactional
     @Override
-    public List<SavedSongsResponseDto> getSavedSongs(String email) {
-        Member member = memberRepository.findMemberByEmail(email)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
-        Long memberId = member.getId();
+    public List<SavedSongsResponseDto> getSavedSongs(Long memberId) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
 
         List<SavedSong> list = savedSongRepository.findByMemberId(memberId);
 
@@ -46,10 +47,9 @@ public class SongServiceImpl implements SongService{
 
     @Transactional
     @Override
-    public List<PracticeResultResponseDto> getPracticeResults(String email) {
-        Member member = memberRepository.findMemberByEmail(email)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
-        Long memberId = member.getId();
+    public List<PracticeResultResponseDto> getPracticeResults(Long memberId) throws NoSuchMemberException, NoPracticeResultException {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
 
         List<PracticeResult> list = practiceResultRepository.findByMemberId(memberId);
         // log
@@ -59,6 +59,9 @@ public class SongServiceImpl implements SongService{
         List<PracticeResultResponseDto> practiceResultList = new ArrayList<>();
         for (PracticeResult practiceResult : list) {
             practiceResultList.add(PracticeResultResponseDto.from(practiceResult));
+        }
+        if (practiceResultList.size() == 0) {
+            throw new NoPracticeResultException("부른 노래가 없습니다.");
         }
         return practiceResultList;
     }
