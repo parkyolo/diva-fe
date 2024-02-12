@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
                 .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
         // profileImg가 ture인 경우에는 S3에 저장된 이미지의 주소를 함께 넘겨줘야함
         String profileImgUrl;
-        if(member.getProfileImg()) {
+        if(member.getProfileImg() != null && member.getProfileImg()) {
             profileImgUrl = "profileImg/" + member.getId() + "/profileImg.jpg";
         } else {
             profileImgUrl = null;
@@ -76,7 +76,7 @@ public class MemberServiceImpl implements MemberService {
         }
         // 사용자가 프로필 이미지로 설정한 파일이 있다면 S3에 저장
         String profileImgUrl;
-        if(profileImg) {
+        if(profileImg != null && profileImg) {
             profileImgUrl = "profileImg/" + member.getId() + "/profileImg.jpg";
             s3Uploader.uploadFile(profileImgUrl, file);
         } else {
