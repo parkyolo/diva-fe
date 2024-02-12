@@ -1,5 +1,7 @@
 package com.diva.backend.sing.service;
 
+import com.diva.backend.exception.NoSuchMemberException;
+import com.diva.backend.exception.NoVocalRangeException;
 import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.entity.VocalRange;
 import com.diva.backend.member.repository.MemberRepository;
@@ -35,9 +37,9 @@ public class SingServiceImpl implements SingService{
 
     @Transactional
     @Override
-    public void saveTestResult(Long memberId, VocalTestRequestDto requestDto) {
+    public void saveTestResult(Long memberId, VocalTestRequestDto requestDto) throws NoSuchMemberException {
         Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         String highestNote = requestDto.getHighestNote();
         String lowestNote = requestDto.getLowestNote();
         int highestMidi = recommendArtist.noteToMidi(highestNote, true);
@@ -59,9 +61,13 @@ public class SingServiceImpl implements SingService{
 
     @Transactional
     @Override
-    public VocalTestResponseDto getTestResult(Long memberId) {
+    public VocalTestResponseDto getTestResult(Long memberId) throws NoSuchMemberException, NoVocalRangeException{
         Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
+        if(member.getVocalRange() == null) {
+            throw new NoVocalRangeException("음역대 정보가 없습니다.");
+        }
+
         String highestNote = member.getVocalRange().getHighestNote();
         String lowestNote = member.getVocalRange().getLowestNote();
 
@@ -79,26 +85,26 @@ public class SingServiceImpl implements SingService{
     }
 
     @Override
-    public TutorialResponseDto getTutorialMode(Long memberId, Long songId) {
+    public TutorialResponseDto getTutorialMode(Long memberId, Long songId) throws NoSuchMemberException{
         Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         Song song = songRepository.findSongById(songId);
         return TutorialResponseDto.from(song);
     }
 
     @Override
-    public LiveResponseDto getLiveMode(Long memberId, Long songId) {
+    public LiveResponseDto getLiveMode(Long memberId, Long songId) throws NoSuchMemberException{
         Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         Song song = songRepository.findSongById(songId);
         return LiveResponseDto.from(song);
     }
 
     @Transactional
     @Override
-    public LiveUploadResponseDto uploadFile(Long memberId, Long songId, MultipartFile multipartFile) {
+    public LiveUploadResponseDto uploadFile(Long memberId, Long songId, MultipartFile multipartFile) throws NoSuchMemberException{
         Member member = memberRepository.findMemberById(memberId)
-            .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         Song song = songRepository.findSongById(songId);
         PracticeResult practiceResult = PracticeResult.builder()
                                         .member(member)

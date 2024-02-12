@@ -1,28 +1,24 @@
 package com.diva.backend.member.service;
 
 
+import com.diva.backend.exception.NoPostException;
+import com.diva.backend.exception.NoSuchMemberException;
 import com.diva.backend.member.dto.*;
 import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.entity.VocalRange;
 import com.diva.backend.member.repository.MemberRepository;
-import com.diva.backend.member.repository.VocalRangeRepository;
 import com.diva.backend.post.entity.Post;
-import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.post.repository.PostRepository;
-import com.diva.backend.song.dto.PracticeResultResponseDto;
 import com.diva.backend.song.entity.Song;
-import com.diva.backend.song.repository.PracticeResultRepository;
 import com.diva.backend.util.S3Uploader;
-import com.querydsl.core.Tuple;
 import jakarta.transaction.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -35,13 +31,13 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public MemberResponseDto getMemberInfo(String email) {
-        Member member = memberRepository.findMemberByEmail(email)
+    public MemberResponseDto getMemberInfo(Long memberId) throws NoSuchMemberException{
+        Member member = memberRepository.findById(memberId)
                 // NULL일 경우 exception 처리
-                .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         // profileImg가 ture인 경우에는 S3에 저장된 이미지의 주소를 함께 넘겨줘야함
         String profileImgUrl;
-        if(member.getProfileImg() != null && member.getProfileImg()) {
+        if (member.getProfileImg() != null && member.getProfileImg()) {
             profileImgUrl = "profileImg/" + member.getId() + "/profileImg.jpg";
         } else {
             profileImgUrl = null;
@@ -58,9 +54,9 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public MemberInfoUpdateResponseDto updateInfo(String email, MemberInfoUpdateRequestDto requestDto, MultipartFile file) {
-        Member member = memberRepository.findMemberByEmail(email)
-                .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
+    public MemberInfoUpdateResponseDto updateInfo(Long memberId, MemberInfoUpdateRequestDto requestDto, MultipartFile file) throws NoSuchMemberException, IllegalArgumentException{
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         String nickname = requestDto.getNickname();
         Boolean profileImg = requestDto.getProfileImg();
         // 닉네임 유효성 확인
@@ -70,27 +66,25 @@ public class MemberServiceImpl implements MemberService {
         member.setProfileImg(profileImg);
         Member newMember = memberRepository.save(member);
 
-        // 이미지 파일이 유효한지 확인
-        if(file.isEmpty()) {
-            throw new RuntimeException("선택된 파일이 없음");
-        }
-        // 사용자가 프로필 이미지로 설정한 파일이 있다면 S3에 저장
-        String profileImgUrl;
-        if(profileImg != null && profileImg) {
+        String profileImgUrl = null;
+        // 넘어온 이미지 파일이 있다면
+        if (profileImg) {
+            // 이미지 파일이 유효한지 확인
+            if (file == null || file.isEmpty()) {
+                throw new IllegalArgumentException("선택된 파일이 없습니다.");
+            }
+
             profileImgUrl = "profileImg/" + member.getId() + "/profileImg.jpg";
             s3Uploader.uploadFile(profileImgUrl, file);
-        } else {
-            profileImgUrl = null;
         }
         return MemberInfoUpdateResponseDto.from(newMember, profileImgUrl);
     }
 
     @Transactional
     @Override
-    public List<MemberPostResponseDto> getMemberPosts(String email) {
-        Member member = memberRepository.findMemberByEmail(email)
-                .orElseThrow(() -> new RuntimeException("해당하는 회원 없음"));
-        Long memberId = member.getId();
+    public List<MemberPostResponseDto> getMemberPosts(Long memberId) throws NoSuchMemberException, NoPostException {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         List<Post> list = postRepository.findAllByMemberIdWithSongWithPost(memberId);
         List<MemberPostResponseDto> memberPostList = new ArrayList<>();
         for (Post post : list) {
@@ -102,6 +96,9 @@ public class MemberServiceImpl implements MemberService {
             String recordUrl = "PracticeResult/" + practiceResultId + "/" + artist
                     + "-" + songTitle + ".mp3";
             memberPostList.add(MemberPostResponseDto.from(member, post, song, score, recordUrl));
+        }
+        if (memberPostList.size() == 0) {
+            throw new NoPostException("공유한 노래가 없습니다.");
         }
         return memberPostList;
     }

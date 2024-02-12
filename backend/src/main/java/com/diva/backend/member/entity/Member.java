@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.hibernate.annotations.ColumnDefault;
 
 import static com.diva.backend.enumstorage.role.MemberRole.MEMBER;
 import static com.diva.backend.enumstorage.status.MemberStatus.ACTIVE;
@@ -47,6 +46,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Setter
+    @NotNull
     @Column(name = "profile_img")
     private Boolean profileImg = false;
 
@@ -92,6 +92,7 @@ public class Member extends BaseEntity {
     @Builder
     protected Member(String email, String nickname) {
         this.email = email;
+        this.profileImg = false;
         this.nickname = nickname;
         this.role = MEMBER;
         this.status = ACTIVE;
