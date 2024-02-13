@@ -1,8 +1,9 @@
 import { SangSong } from '@/types/song';
 import Image, { StaticImageData } from 'next/image';
-import Link from 'next/link';
 import { useSetAtom } from 'jotai';
 import { songAtom, feedPageAtom } from '@/store/feed';
+import { useRouter } from 'next/navigation';
+
 
 interface ContentProps {
   song: SangSong;
@@ -11,22 +12,20 @@ interface ContentProps {
 const SongItems = ({ song }: ContentProps) => {
   const setFeedPageAtom = useSetAtom(feedPageAtom);
   const setSongData = useSetAtom(songAtom);
+  const router = useRouter();
   const sendDatatoJotaiStore = () => {
-    if (
-      song.songTitle !== '' &&
-      song.artist !== '' &&
-      song.coverImg !== '' 
-    ) {
+    if (song.songTitle !== '' && song.artist !== '' && song.coverImg !== '') {
       const dataTosend: SangSong = {
         practiceResultId: song.practiceResultId,
         songTitle: song.songTitle,
         artist: song.artist,
         coverImg: song.coverImg,
         createdDate: song.createdDate,
-        score: song.score
+        score: song.score,
       };
       setSongData(dataTosend);
       setFeedPageAtom(0b1);
+      router.push('/feed')
     }
   };
 
@@ -39,7 +38,6 @@ const SongItems = ({ song }: ContentProps) => {
             sendDatatoJotaiStore();
           }}
         >
-          <Link href="/feed">
             <Image
               src={`/images/${song.coverImg}`}
               alt={song.songTitle}
@@ -50,7 +48,6 @@ const SongItems = ({ song }: ContentProps) => {
             <span className="w-full text-center absolute top-1/2 -translate-y-1/2  text-white">
               {song.songTitle}
             </span>
-          </Link>
         </div>
       </div>
     </>

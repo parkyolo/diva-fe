@@ -9,12 +9,13 @@ export interface SangSong {
 
 export interface SharedSong {
   memberId: string;
-  postId: string;
+  postId: number;
   nickname: string;
   content: string;
   songTitle: string;
   artist: string;
   recordUrl: string;
+  score: number,
 }
 
 export interface RecommendedSong {

@@ -117,6 +117,10 @@ const config: Config = {
           '0%': { transform: 'translateY(50%)' },
           '100%': { transform: 'translateY(0)' },
         },
+        movebottom: {
+          '0%': { transform: 'translateY(-150%)' },
+          '100%': { transform: 'translateY(0%)' },
+        },
         blink: {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
@@ -137,6 +141,7 @@ const config: Config = {
         scorebox: 'scorebox 1s ease-in-out',
         moveleft: 'moveleft 1s ease-in-out',
         movetop: 'movetop 1s ease-in-out',
+        movebottom: 'movebottom 1.5s ease-in-out',
         blink: 'blink 2s ease-in-out',
       },
     },

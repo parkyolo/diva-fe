@@ -11,7 +11,33 @@ export interface IRequestConfigResolver {
 }
 
 interface IRequests {
-  [key: string]: { [key: string]: IRequestConfigResolver };
+  member: {
+    getMember: IRequestConfigResolver;
+    updateMember: IRequestConfigResolver;
+  };
+  sing: {
+    saveTestResult: IRequestConfigResolver;
+    getTestResult: IRequestConfigResolver;
+    tutorial: IRequestConfigResolver;
+    live: IRequestConfigResolver;
+    saveLiveResult: IRequestConfigResolver;
+  };
+  recommend: {
+    getSongRecommendation: IRequestConfigResolver;
+    getSingerRecommendation: IRequestConfigResolver;
+  };
+  post: {
+    getMyPosts: IRequestConfigResolver;
+    getAllPosts: IRequestConfigResolver;
+    writePost: IRequestConfigResolver;
+    deletePost: IRequestConfigResolver;
+    updatePost: IRequestConfigResolver;
+    doLike: IRequestConfigResolver;
+    doUnlike: IRequestConfigResolver;
+  };
+  song: {
+    getSangSong: IRequestConfigResolver;
+  };
 }
 
 const req: IRequests = {

@@ -1,15 +1,20 @@
-import { accessTokenAtom } from '@/store/user';
 import { IRequestConfigResolver, req } from '@/services';
-import { useAtomValue } from 'jotai';
+import { logout } from '@/services/logout';
+import { reissueToken } from '@/services/reissueToken';
+import { accessTokenAtom } from '@/store/user';
+import { useAtom } from 'jotai';
+import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
 
 export const useFetch = <T>(
   requestConfigResolver: IRequestConfigResolver,
 ): [boolean, T | null, any, (params?: any) => Promise<void>] => {
-  const accessToken = useAtomValue(accessTokenAtom);
+  const [accessToken, setAccessTokenWithLocalStorage] =
+    useAtom(accessTokenAtom);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<unknown>(null);
   const [data, setData] = useState<T | null>(null);
+  const router = useRouter();
 
   const request = useCallback(
     async (...params: any) => {
@@ -17,14 +22,59 @@ export const useFetch = <T>(
       setError(null);
       setData(null);
 
-      try {
-        let result;
+      let result;
 
-        const { url, ...rest } = requestConfigResolver(params[0]);
+      const { url, ...rest } = requestConfigResolver(params[0]);
 
-        const res: Response = await fetch(`/api${url}`, {
+      const response: Response = await fetch(`/api${url}`, {
+        headers: {
+          Authorization: accessToken,
+          'Content-Type':
+            Object.is(requestConfigResolver, req.sing.saveLiveResult) ||
+            Object.is(requestConfigResolver, req.member.updateMember)
+              ? 'multipart/form-data'
+              : 'application/json',
+        },
+        ...rest,
+      });
+
+      if (response.ok) {
+        const responseBody = await response.text();
+
+        if (responseBody.trim() !== '') {
+          // Check if the response body is not empty
+          result = JSON.parse(responseBody);
+          setData(result);
+        } else {
+          // Handle empty response body
+          console.warn('Empty response body');
+        }
+
+        setIsLoading(false);
+      } else if (response.status === 401) {
+        // 액세스 토큰이 만료된 경우
+        const res: Response = await reissueToken(
+          accessToken,
+          setAccessTokenWithLocalStorage,
+        );
+
+        // 리프레쉬 토큰이 더 이상 존재하지 않는 등의 이유로 리이슈에 실패할 시 강제 로그아웃 시키고 홈으로 이동
+        if (!res.ok) {
+          logout(setAccessTokenWithLocalStorage);
+          router.push('/');
+          return;
+        }
+
+        // 재요청
+        let reissuedAccessToken = localStorage.getItem('accessToken') ?? '';
+        reissuedAccessToken = reissuedAccessToken.substring(
+          1,
+          reissuedAccessToken.length - 1,
+        );
+
+        const response: Response = await fetch(`/api${url}`, {
           headers: {
-            Authorization: accessToken,
+            Authorization: reissuedAccessToken,
             'Content-Type':
               Object.is(requestConfigResolver, req.sing.saveLiveResult) ||
               Object.is(requestConfigResolver, req.member.updateMember)
@@ -34,10 +84,18 @@ export const useFetch = <T>(
           ...rest,
         });
 
-        result = await res.json();
-        setData(result);
-        setIsLoading(false);
-      } catch (error: unknown) {
+        if (response.ok) {
+          result = await response.json();
+          setIsLoading(false);
+          setData(result);
+        } else {
+          setIsLoading(false);
+          setError(error);
+          if (process.env.NODE_ENV === 'development') {
+            alert('서버에서 데이터를 가져오지 못했습니다');
+          }
+        }
+      } else {
         setIsLoading(false);
         setError(error);
         if (process.env.NODE_ENV === 'development') {

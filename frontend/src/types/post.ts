@@ -19,3 +19,12 @@ export interface PostInterface {
   }
   liked?:boolean;
 }
+
+export interface UpdateSongs {
+  postId: number;
+  content: string;
+  title: string;
+  score: number;
+  artist: string;
+  coverImg: string;
+}

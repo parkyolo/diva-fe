@@ -5,16 +5,16 @@ import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import Main from '@/components/Main';
 import SongCarousel from './SongCarousel';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { RecommendedSong } from '@/types/song';
+import { RecommendedSong, S3SongInfo } from '@/types/song';
 import { useFetch } from '@/hooks/useFetch';
 import { realMode, tutorialMode } from '.';
 
 const Content = ({
   onModeChange,
-  setActiveSongId,
+  setActiveSong,
 }: {
   onModeChange: Function;
-  setActiveSongId: Dispatch<SetStateAction<number>>;
+  setActiveSong: Dispatch<SetStateAction<S3SongInfo>>;
 }) => {
   const [isOpen, open, close] = useModal();
   const [activeMusicIdx, setActiveMusicIdx] = useState<number>(0);
@@ -51,12 +51,18 @@ const Content = ({
   // const [isLoading, recommendedSongs, err, getRecommendedSongs] = useFetch(req.recommend.getSongRecommendation)
 
   const changeModeToReal = () => {
-    setActiveSongId(recommendedSongs[activeMusicIdx].songId);
+    setActiveSong({
+      artist: recommendedSongs[activeMusicIdx].artist,
+      songTitle: recommendedSongs[activeMusicIdx].songTitle,
+    });
     onModeChange(realMode);
   };
 
   const changeModetoTutorial = () => {
-    setActiveSongId(recommendedSongs[activeMusicIdx].songId);
+    setActiveSong({
+      artist: recommendedSongs[activeMusicIdx].artist,
+      songTitle: recommendedSongs[activeMusicIdx].songTitle,
+    });
     onModeChange(tutorialMode);
   };
 

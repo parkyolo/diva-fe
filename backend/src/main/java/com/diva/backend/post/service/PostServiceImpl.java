@@ -9,8 +9,8 @@ import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.post.repository.PostRepository;
 import com.diva.backend.song.entity.Song;
 import com.diva.backend.song.repository.PracticeResultRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,12 +27,13 @@ public class PostServiceImpl implements PostService {
     // 전체 게시글 조회
     @Override
     @Transactional
-    public List<PostSelectResponseDto> getAllPosts() {
-        List<Post> posts = postRepository.findAll();
+    public List<PostSelectResponseDto> getAllPosts(HttpServletRequest request) {
+        List<Post> posts = postRepository.findByPracticeResultIsNotNull();
+        Long memberId = (Long) request.getAttribute("memberId");
 
         return posts.stream()
-                .map(PostSelectResponseDto::toPostResponseDto)
-                .toList();
+            .map(post -> PostSelectResponseDto.toPostResponseDto(post, memberId))
+            .collect(Collectors.toList());
     }
 
     // 게시글 작성
@@ -58,6 +59,7 @@ public class PostServiceImpl implements PostService {
                 .member(member)
                 .practiceResult(practiceResult)
                 .song(song)
+                .heartCount(0)
             .build();
 
         postRepository.save(post);
@@ -69,7 +71,7 @@ public class PostServiceImpl implements PostService {
     public void deletePost(Long postId, Long memberId) {
         // postId를 갖고있는 practice result를 member와 post를 함께 찾는다.
         PracticeResult practiceResult = practiceResultRepository.findByPostIdWithMemberAndPost(postId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
+            .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
 
         Member member = practiceResult.getMember();
         Post post = practiceResult.getPost();

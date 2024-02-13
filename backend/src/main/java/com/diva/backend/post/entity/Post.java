@@ -41,28 +41,37 @@ public class Post extends BaseEntity {
     @OneToOne(mappedBy = "post")
     private PracticeResult practiceResult;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Heart> hearts = new ArrayList<>();
-
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "song_id")
     private Song song;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Heart> hearts = new ArrayList<>();
+
+    @NotNull
+    @Column(name = "heart_count")
+    private Integer heartCount = 0;
+
     @Builder
-    protected Post(String content, Member member, PracticeResult practiceResult, Song song) {
+    protected Post(String content, Member member, PracticeResult practiceResult, Song song, List<Heart> hearts, Integer heartCount) {
         this.content = content;
         this.member = member;
         this.member.addPost(this);
         this.setPracticeResult(practiceResult);
-
         this.song = song;
         this.song.addPost(this);
+        this.hearts = hearts;
+        this.heartCount = heartCount;
     }
 
     // 연관관계 메소드
     public void setPracticeResult(PracticeResult practiceResult) {
         this.practiceResult = practiceResult;
         practiceResult.setPost(this);
+    }
+
+    public void setHeartCount(int heartCount) {
+        this.heartCount = heartCount;
     }
 
     // 게시글 수정

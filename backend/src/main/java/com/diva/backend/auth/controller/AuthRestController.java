@@ -2,7 +2,6 @@ package com.diva.backend.auth.controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.diva.backend.auth.dto.KakaoOAuthResponse;
-import com.diva.backend.auth.enumstorage.profile.SpringProfile;
 import com.diva.backend.auth.exception.NoSuchRefreshTokenInDBException;
 import com.diva.backend.auth.service.AuthService;
 import com.diva.backend.auth.service.OAuthService;
@@ -16,6 +15,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,23 +54,22 @@ public class AuthRestController {
     private String activeProfile;
 
     @GetMapping(value = "/login/oauth2/authorization/{provider}")
-    public void oAuth2AuthorizationV1(@PathVariable(name = "provider") String provider, HttpServletResponse response) throws IOException {
-        String frontPort = "";
+    public void oAuth2AuthorizationV1(@PathVariable(name = "provider") String provider, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String requestUrl = getHttpAndDomain(request);
 
-        // local
-        if (activeProfile.equals(SpringProfile.LOCAL.getProfile())) {
-            frontPort += ":" + frontendPort;
-        }
-
-        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + frontend + frontPort + "/auth/login/oauth2/code/" + provider);
+        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + requestUrl + "/auth/login/oauth2/code/" + provider);
     }
 
     @GetMapping(value = "/login/oauth2/code/{provider}")
-    public ResponseEntity<?> oAuth2CodeV1(@PathVariable(name = "provider") String provider, @RequestParam(name = "code") String code, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> oAuth2CodeV1(@PathVariable(name = "provider") String provider, @RequestParam(name = "code") String code, HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("code: " + code);
 
+        // 요청한 url을 가져온다.
+        String requestUrl = getHttpAndDomain(request);
+        log.info("requestUrl: " + requestUrl);
+
         // Kakao에 Access Token을 요청한다.
-        KakaoOAuthResponse kakaoOAuthResponse = oauthService.requestKakao(provider, code);
+        KakaoOAuthResponse kakaoOAuthResponse = oauthService.requestKakao(provider, code, requestUrl);
 
         // DB에 사용자 정보, Access Token, Refresh Token 저장
         MemberFindDto member = authService.signIn(kakaoOAuthResponse, response);
@@ -135,5 +134,27 @@ public class AuthRestController {
                 .status(FAIL.getStatus())
                 .message(e.getMessage())
                 .build());
+    }
+
+    private String getHttpAndDomain(HttpServletRequest request) {
+        // request의 domain을 가져온다.
+        String origin = request.getHeader(HttpHeaders.ORIGIN);
+
+        if (origin != null) {
+            // 프론트 로컬, 백엔드 dev
+            return origin;
+        }
+        else {
+            String host = request.getHeader(HttpHeaders.HOST);
+
+            if (host != null) {
+                // 프론트 local, 백엔드 local
+                String[] split = host.split(":");
+                return "http://" + split[0] + ":" + "3000";
+            }
+
+            // 프론트 dev, 백엔드 dev
+            return frontend;
+        }
     }
 }
