@@ -187,9 +187,6 @@ const Post = ({
           )}
         </div>
 
-        {post.member.memberId === user.memberId ? (
-          ''
-        ) : (
           <div
             className="flex justify-start gap-2 items-center"
             onClick={() => {
@@ -213,7 +210,6 @@ const Post = ({
               )}
             </div>
           </div>
-        )}
 
         {isOpen && (
           <BottomSheet close={close}>

@@ -34,8 +34,7 @@ const UploadForm = () => {
     setFeedPageAtom(feedPage);
   };
 
-  const [defaultValue, setDefaultValue] =
-    useState<string>('문구를 입력하세요..');
+  const [defaultValue, setDefaultValue] = useState<string>('');
 
   const [isLoading, sharedsongs, error, postSongFeed] = useFetch<
     [letsUploadSongs]
@@ -132,7 +131,8 @@ const UploadForm = () => {
           </div>
           <textarea
             className="h-full w-full bg-[#0A0A0A] rounded-xl p-5 outline-none"
-            placeholder={defaultValue}
+            defaultValue={defaultValue}
+            placeholder={'문구를 입력하세요..'}
             onChange={handleInputChange}
           />
         </div>
