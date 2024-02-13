@@ -49,13 +49,13 @@ const RangeCheckPage: React.FC = () => {
     if (audioStream) {
       audioStream.getTracks().forEach((track) => track.stop());
       setAudioStream(null);
-      convertHztoNote(pitchArray);
-      setCurrentPhase(LoadingPhase);
-      const { minNoteName, maxNoteName } = convertHztoNote(pitchArray);
-
-      postRange({ highestNote: maxNoteName, lowestNote: minNoteName });
-      setCurrentPhase(LoadingPhase);
     }
+  };
+  const stoprecording = () => {
+    setCurrentPhase(LoadingPhase);
+    const { minNoteName, maxNoteName } = convertHztoNote(pitchArray);
+    postRange({ highestNote: maxNoteName, lowestNote: minNoteName });
+    console.log(minNoteName, maxNoteName)
   };
 
   // 결과 로딩할 때 일정 시간 후 '결과 확인하기' 버튼 렌더링
@@ -116,6 +116,7 @@ const RangeCheckPage: React.FC = () => {
           <main className="flex flex-col justify-evenly items-center">
             <Timer
               onFinish={() => {
+                stoprecording();
                 handleStopRecording();
               }}
             ></Timer>
@@ -130,6 +131,7 @@ const RangeCheckPage: React.FC = () => {
             <ClayButton
               onClick={() => {
                 handleStopRecording();
+                stoprecording();
               }}
             >
               녹음 중지하기
