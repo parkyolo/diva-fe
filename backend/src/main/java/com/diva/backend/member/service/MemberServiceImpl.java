@@ -54,7 +54,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public MemberInfoUpdateResponseDto updateInfo(Long memberId, MemberInfoUpdateRequestDto requestDto, MultipartFile file) throws NoSuchMemberException, IllegalArgumentException{
+    public MemberInfoUpdateResponseDto updateInfo(Long memberId, MemberInfoUpdateRequestDto requestDto, MultipartFile file) throws NoSuchMemberException{
         Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         String nickname = requestDto.getNickname();
@@ -63,20 +63,21 @@ public class MemberServiceImpl implements MemberService {
         if (!nickname.isBlank()) {
             member.setNickname(nickname);
         }
-        member.setProfileImg(profileImg);
-        Member newMember = memberRepository.save(member);
 
         String profileImgUrl = null;
-        // 넘어온 이미지 파일이 있다면
-        if (profileImg) {
-            // 이미지 파일이 유효한지 확인
-            if (file == null || file.isEmpty()) {
-                throw new IllegalArgumentException("선택된 파일이 없습니다.");
+        // 넘어온 이미지 파일이 없다 == 사진 변경 안함
+        if (file == null || file.isEmpty()) {
+            // 기존 프로필 이미지가 있는 경우
+            if (profileImg) {
+                profileImgUrl = "profileImg/" + member.getId() + "/profileImg.jpg";
             }
-
+        } else { // 넘어온 이미지 파일이 있다 == 사진 변경 함
+            member.setProfileImg(true);
             profileImgUrl = "profileImg/" + member.getId() + "/profileImg.jpg";
             s3Uploader.uploadFile(profileImgUrl, file);
         }
+
+        Member newMember = memberRepository.save(member);
         return MemberInfoUpdateResponseDto.from(newMember, profileImgUrl);
     }
 

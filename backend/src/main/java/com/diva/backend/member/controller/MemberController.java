@@ -38,7 +38,7 @@ public class MemberController {
     @PatchMapping(consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> updateInfo(HttpServletRequest request,
                                   @RequestPart(value = "info") MemberInfoUpdateRequestDto requestDto,
-                                  @RequestPart(value = "file", required = false) MultipartFile multipartFile) throws NoSuchMemberException, IllegalArgumentException {
+                                  @RequestPart(value = "file", required = false) MultipartFile multipartFile) throws NoSuchMemberException {
         Long memberId = (Long) request.getAttribute("memberId");
         MemberInfoUpdateResponseDto result = memberService.updateInfo(memberId, requestDto, multipartFile);
         return ResponseEntity.ok(result);
