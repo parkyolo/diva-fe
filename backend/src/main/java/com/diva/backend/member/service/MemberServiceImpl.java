@@ -95,7 +95,7 @@ public class MemberServiceImpl implements MemberService {
             Long practiceResultId = post.getPracticeResult().getId();
             String recordUrl = "PracticeResult/" + practiceResultId + "/" + artist
                     + "-" + songTitle + ".mp3";
-            memberPostList.add(MemberPostResponseDto.from(member, post, song, score, recordUrl));
+            memberPostList.add(MemberPostResponseDto.from(member, post, song, score, recordUrl, practiceResultId));
         }
         return memberPostList;
     }
