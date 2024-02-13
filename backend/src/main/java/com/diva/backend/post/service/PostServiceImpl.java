@@ -59,7 +59,6 @@ public class PostServiceImpl implements PostService {
                 .member(member)
                 .practiceResult(practiceResult)
                 .song(song)
-                .liked(false)
                 .heartCount(0)
             .build();
 
