@@ -138,15 +138,13 @@ public class AuthRestController {
 
     private String getHttpAndDomain(HttpServletRequest request) {
         // request의 domain을 가져온다.
-//        String[] splitUrl = request.getRequestURL().toString().split("/");
-//
-//        String domain = splitUrl[2].split(":")[0];
-//        log.info("domain: " + domain);
-//        splitUrl[2] = domain;
-//
-//        String url = splitUrl[0] + "//" + splitUrl[2];
-//        log.info("url: " + url);
+        String origin = request.getHeader(HttpHeaders.ORIGIN);
 
-        return request.getHeader(HttpHeaders.ORIGIN);
+        if (origin != null) {
+            return origin;
+        }
+        else {
+            return frontend + ":" + frontendPort;
+        }
     }
 }
