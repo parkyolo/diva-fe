@@ -6,6 +6,7 @@ import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.entity.VocalRange;
 import com.diva.backend.member.repository.MemberRepository;
 import com.diva.backend.member.repository.VocalRangeRepository;
+import com.diva.backend.post.dto.PracticeResultUploadResponseDto;
 import com.diva.backend.post.entity.PracticeResult;
 import com.diva.backend.sing.dto.LiveResponseDto;
 import com.diva.backend.sing.dto.LiveUploadResponseDto;
@@ -42,8 +43,8 @@ public class SingServiceImpl implements SingService{
                 .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         String highestNote = requestDto.getHighestNote();
         String lowestNote = requestDto.getLowestNote();
-        int highestMidi = recommendArtist.noteToMidi(highestNote, true);
-        int lowestMidi = recommendArtist.noteToMidi(lowestNote, true);
+        Integer highestMidi = recommendArtist.noteToMidi(highestNote, true);
+        Integer lowestMidi = recommendArtist.noteToMidi(lowestNote, true);
 
         // 음역대 정보 저장
         VocalRange vocalRange = VocalRange.builder()
@@ -55,6 +56,7 @@ public class SingServiceImpl implements SingService{
         vocalRangeRepository.save(vocalRange);
         member.updateMemberWhenVocalTest(vocalRange);
         memberRepository.save(member);
+        System.out.println("HighestNote: " + member.getVocalRange().getHighestNote() + "  LowestNote: " + member.getVocalRange().getLowestNote());
         // 리턴할 필요없음
         return;
     }
@@ -102,7 +104,7 @@ public class SingServiceImpl implements SingService{
 
     @Transactional
     @Override
-    public LiveUploadResponseDto uploadFile(Long memberId, Long songId, MultipartFile multipartFile) throws NoSuchMemberException{
+    public PracticeResultUploadResponseDto uploadFile(Long memberId, Long songId, MultipartFile multipartFile) throws NoSuchMemberException{
         Member member = memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         Song song = songRepository.findSongById(songId);
@@ -117,14 +119,9 @@ public class SingServiceImpl implements SingService{
         String title = song.getTitle();
         String url = "PracticeResult/" + practiceResultId + "/" + artist + "-" + title + ".mp3";
         s3Uploader.uploadFile(url, multipartFile);
-
-        // 파이썬 서버에 채점요청 보내기(practiceResultId, artist, title) -> response로 score 들어옴
-        int score = 99;
-        
-        // practiceResult의 score 업데이트
-        practiceResult.setScore(score);
-        PracticeResult newProjectResult = practiceResultRepository.save(practiceResult);
-        return LiveUploadResponseDto.from(newProjectResult);
+        return PracticeResultUploadResponseDto.builder()
+            .practiceResultId(practiceResultId)
+            .build();
     }
 
 
