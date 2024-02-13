@@ -3,7 +3,7 @@ type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 export type RequestConfig = {
   method: Method;
   url: string;
-  body?: string;
+  body?: string | FormData;
 };
 
 export interface IRequestConfigResolver {
@@ -70,9 +70,16 @@ const req: IRequests = {
       method: 'GET',
       url: `/sing/${songId}/live`,
     }),
-    saveLiveResult: ({ songId }: { songId: number }) => ({
+    saveLiveResult: ({
+      songId,
+      record,
+    }: {
+      songId: number;
+      record: FormData;
+    }) => ({
       method: 'POST',
-      url: `/sing/${songId}/live`,
+      url: `/sing/${songId}/upload`,
+      body: record,
     }),
   },
   recommend: {

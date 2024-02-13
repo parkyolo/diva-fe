@@ -15,7 +15,7 @@ export interface SharedSong {
   songTitle: string;
   artist: string;
   recordUrl: string;
-  score: number,
+  score: number;
 }
 
 export interface RecommendedSong {
@@ -29,6 +29,10 @@ export interface RecommendedSong {
 export interface S3SongInfo {
   artist: string;
   songTitle: string;
+}
+
+export interface RealModeResponse {
+  practiceResultId: number;
 }
 
 export interface letsUploadSongs extends SangSong {
