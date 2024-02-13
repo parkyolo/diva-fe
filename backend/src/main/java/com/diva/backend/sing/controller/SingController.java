@@ -54,13 +54,13 @@ public class SingController {
         return ResponseEntity.ok(result);
     }
 
-    // 실전 모드 결과 저장
-    @PostMapping(value = "/sing/{songId}/live", consumes = MULTIPART_FORM_DATA_VALUE)
+    // 실전 모드 결과 업로드
+    @PostMapping(value = "/sing/{songId}/upload", consumes = MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFileToS3(HttpServletRequest request,
                                                 @PathVariable("songId") Long songId,
-                                                @RequestPart(value = "file", required = false) MultipartFile multipartFile) throws NoSuchMemberException{
+                                                @RequestPart(value = "file", required = false) MultipartFile multipartFile) throws NoSuchMemberException {
         Long memberId = (Long) request.getAttribute("memberId");
-        LiveUploadResponseDto result = singService.uploadFile(memberId, songId, multipartFile);
+        Long result = singService.uploadFile(memberId, songId, multipartFile);
         return ResponseEntity.ok(result);
     }
 
