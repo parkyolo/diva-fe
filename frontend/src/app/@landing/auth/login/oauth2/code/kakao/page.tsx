@@ -1,8 +1,8 @@
 'use client';
 
-import { setAccessTokenCookie } from '@/app/action';
-import { accessTokenAtom, userAtom } from '@/store/user';
-import { useAtom, useSetAtom } from 'jotai';
+import { setRefreshTokenCookie } from '@/app/action';
+import { accessTokenAtom } from '@/store/user';
+import { useSetAtom } from 'jotai';
 import { NextPage } from 'next';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -13,29 +13,25 @@ const KakaoLogin: NextPage = () => {
   const code: string | null = searchParams!.get('code');
   const setAccessTokenWithLocalStorage = useSetAtom(accessTokenAtom);
 
-  const [user, setUser] = useAtom(userAtom);
-
   const loginHandler = async (code: string | null) => {
-    console.log('code', code);
     const response: Response = await fetch(
       `/api/auth/login/oauth2/code/kakao?code=${code}`,
     );
 
     if (response.ok) {
       // 응답으로부터 토큰정보 추출
-      const accessToken: string = response.headers.get('authorization') ?? '';
-      // TODO: 리프레쉬 토큰 활용 필요
+      const accessToken: string = response.headers.get('Authorization') ?? '';
       const refreshToken: string =
-        response.headers.get('authorizationrefresh') ?? '';
-      // 쿠키에 저장
-      setAccessTokenCookie(accessToken);
+        response.headers.get('AuthorizationRefresh') ?? '';
 
-      // 전역 상태에 저장
+      // 리프레쉬 토큰 쿠키에 저장
+      setRefreshTokenCookie(refreshToken);
+      // 액세스 토큰 전역 상태+로컬스토리지에 저장
       setAccessTokenWithLocalStorage(accessToken);
 
       router.push('/');
     } else {
-      console.log('로그인 실패');
+      console.log('로그인 실패', response.status);
       alert('로그인 중 에러가 발생했습니다.');
       router.push('/');
     }
@@ -47,6 +43,7 @@ const KakaoLogin: NextPage = () => {
     }
   }, []);
 
+  //TODO: 로그인 로드 중 띄울 화면 지정하기
   return <>로그인 중</>;
 };
 
