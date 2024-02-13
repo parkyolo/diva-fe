@@ -40,7 +40,10 @@ const LyricsComponent = ({
         {parsedLyrics.map((lyrics, index) => {
           if (index >= startIndex && index < endIndex) {
             return (
-              <div className={index === currentIndex ? 'text-xl' : 'text-gray'}>
+              <div
+                key={index}
+                className={index === currentIndex ? 'text-xl' : 'text-gray'}
+              >
                 {lyrics.lyrics}
               </div>
             );
