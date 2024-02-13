@@ -2,6 +2,7 @@ package com.diva.backend.sing.controller;
 
 import com.diva.backend.exception.NoSuchMemberException;
 import com.diva.backend.exception.NoVocalRangeException;
+import com.diva.backend.post.dto.PracticeResultUploadResponseDto;
 import com.diva.backend.sing.dto.*;
 import com.diva.backend.sing.service.SingService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,7 +61,7 @@ public class SingController {
                                                 @PathVariable("songId") Long songId,
                                                 @RequestPart(value = "file", required = false) MultipartFile multipartFile) throws NoSuchMemberException {
         Long memberId = (Long) request.getAttribute("memberId");
-        Long result = singService.uploadFile(memberId, songId, multipartFile);
+        PracticeResultUploadResponseDto result = singService.uploadFile(memberId, songId, multipartFile);
         return ResponseEntity.ok(result);
     }
 
