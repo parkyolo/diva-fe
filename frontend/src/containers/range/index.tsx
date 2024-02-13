@@ -54,16 +54,7 @@ const Range = () => {
   }, [note]);
 
   useEffect(() => {
-    if (vocalRange) {
-      if (vocalRange.lowestNote.length === 3) {
-        vocalRange.lowestNote =
-          vocalRange.lowestNote.slice(0, 1) + vocalRange.lowestNote.slice(2, 3);
-      }
-      if (vocalRange.highestNote.length === 3) {
-        vocalRange.highestNote =
-          vocalRange.highestNote.slice(0, 1) +
-          vocalRange.highestNote.slice(2, 3);
-      }
+    if (vocalRange && vocalRange.lowestNote) {
       setNote({
         lowestNote: vocalRange.lowestNote,
         highestNote: vocalRange.highestNote,
