@@ -39,9 +39,18 @@ export const useFetch = <T>(
       });
 
       if (response.ok) {
-        result = await response.json();
+        const responseBody = await response.text();
+
+        if (responseBody.trim() !== '') {
+          // Check if the response body is not empty
+          result = JSON.parse(responseBody);
+          setData(result);
+        } else {
+          // Handle empty response body
+          console.warn('Empty response body');
+        }
+
         setIsLoading(false);
-        setData(result);
       } else if (response.status === 401) {
         // 액세스 토큰이 만료된 경우
         const res: Response = await reissueToken(
