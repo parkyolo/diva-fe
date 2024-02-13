@@ -24,11 +24,12 @@ public class MemberPostResponseDto {
     private final LocalDateTime lastModifiedDate;
     private final String coverImg;
     private final Long practiceResultId;
+    private final Long songId;
 
     @Builder
     public MemberPostResponseDto(Long memberId, Long postId, String nickname, String content,
         LocalDateTime createDate, LocalDateTime lastModifiedDate, String songTitle, String artist,
-        String coverImg, Integer score, String recordUrl, Long practiceResultId) {
+        String coverImg, Integer score, String recordUrl, Long practiceResultId, Long songId) {
         this.memberId = memberId;
         this.postId = postId;
         this.nickname = nickname;
@@ -41,22 +42,24 @@ public class MemberPostResponseDto {
         this.score = score;
         this.recordUrl = recordUrl;
         this.practiceResultId = practiceResultId;
+        this.songId = songId;
     }
 
     public static MemberPostResponseDto from (Member member,Post post, Song song, Integer score, String recordUrl, Long practiceResultId) {
         return MemberPostResponseDto.builder()
             .memberId(member.getId())
-            .postId(post.getId())
             .nickname(member.getNickname())
-            .content(post.getContent())
-            .createDate(post.getCreatedDate())
-            .lastModifiedDate(post.getLastModifiedDate())
+            .songId(song.getId())
             .songTitle(song.getTitle())
             .artist(song.getArtist())
             .coverImg(song.getCoverImg())
-            .score(score)
-            .recordUrl(recordUrl)
+            .postId(post.getId())
+            .content(post.getContent())
+            .createDate(post.getCreatedDate())
+            .lastModifiedDate(post.getLastModifiedDate())
             .practiceResultId(practiceResultId)
+            .recordUrl(recordUrl)
+            .score(score)
             .build();
     }
 }
