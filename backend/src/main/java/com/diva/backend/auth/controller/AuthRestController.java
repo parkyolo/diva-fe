@@ -146,15 +146,13 @@ public class AuthRestController {
         String url = splitUrl[0] + "//" + splitUrl[2];
         log.info("url: " + url);
 
-        String host = request.getHeader("Host");
-
         // 로컬이면 포트를 붙여준다.
         if (domain.equals("localhost")) {
             return "http://" + host + ":" + frontendPort;
         }
         // 로컬이 아니면 포트를 붙이지 않는다.
         else {
-            return "https://" + host;
+            return url.replace("http", "https");
         }
     }
 }
