@@ -1,4 +1,4 @@
-export interface lyricsInterface {
+export interface LyricsInterface {
   startSeconds: number;
   endSeconds: number;
   lyrics: string;
