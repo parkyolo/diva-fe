@@ -73,17 +73,17 @@ public class MemberController {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    // 404 NotFound
-    @ExceptionHandler(NoPostException.class)
-    public ResponseEntity<?> handleNoPostException(Exception e) {
-        return ResponseEntity.status(404).body(e.getMessage());
-    }
-
-    // 404 NotFound
-    @ExceptionHandler(NoPracticeResultException.class)
-    public ResponseEntity<?> handleNoPracticeResultException(Exception e) {
-        return ResponseEntity.status(404).body(e.getMessage());
-    }
+//    // 404 NotFound
+//    @ExceptionHandler(NoPostException.class)
+//    public ResponseEntity<?> handleNoPostException(Exception e) {
+//        return ResponseEntity.status(404).body(e.getMessage());
+//    }
+//
+//    // 404 NotFound
+//    @ExceptionHandler(NoPracticeResultException.class)
+//    public ResponseEntity<?> handleNoPracticeResultException(Exception e) {
+//        return ResponseEntity.status(404).body(e.getMessage());
+//    }
 
     // 410 Gone
     @ExceptionHandler(NoSuchMemberException.class)
