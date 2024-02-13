@@ -36,8 +36,8 @@ public class OAuthService {
     @Value("${spring.profiles.active}")
     private String activeProfile;
 
-    public KakaoOAuthResponse requestKakao(String provider, String code) throws IOException {
-        KakaoTokenResponse kakaoTokenResponse = requestKakaoTokenResponse(provider, code);
+    public KakaoOAuthResponse requestKakao(String provider, String code, String requestUrl) throws IOException {
+        KakaoTokenResponse kakaoTokenResponse = requestKakaoTokenResponse(provider, code, requestUrl);
 
         // Access Token을 이용해서 사용자 정보 요청
         KakaoUserResponse kakaoUserResponse = requestKakaoUserInfo(kakaoTokenResponse);
@@ -52,7 +52,7 @@ public class OAuthService {
             .build();
     }
 
-    private KakaoTokenResponse requestKakaoTokenResponse(String provider, String code)
+    private KakaoTokenResponse requestKakaoTokenResponse(String provider, String code, String requestUrl)
         throws IOException {
         // 7. Access Token 요청
         URL url = new URL("https://kauth.kakao.com/oauth/token");
@@ -63,18 +63,11 @@ public class OAuthService {
         // OutputStream으로 POST 데이터를 넘겨주겠다는 옵션.
         connection.setDoOutput(true);
 
-        String front = frontend;
-
-        // local
-        if (activeProfile.equals(SpringProfile.LOCAL.getProfile())) {
-            front += ":" + frontendPort;
-        }
-
         // POST 데이터를 넘겨주기 위한 OutputStream
         try (OutputStream os = connection.getOutputStream()) {
             String encoded = String.format("grant_type=authorization_code&client_id=%s&redirect_uri=%s/auth/login/oauth2/code/%s&code=%s&client_secret=%s",
                 kakaoClientId,
-                front,
+                requestUrl,
                 provider,
                 code,
                 kakaoClientSecret

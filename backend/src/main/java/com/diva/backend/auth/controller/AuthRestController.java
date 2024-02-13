@@ -54,23 +54,21 @@ public class AuthRestController {
     private String activeProfile;
 
     @GetMapping(value = "/login/oauth2/authorization/{provider}")
-    public void oAuth2AuthorizationV1(@PathVariable(name = "provider") String provider, HttpServletResponse response) throws IOException {
-        String frontPort = "";
+    public void oAuth2AuthorizationV1(@PathVariable(name = "provider") String provider, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String requestUrl = getRequestUrl(request);
 
-        // local
-        if (activeProfile.equals(SpringProfile.LOCAL.getProfile())) {
-            frontPort += ":" + frontendPort;
-        }
-
-        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + frontend + frontPort + "/auth/login/oauth2/code/" + provider);
+        response.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + requestUrl + "/auth/login/oauth2/code/" + provider);
     }
 
     @GetMapping(value = "/login/oauth2/code/{provider}")
-    public ResponseEntity<?> oAuth2CodeV1(@PathVariable(name = "provider") String provider, @RequestParam(name = "code") String code, HttpServletResponse response) throws IOException {
+    public ResponseEntity<?> oAuth2CodeV1(@PathVariable(name = "provider") String provider, @RequestParam(name = "code") String code, HttpServletRequest request, HttpServletResponse response) throws IOException {
         log.info("code: " + code);
 
+        // 요청한 url을 가져온다.
+        String requestUrl = getRequestUrl(request);
+
         // Kakao에 Access Token을 요청한다.
-        KakaoOAuthResponse kakaoOAuthResponse = oauthService.requestKakao(provider, code);
+        KakaoOAuthResponse kakaoOAuthResponse = oauthService.requestKakao(provider, code, requestUrl);
 
         // DB에 사용자 정보, Access Token, Refresh Token 저장
         MemberFindDto member = authService.signIn(kakaoOAuthResponse, response);
@@ -135,5 +133,11 @@ public class AuthRestController {
                 .status(FAIL.getStatus())
                 .message(e.getMessage())
                 .build());
+    }
+
+    private String getRequestUrl(HttpServletRequest request) {
+        // request의 url을 가져온다.
+        String[] splitUrl = request.getRequestURL().toString().split("/");
+        return splitUrl[0] + "//" + splitUrl[2];
     }
 }
