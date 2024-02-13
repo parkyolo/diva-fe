@@ -59,7 +59,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/posts/**").permitAll()
                 .requestMatchers("/api/vocal-test").permitAll()
                 .requestMatchers("/api/sing/**").permitAll()
-                .requestMatchers("/api/scores/**").permitAll()
+                .requestMatchers("/api/recommend/**").permitAll()
                 .anyRequest().authenticated()
 
             );
