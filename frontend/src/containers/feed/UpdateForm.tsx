@@ -20,9 +20,9 @@ const UpdateForm = () => {
       handleCurrentPage();
     };
   }, []);
-const [postIsLoading, allPosts, getPostError, getAllPosts] = useFetch<
-  PostInterface[]
->(req.post.getAllPosts);
+  const [postIsLoading, allPosts, getPostError, getAllPosts] = useFetch<
+    PostInterface[]
+  >(req.post.getAllPosts);
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
   };
@@ -67,13 +67,9 @@ const [postIsLoading, allPosts, getPostError, getAllPosts] = useFetch<
               /> */}
             </div>
             <div className="flex w-full justify-center itmes-center flex-col">
-              <div className="text-2xl font-bold px-2">
-                {postData.title}
-              </div>
+              <div className="text-2xl font-bold px-2">{postData.title}</div>
 
-              <div className="flex justify-end">
-                {postData.score}/100
-              </div>
+              <div className="flex justify-end">{postData.score}/100</div>
             </div>
           </div>
 
@@ -89,7 +85,7 @@ const [postIsLoading, allPosts, getPostError, getAllPosts] = useFetch<
           </div>
           <textarea
             className="h-full w-full bg-[#0A0A0A] rounded-xl p-5 outline-none"
-            placeholder="문구를 입력하세요..."
+            defaultValue={postData.content}
             onChange={handleInputChange}
           />
         </div>
