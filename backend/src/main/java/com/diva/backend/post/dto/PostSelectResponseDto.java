@@ -2,6 +2,7 @@ package com.diva.backend.post.dto;
 
 import com.diva.backend.post.entity.Post;
 import com.google.firebase.database.annotations.NotNull;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,19 +24,28 @@ public class PostSelectResponseDto {
     private PracticeResultResponseDto practiceResult;
 
     @NotNull
+    private Boolean liked;
+
+    @NotNull
     private Integer heartCount;
 
+    private LocalDateTime createDate;
+    private LocalDateTime lastModifiedDate;
+
     @Builder
-    protected PostSelectResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Integer heartCount) {
+    protected PostSelectResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Boolean liked, Integer heartCount, LocalDateTime createDate, LocalDateTime lastModifiedDate) {
         this.postId = postId;
         this.content = content;
         this.member = member;
         this.practiceResult = practiceResult;
+        this.liked = liked;
         this.heartCount = heartCount;
+        this.createDate = createDate;
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     // Post 엔티티를 PostResponseDto로 변환
-    public static PostSelectResponseDto toPostResponseDto(Post post) {
+    public static PostSelectResponseDto toPostResponseDto(Post post, Long memberId) {
         MemberResponseDto memberResponseDto = MemberResponseDto.builder()
                 .memberId(post.getMember().getId())
                 .nickname(post.getMember().getNickname())
@@ -53,13 +63,18 @@ public class PostSelectResponseDto {
                     .build())
             .build();
 
+        Boolean liked = post.getHearts().stream().anyMatch(heart -> heart.getMember().getId().equals(memberId));
+        LocalDateTime createDate = post.getCreatedDate();
+        LocalDateTime lastModifiedDate = post.getLastModifiedDate();
         return PostSelectResponseDto.builder()
                 .postId(post.getId())
                 .content(post.getContent())
                 .member(memberResponseDto)
                 .practiceResult(practiceResultResponseDto)
-                .heartCount(post.getHearts().size())
+                .liked(liked)
+                .heartCount(post.getHeartCount())
+                .createDate(createDate)
+                .lastModifiedDate(lastModifiedDate)
             .build();
     }
 }
-

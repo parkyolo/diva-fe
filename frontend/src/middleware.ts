@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  // 요청으로부터 토큰정보 추출
-  const accessToken: string = request.cookies.get('accessToken')?.value ?? '';
-  console.log('token ', accessToken);
+  // 요청으로부터 리프레쉬 토큰정보 추출
+  const refreshToken: string =
+    request.cookies.get('AuthorizationRefresh')?.value ?? '';
 
-  if (!accessToken) {
+  if (!refreshToken) {
     return NextResponse.redirect(new URL('/', request.url));
   }
 }

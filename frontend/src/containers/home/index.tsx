@@ -2,13 +2,14 @@
 
 import Content from '@/containers/home/Content';
 import Navigation from '@/components/Navigation';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import Link from 'next/link';
-import PlayResult from '../play/PlayResult';
-import RealMode from '../play/RealMode';
-import TutorialMode from '../play/TutorialMode';
+import PlayResult from '@/containers/play/PlayResult';
+import RealMode from '@/containers/play/RealMode';
+import TutorialMode from '@/containers/play/TutorialMode';
 import { CloseButton, LeftArrowIcon, HeaderLogo } from '../../../public/svgs';
+import { S3SongInfo } from '@/types/song';
 
 export const homePage = 0b00;
 export const realMode = 0b01;
@@ -16,7 +17,10 @@ export const tutorialMode = 0b10;
 
 const Home = () => {
   const [mode, setMode] = useState(homePage);
-  const [activeMusic, setActiveMusic] = useState<number>(0);
+  const [activeMusic, setActiveMusic] = useState<S3SongInfo>({
+    artist: '',
+    songTitle: '',
+  });
 
   const handleModeChange = (newMode: number) => {
     setMode(newMode);
@@ -39,7 +43,7 @@ const Home = () => {
           />
           <Content
             onModeChange={handleModeChange}
-            setActiveSongId={setActiveMusic}
+            setActiveSong={setActiveMusic}
           />
           <Navigation />
         </>
@@ -64,7 +68,7 @@ const Home = () => {
               </button>
             }
           />
-          {/* <TutorialMode onModeChange={handleModeChange} song={activeMusic} /> */}
+          <TutorialMode onModeChange={handleModeChange} song={activeMusic} />
         </>
       ) : (
         <>
