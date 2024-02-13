@@ -1,16 +1,19 @@
+import Header from '@/components/Header';
 import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
+import { logout } from '@/services/logout';
+import myPageAtom from '@/store/myPage';
 import { accessTokenAtom, userAtom } from '@/store/user';
 import { User, UserPatch } from '@/types/user';
 import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
-import { useState, ChangeEvent, useEffect } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import LeftArrow from '/public/svgs/left_arrow.svg';
-import Header from '@/components/Header';
-import myPageAtom from '@/store/myPage';
+
 interface myPageProps {
   user: User;
 }
+
 const SettingPage = ({ user }: myPageProps) => {
   const router = useRouter();
   const [inputValue, setInputValue] = useState(user.nickname);
@@ -28,10 +31,13 @@ const SettingPage = ({ user }: myPageProps) => {
     req.member.updateMember,
   );
 
-  const setAccessTokenAtom = useSetAtom(accessTokenAtom);
-  const handleLogoutButton = (e: React.MouseEvent) => {
-    setAccessTokenAtom('');
-    localStorage.removeItem('accessToken');
+  const setAccessTokenWithLocalStorage = useSetAtom(accessTokenAtom);
+  /**
+   * 로그아웃: 로컬스토리지와 전역에 저장된 액세스 토큰 삭제, 쿠키에 저장된 리프레쉬 토큰 삭제
+   * @param e
+   */
+  const handleLogoutButton = async (e: React.MouseEvent) => {
+    await logout(setAccessTokenWithLocalStorage);
     router.push('/');
   };
 
@@ -40,6 +46,7 @@ const SettingPage = ({ user }: myPageProps) => {
     const newProfileImg = event?.target.files[0];
     setSelectImg(newProfileImg);
   };
+
   const setMyPageAtom = useSetAtom(myPageAtom);
 
   // 유저 정보 업데이트 후 서버에 모두 반영이 되면 그 때 전역 유저를 갱신하고 마이페이지 메인으로 이동
