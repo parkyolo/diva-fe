@@ -2,7 +2,6 @@ package com.diva.backend.auth.controller;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.diva.backend.auth.dto.KakaoOAuthResponse;
-import com.diva.backend.auth.enumstorage.profile.SpringProfile;
 import com.diva.backend.auth.exception.NoSuchRefreshTokenInDBException;
 import com.diva.backend.auth.service.AuthService;
 import com.diva.backend.auth.service.OAuthService;
@@ -55,7 +54,7 @@ public class AuthRestController {
 
     @GetMapping(value = "/login/oauth2/authorization/{provider}")
     public void oAuth2AuthorizationV1(@PathVariable(name = "provider") String provider, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String requestUrl = getRequestUrl(request);
+        String requestUrl = getHttpAndDomain(request);
 
         response.sendRedirect("https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=" + kakaoClientId + "&redirect_uri=" + requestUrl + "/auth/login/oauth2/code/" + provider);
     }
@@ -65,7 +64,8 @@ public class AuthRestController {
         log.info("code: " + code);
 
         // 요청한 url을 가져온다.
-        String requestUrl = getRequestUrl(request);
+        String requestUrl = getHttpAndDomain(request);
+        log.info("requestUrl: " + requestUrl);
 
         // Kakao에 Access Token을 요청한다.
         KakaoOAuthResponse kakaoOAuthResponse = oauthService.requestKakao(provider, code, requestUrl);
@@ -135,9 +135,24 @@ public class AuthRestController {
                 .build());
     }
 
-    private String getRequestUrl(HttpServletRequest request) {
-        // request의 url을 가져온다.
+    private String getHttpAndDomain(HttpServletRequest request) {
+        // request의 domain을 가져온다.
         String[] splitUrl = request.getRequestURL().toString().split("/");
-        return splitUrl[0] + "//" + splitUrl[2];
+
+        String domain = splitUrl[2].split(":")[0];
+        log.info("domain: " + domain);
+        splitUrl[2] = domain;
+
+        String url = splitUrl[0] + "//" + splitUrl[2];
+        log.info("url: " + url);
+
+        // 로컬이면 포트를 붙여준다.
+        if (domain.equals("localhost")) {
+            return url + ":" + frontendPort;
+        }
+        // 로컬이 아니면 포트를 붙이지 않는다.
+        else {
+            return url.replace("http", "https");
+        }
     }
 }
