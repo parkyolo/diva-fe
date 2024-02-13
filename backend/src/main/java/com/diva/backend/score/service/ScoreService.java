@@ -1,7 +1,7 @@
 package com.diva.backend.score.service;
 
 import com.diva.backend.post.entity.PracticeResult;
-import com.diva.backend.score.dto.ScoreRequestDto;
+import com.diva.backend.score.dto.ScorePythonRequestDto;
 import com.diva.backend.score.dto.ScoreResponseDto;
 import com.diva.backend.score.exception.ScoreServerErrorException;
 import com.diva.backend.song.repository.PracticeResultRepository;
@@ -85,11 +85,11 @@ public class ScoreService {
         try (OutputStream os = connection.getOutputStream()) {
             os.write(
                     objectMapper.writeValueAsBytes(
-                            ScoreRequestDto.builder()
+                            ScorePythonRequestDto.builder()
                                     .id(practiceResultId)
                                     .artist(artist)
                                     .title(title)
-                                    .build()
+                                .build()
                     )
             );
         }
