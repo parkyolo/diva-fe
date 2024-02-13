@@ -15,6 +15,7 @@ import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -137,22 +138,13 @@ public class AuthRestController {
 
     private String getHttpAndDomain(HttpServletRequest request) {
         // request의 domain을 가져온다.
-        String[] splitUrl = request.getRequestURL().toString().split("/");
+        String origin = request.getHeader(HttpHeaders.ORIGIN);
 
-        String domain = splitUrl[2].split(":")[0];
-        log.info("domain: " + domain);
-        splitUrl[2] = domain;
-
-        String url = splitUrl[0] + "//" + splitUrl[2];
-        log.info("url: " + url);
-
-        // 로컬이면 포트를 붙여준다.
-        if (domain.equals("localhost")) {
-            return url + ":" + frontendPort;
+        if (origin != null) {
+            return origin;
         }
-        // 로컬이 아니면 포트를 붙이지 않는다.
         else {
-            return url.replace("http", "https");
+            return frontend;
         }
     }
 }
