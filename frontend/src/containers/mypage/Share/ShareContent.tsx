@@ -3,23 +3,44 @@ import { SharedSong } from '@/types/song';
 import { useEffect } from 'react';
 import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
+import { PostInterface } from '@/types/post';
 
 const ShareContent = () => {
   const [isLoading, sharedSongs, error, getSharedSongs] = useFetch<
     SharedSong[]
   >(req.post.getMyPosts);
-
+  const [deleteisLoading, deletePost, deleteError, doDeletePost] = useFetch<
+    PostInterface[]
+  >(req.post.deletePost);
+  const handleRemovePost = async (postId: number) => {
+    try {
+      await doDeletePost({ postId });
+      await getSharedSongs();
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
     getSharedSongs();
   }, []);
-
+  console.log(sharedSongs);
   return (
     <>
-      <div className="flex flex-col justify-center items-center gap-8 p-5">
-        {sharedSongs?.map((song: SharedSong) => (
-          <ShareItems key={song.postId} song={song}></ShareItems>
-        ))}
-      </div>
+      {Array.isArray(sharedSongs) ? (
+        <div className="flex flex-col justify-center items-center gap-8 p-5">
+          {sharedSongs.map((song: SharedSong) => (
+            <ShareItems
+              key={song.postId}
+              song={song}
+              handleRemovePost={handleRemovePost}
+            ></ShareItems>
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col justify-center items-center gap-8 p-5">
+          <p>공유한 노래가 없습니다</p>
+        </div>
+      )}
     </>
   );
 };

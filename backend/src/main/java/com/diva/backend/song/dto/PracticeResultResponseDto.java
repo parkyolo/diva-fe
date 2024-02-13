@@ -14,7 +14,6 @@ public class PracticeResultResponseDto {
     private final LocalDateTime createdDate;
     private final String artist;
     private final Integer score;
-
     @Builder
     public PracticeResultResponseDto(Long practiceResultId, String songTitle, String coverImg, LocalDateTime createdDate, String artist, Integer score) {
         this.practiceResultId = practiceResultId;

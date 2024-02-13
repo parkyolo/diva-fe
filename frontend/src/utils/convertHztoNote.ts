@@ -9,16 +9,16 @@ export const convertHztoNote = (pitchArray: number[]) => {
   const getNoteName = (frequecy: number) => {
    const noteNames = [
      'C',
-     'C#',
+     'C',
      'D',
-     'D#',
+     'D',
      'E',
      'F',
-     'F#',
+     'F',
      'G',
-     'G#',
+     'G',
      'A',
-     'A#',
+     'A',
      'B',
    ];
     const noteNumber: number = 12 * Math.log2(frequecy / 440) + 69;

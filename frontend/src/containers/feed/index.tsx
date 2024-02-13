@@ -3,7 +3,7 @@
 import Header from '@/components/Header';
 import Navigation from '@/components/Navigation';
 import UploadForm from '@/containers/feed/UploadForm';
-import { feedPage, feedPageAtom } from '@/store/feed';
+import { feedPage, updateForm, uploadForm, feedPageAtom } from '@/store/feed';
 import { PostInterface } from '@/types/post';
 import { useAtom } from 'jotai';
 import Link from 'next/link';
@@ -11,6 +11,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import PostContainer from './post/PostContainer';
 import UploadButton from './UploadButton';
 import { HeaderLogo } from '../../../public/svgs';
+import UpdateForm from './UpdateForm';
 
 const PAGE_SIZE = 5;
 
@@ -58,8 +59,10 @@ const Feed = () => {
           </main>
           <Navigation />
         </>
-      ) : (
+      ) : isFeedPage === uploadForm ?  (
         <UploadForm />
+      ) :  (
+        <UpdateForm />
       )}
     </>
   );
