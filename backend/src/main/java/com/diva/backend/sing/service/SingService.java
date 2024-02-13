@@ -2,6 +2,7 @@ package com.diva.backend.sing.service;
 
 import com.diva.backend.exception.NoSuchMemberException;
 import com.diva.backend.exception.NoVocalRangeException;
+import com.diva.backend.post.dto.PracticeResultUploadResponseDto;
 import com.diva.backend.sing.dto.LiveResponseDto;
 import com.diva.backend.sing.dto.LiveUploadResponseDto;
 import com.diva.backend.sing.dto.TutorialResponseDto;
@@ -19,5 +20,5 @@ public interface SingService {
 
     LiveResponseDto getLiveMode(Long memberId, Long songId) throws NoSuchMemberException;
 
-    Long uploadFile(Long memberId, Long songId, MultipartFile multipartFile) throws NoSuchMemberException;
+    PracticeResultUploadResponseDto uploadFile(Long memberId, Long songId, MultipartFile multipartFile) throws NoSuchMemberException;
 }
