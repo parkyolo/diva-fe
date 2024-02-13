@@ -19,5 +19,5 @@ public interface SingService {
 
     LiveResponseDto getLiveMode(Long memberId, Long songId) throws NoSuchMemberException;
 
-    LiveUploadResponseDto uploadFile(Long memberId, Long songId, MultipartFile multipartFile) throws NoSuchMemberException;
+    Long uploadFile(Long memberId, Long songId, MultipartFile multipartFile) throws NoSuchMemberException;
 }
