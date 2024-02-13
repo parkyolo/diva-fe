@@ -97,7 +97,7 @@ public class MemberServiceImpl implements MemberService {
                     + "-" + songTitle + ".mp3";
             memberPostList.add(MemberPostResponseDto.from(member, post, song, score, recordUrl));
         }
-        if (memberPostList.size() == 0) {
+        if (memberPostList.isEmpty()) {
             throw new NoPostException("공유한 노래가 없습니다.");
         }
         return memberPostList;

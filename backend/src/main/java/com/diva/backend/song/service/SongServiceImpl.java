@@ -60,7 +60,7 @@ public class SongServiceImpl implements SongService{
         for (PracticeResult practiceResult : list) {
             practiceResultList.add(PracticeResultResponseDto.from(practiceResult));
         }
-        if (practiceResultList.size() == 0) {
+        if (practiceResultList.isEmpty()) {
             throw new NoPracticeResultException("부른 노래가 없습니다.");
         }
         return practiceResultList;
