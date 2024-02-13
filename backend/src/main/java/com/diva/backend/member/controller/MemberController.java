@@ -1,6 +1,7 @@
 package com.diva.backend.member.controller;
 
 import com.diva.backend.exception.NoPostException;
+import com.diva.backend.exception.NoPracticeResultException;
 import com.diva.backend.exception.NoSuchMemberException;
 import com.diva.backend.member.dto.*;
 import com.diva.backend.member.service.MemberService;
@@ -72,11 +73,17 @@ public class MemberController {
         return ResponseEntity.badRequest().body(e.getMessage());
     }
 
-    // 404 NotFound
-    @ExceptionHandler(NoPostException.class)
-    public ResponseEntity<?> handleNoPostException(Exception e) {
-        return ResponseEntity.status(404).body(e.getMessage());
-    }
+//    // 404 NotFound
+//    @ExceptionHandler(NoPostException.class)
+//    public ResponseEntity<?> handleNoPostException(Exception e) {
+//        return ResponseEntity.status(404).body(e.getMessage());
+//    }
+//
+//    // 404 NotFound
+//    @ExceptionHandler(NoPracticeResultException.class)
+//    public ResponseEntity<?> handleNoPracticeResultException(Exception e) {
+//        return ResponseEntity.status(404).body(e.getMessage());
+//    }
 
     // 410 Gone
     @ExceptionHandler(NoSuchMemberException.class)
