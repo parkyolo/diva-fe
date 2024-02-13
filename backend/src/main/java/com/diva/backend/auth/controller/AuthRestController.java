@@ -144,7 +144,7 @@ public class AuthRestController {
             return origin;
         }
         else {
-            return frontend + ":" + frontendPort;
+            return frontend;
         }
     }
 }
