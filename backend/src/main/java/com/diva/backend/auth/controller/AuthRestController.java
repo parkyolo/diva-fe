@@ -141,9 +141,19 @@ public class AuthRestController {
         String origin = request.getHeader(HttpHeaders.ORIGIN);
 
         if (origin != null) {
+            // 프론트 로컬, 백엔드 dev
             return origin;
         }
         else {
+            String host = request.getHeader(HttpHeaders.HOST);
+
+            if (host != null) {
+                // 프론트 local, 백엔드 local
+                String[] split = host.split(":");
+                return "http://" + split[0] + ":" + "3000";
+            }
+
+            // 프론트 dev, 백엔드 dev
             return frontend;
         }
     }
