@@ -85,13 +85,13 @@ public class SingController {
         return ResponseEntity.status(404).body(e.getMessage());
     }
 
-    @PostMapping(value = "/sing/{songId}/score")
-    public ResponseEntity<?> calculateScores(@PathVariable(value = "songId") Long songId, @RequestBody @Valid ScoreRequestDto scoreRequestDto, HttpServletRequest request) throws IOException, IllegalArgumentException, ScoreServerErrorException {
+    @PostMapping(value = "/sing/{practiceResultId}/score")
+    public ResponseEntity<?> calculateScores(@PathVariable(value = "practiceResultId") Long practiceResultId, @RequestBody @Valid ScoreRequestDto scoreRequestDto, HttpServletRequest request) throws IOException, IllegalArgumentException, ScoreServerErrorException {
         Long memberId = (Long) request.getAttribute("memberId");
         String artist = scoreRequestDto.getArtist();
         String title = scoreRequestDto.getTitle();
 
-        ScoreResponseDto scoreResponseDto = scoreService.calculateScores(memberId, songId, artist, title);
+        ScoreResponseDto scoreResponseDto = scoreService.calculateScores(memberId, practiceResultId, artist, title);
 
         return ResponseEntity.ok(scoreResponseDto);
     }
