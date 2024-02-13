@@ -26,7 +26,7 @@ const ShareContent = () => {
   console.log(sharedSongs);
   return (
     <>
-      {Array.isArray(sharedSongs) ? (
+      {Array.isArray(sharedSongs) && sharedSongs.length > 0 ? (
         <div className="flex flex-col justify-center items-center gap-8 p-5">
           {sharedSongs.map((song: SharedSong) => (
             <ShareItems
