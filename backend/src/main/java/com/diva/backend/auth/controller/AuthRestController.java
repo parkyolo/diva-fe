@@ -148,7 +148,7 @@ public class AuthRestController {
 
         // 로컬이면 포트를 붙여준다.
         if (domain.equals("localhost")) {
-            return "http://" + host + ":" + frontendPort;
+            return url + ":" + frontendPort;
         }
         // 로컬이 아니면 포트를 붙이지 않는다.
         else {
