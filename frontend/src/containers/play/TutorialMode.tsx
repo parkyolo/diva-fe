@@ -7,9 +7,8 @@ import { parseLyricsTiming } from '@/utils/parseLyricsTiming';
 import { PitchInterface } from '@/types/pitch';
 import { parsePitchDuration } from '@/utils/parsePitchDuration';
 import { getMusicInfo } from '@/services/getMusicInfo';
-import { useFetch } from '@/hooks/useFetch';
 import { infoUrl, mrUrl } from '@/utils/getS3URL';
-import { req } from '@/services';
+import { homePage } from '../home';
 
 const TutorialMode = ({
   onModeChange,
@@ -19,34 +18,19 @@ const TutorialMode = ({
   song: S3SongInfo;
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [playtime, setPlayTime] = useState<number>(0);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
-
   const bpm = useRef<number>(0);
   const gap = useRef<number>(0);
-
+  const musicUrl = useRef<string>(mrUrl(song));
   const [parsedLyrics, setLyrics] = useState<LyricsInterface[]>([]);
   const [parsedPitches, setPitches] = useState<PitchInterface[]>([]);
   const [currentSeconds, setCurrentSeconds] = useState<number>(0);
-  const musicUrl = useRef<string>(mrUrl(song));
-
-  let audioArray: BlobPart[] = [];
-
-  // const [isLoading, songInfo, error, getSongInfo] = useFetch<S3SongInfo>(
-  //   req.sing.tutorial,
-  // );
-
-  useEffect(() => {
-    if (mediaRecorder && currentSeconds && playtime) {
-      if (currentSeconds >= playtime) {
-        mediaRecorder.stop();
-        onModeChange(0b11);
-      }
-    }
-  }, [currentSeconds]);
 
   const handleSeconds = () => {
     if (audioRef.current) setCurrentSeconds(audioRef.current.currentTime);
+  };
+
+  const handleAudioEnd = () => {
+    setTimeout(() => onModeChange(homePage), 500);
   };
 
   useEffect(() => {
@@ -61,39 +45,12 @@ const TutorialMode = ({
 
         audioRef.current?.play();
         audioRef.current?.addEventListener('timeupdate', handleSeconds);
-      });
-
-    // 마이크가 입력 받는 소리를 mediaStream 객체로 취득
-    navigator.mediaDevices
-      .getUserMedia({
-        audio: true,
-      })
-      .then((stream) => {
-        // mediaStream으로 들어오는 오디오 데이터를 mediaRecorder로 저장
-        setMediaRecorder(new MediaRecorder(stream));
-
-        if (mediaRecorder) {
-          mediaRecorder.ondataavailable = (e) => {
-            audioArray.push(e.data);
-          };
-
-          mediaRecorder.onstop = (e) => {
-            const blob = new Blob(audioArray, {
-              type: 'audio/mp3 codecs=opus',
-            });
-            const formData = new FormData();
-            formData.append('audio', blob);
-
-            // TODO: 녹음이 중지되면 homePage로 넘어가기
-          };
-
-          mediaRecorder.start();
-        }
+        audioRef.current?.addEventListener('ended', handleAudioEnd);
       });
 
     return () => {
       audioRef.current?.removeEventListener('timeupdate', handleSeconds);
-      mediaRecorder?.stop();
+      audioRef.current?.removeEventListener('ended', handleAudioEnd);
     };
   }, []);
 

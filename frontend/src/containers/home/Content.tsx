@@ -11,9 +11,11 @@ import { realMode, tutorialMode } from '.';
 
 const Content = ({
   onModeChange,
+  setActiveMusicId,
   setActiveSong,
 }: {
   onModeChange: Function;
+  setActiveMusicId: Dispatch<SetStateAction<number>>;
   setActiveSong: Dispatch<SetStateAction<S3SongInfo>>;
 }) => {
   const [isOpen, open, close] = useModal();
@@ -55,6 +57,7 @@ const Content = ({
       artist: recommendedSongs[activeMusicIdx].artist,
       songTitle: recommendedSongs[activeMusicIdx].songTitle,
     });
+    setActiveMusicId(recommendedSongs[activeMusicIdx].songId);
     onModeChange(realMode);
   };
 
