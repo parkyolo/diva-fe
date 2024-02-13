@@ -22,33 +22,41 @@ public class MemberPostResponseDto {
     private final String recordUrl;
     private final LocalDateTime createDate;
     private final LocalDateTime lastModifiedDate;
+    private final String coverImg;
+    private final Long practiceResultId;
 
     @Builder
-    public MemberPostResponseDto(Long memberId, Long postId, String nickname, String content, String songTitle, String artist, Integer score, String recordUrl, LocalDateTime createDate, LocalDateTime lastModifiedDate) {
+    public MemberPostResponseDto(Long memberId, Long postId, String nickname, String content,
+        LocalDateTime createDate, LocalDateTime lastModifiedDate, String songTitle, String artist,
+        String coverImg, Integer score, String recordUrl, Long practiceResultId) {
         this.memberId = memberId;
         this.postId = postId;
         this.nickname = nickname;
         this.content = content;
-        this.songTitle = songTitle;
-        this.artist = artist;
-        this.score = score;
-        this.recordUrl = recordUrl;
         this.createDate = createDate;
         this.lastModifiedDate = lastModifiedDate;
+        this.songTitle = songTitle;
+        this.artist = artist;
+        this.coverImg = coverImg;
+        this.score = score;
+        this.recordUrl = recordUrl;
+        this.practiceResultId = practiceResultId;
     }
 
-    public static MemberPostResponseDto from (Member member,Post post, Song song, Integer score, String recordUrl) {
+    public static MemberPostResponseDto from (Member member,Post post, Song song, Integer score, String recordUrl, Long practiceResultId) {
         return MemberPostResponseDto.builder()
             .memberId(member.getId())
             .postId(post.getId())
             .nickname(member.getNickname())
             .content(post.getContent())
-            .songTitle(song.getTitle())
-            .artist(song.getArtist())
-            .score(score)
-            .recordUrl(recordUrl)
             .createDate(post.getCreatedDate())
             .lastModifiedDate(post.getLastModifiedDate())
+            .songTitle(song.getTitle())
+            .artist(song.getArtist())
+            .coverImg(song.getCoverImg())
+            .score(score)
+            .recordUrl(recordUrl)
+            .practiceResultId(practiceResultId)
             .build();
     }
 }
