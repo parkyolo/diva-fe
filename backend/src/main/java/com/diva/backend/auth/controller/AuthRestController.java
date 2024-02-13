@@ -65,6 +65,7 @@ public class AuthRestController {
 
         // 요청한 url을 가져온다.
         String requestUrl = getHttpAndDomain(request);
+        log.info("requestUrl: " + requestUrl);
 
         // Kakao에 Access Token을 요청한다.
         KakaoOAuthResponse kakaoOAuthResponse = oauthService.requestKakao(provider, code, requestUrl);
@@ -139,9 +140,11 @@ public class AuthRestController {
         String[] splitUrl = request.getRequestURL().toString().split("/");
 
         String domain = splitUrl[2].split(":")[0];
+        log.info("domain: " + domain);
         splitUrl[2] = domain;
 
         String url = splitUrl[0] + "//" + splitUrl[2];
+        log.info("url: " + url);
 
         // 로컬이면 포트를 붙여준다.
         if (domain.equals("localhost")) {
