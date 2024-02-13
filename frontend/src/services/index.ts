@@ -3,7 +3,7 @@ type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 export type RequestConfig = {
   method: Method;
   url: string;
-  body?: string;
+  body?: string | FormData;
 };
 
 export interface IRequestConfigResolver {
@@ -46,10 +46,10 @@ const req: IRequests = {
       method: 'GET',
       url: '/members',
     }),
-    updateMember: (data: { nickname: string; profileImg: string }) => ({
+    updateMember: (data: FormData) => ({
       method: 'PATCH',
       url: '/members',
-      body: JSON.stringify(data),
+      body: data,
     }),
   },
   sing: {

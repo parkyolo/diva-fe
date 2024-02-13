@@ -25,15 +25,16 @@ export const useFetch = <T>(
       let result;
 
       const { url, ...rest } = requestConfigResolver(params[0]);
+      const contentType =
+        Object.is(requestConfigResolver, req.sing.saveLiveResult) ||
+        Object.is(requestConfigResolver, req.member.updateMember)
+          ? undefined
+          : { 'Content-Type': 'application/json' };
 
       const response: Response = await fetch(`/api${url}`, {
         headers: {
           Authorization: accessToken,
-          'Content-Type':
-            Object.is(requestConfigResolver, req.sing.saveLiveResult) ||
-            Object.is(requestConfigResolver, req.member.updateMember)
-              ? 'multipart/form-data'
-              : 'application/json',
+          ...contentType,
         },
         ...rest,
       });
@@ -41,6 +42,7 @@ export const useFetch = <T>(
       if (response.ok) {
         const responseBody = await response.text();
 
+        // response body 유무에 따른 분기
         if (responseBody.trim() !== '') {
           // Check if the response body is not empty
           result = JSON.parse(responseBody);
@@ -75,11 +77,7 @@ export const useFetch = <T>(
         const response: Response = await fetch(`/api${url}`, {
           headers: {
             Authorization: reissuedAccessToken,
-            'Content-Type':
-              Object.is(requestConfigResolver, req.sing.saveLiveResult) ||
-              Object.is(requestConfigResolver, req.member.updateMember)
-                ? 'multipart/form-data'
-                : 'application/json',
+            ...contentType,
           },
           ...rest,
         });
