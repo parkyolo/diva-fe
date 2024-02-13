@@ -110,6 +110,7 @@ const SettingPage = ({ user }: myPageProps) => {
   //     setMyPageAtom(0b0);
   //   }
   // }, [userInfo]);
+
   return (
     <>
       <Header
@@ -133,7 +134,14 @@ const SettingPage = ({ user }: myPageProps) => {
                 alt="사용자가 선택한 프로필 사진입니다"
                 sizes="200px, 200px"
                 fill
+                priority={true}
               />
+              {/* <img
+                key={Date.now()}
+                src={preview}
+                alt="사용자가 선택한 프로필 사진입니다"
+                className="object-cover aspect-square"
+              /> */}
             </div>
             <label className="text-2xl text-skyblue font-bold text-center cursor-pointer">
               사진 수정
