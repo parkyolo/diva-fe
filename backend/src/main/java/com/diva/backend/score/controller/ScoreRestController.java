@@ -21,19 +21,20 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RestController
 @RequestMapping(value = "/api/scores/v1", consumes = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
+// 클래스 전체에 @Transactional 넣지 마세요.
 public class ScoreRestController {
     private final ScoreService scoreService;
 
     private final ObjectMapper objectMapper;
 
     @PostMapping
-    public ResponseEntity<?> getScores(@RequestBody @Valid ScoreRequestDto scoreRequestDto, HttpServletRequest request) throws IOException, IllegalArgumentException, ScoreServerErrorException {
+    public ResponseEntity<?> calculateScores(@RequestBody @Valid ScoreRequestDto scoreRequestDto, HttpServletRequest request) throws IOException, IllegalArgumentException, ScoreServerErrorException {
         Long memberId = (Long) request.getAttribute("memberId");
         Long practiceResultId = scoreRequestDto.getId();
         String artist = scoreRequestDto.getArtist();
         String title = scoreRequestDto.getTitle();
 
-        ScoreResponseDto scoreResponseDto = scoreService.getScores(memberId, practiceResultId, artist, title);
+        ScoreResponseDto scoreResponseDto = scoreService.calculateScores(memberId, practiceResultId, artist, title);
 
         return ResponseEntity.ok(
                 Response.builder()

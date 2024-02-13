@@ -27,7 +27,7 @@ public class ScoreService {
     @Value("${PYTHON.URL}")
     private String pythonUrl;
 
-    public ScoreResponseDto getScores(Long memberId, Long practiceResultId, String artist, String title) throws IOException, IllegalArgumentException, ScoreServerErrorException {
+    public ScoreResponseDto calculateScores(Long memberId, Long practiceResultId, String artist, String title) throws IOException, IllegalArgumentException, ScoreServerErrorException {
         PracticeResult practiceResult = practiceResultRepository.findById(practiceResultId)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 연습 결과가 없습니다."));
 
