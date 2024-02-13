@@ -1,6 +1,7 @@
 import { vocalRange } from './range';
 
 export interface User {
+  memberId: number;
   nickname: string;
   profileImg: boolean;
   email: string;

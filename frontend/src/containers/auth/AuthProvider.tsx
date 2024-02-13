@@ -1,8 +1,9 @@
 'use client';
 
 import ClientOnly from '@/components/ClientOnly';
-import { userAtom } from '@/store/user';
-import { useAtomValue } from 'jotai';
+import { reissueToken } from '@/services/reissueToken';
+import { TOKEN_UNAVAILABLE, accessTokenAtom, userAtom } from '@/store/user';
+import { useAtom, useAtomValue } from 'jotai';
 import { redirect, usePathname } from 'next/navigation';
 import { useLayoutEffect } from 'react';
 
@@ -21,11 +22,18 @@ interface AuthProviderProps {
  */
 const AuthProvider = ({ children, landing }: AuthProviderProps) => {
   const user = useAtomValue(userAtom);
+  const [accessToken, setAccessTokenWithLocalStorage] =
+    useAtom(accessTokenAtom);
 
-  // 유저의 음역대 테스트 결과가 없으면 range/check으로 리다이렉트
   const pathname = usePathname();
   useLayoutEffect(() => {
-    if (user) {
+    // 토큰이 유효하지 않은 경우 토큰 리이슈
+    if (user === TOKEN_UNAVAILABLE) {
+      reissueToken(accessToken, setAccessTokenWithLocalStorage);
+    }
+
+    // 유저의 음역대 테스트 결과가 없으면 range/check으로 리다이렉트
+    if (user && user !== TOKEN_UNAVAILABLE) {
       if (!user.vocalRange && pathname !== '/range/check') {
         redirect('/range/check');
       }
