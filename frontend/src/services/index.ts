@@ -70,9 +70,16 @@ const req: IRequests = {
       method: 'GET',
       url: `/sing/${songId}/live`,
     }),
-    saveLiveResult: ({ songId }: { songId: number }) => ({
+    saveLiveResult: ({
+      songId,
+      record,
+    }: {
+      songId: number;
+      record: FormData;
+    }) => ({
       method: 'POST',
-      url: `/sing/${songId}/live`,
+      url: `/sing/${songId}/upload`,
+      body: record,
     }),
   },
   recommend: {
