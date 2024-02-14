@@ -43,7 +43,7 @@ const CarouselItem = ({
 
   return (
     <button
-      className="flex justify-center items-center w-full aspect-square overflow-hidden rounded-3xl transition-all duration-700 ease-in-out"
+      className="flex justify-center items-center w-full aspect-square overflow-hidden shadow-[1px_-1px_10px_1px_rgb(55,55,55)] rounded-3xl transition-all duration-700 ease-in-out"
       style={{
         transform: cssTransformProperties,
         zIndex: index === active ? 10 : 0,
@@ -56,7 +56,7 @@ const CarouselItem = ({
         className="w-full aspect-square"
         width={500}
         height={500}
-        src={song.coverUrl}
+        src={song.coverUrl ? song.coverUrl : '/images/logo.jpg'}
         alt={song.songTitle}
         priority={true}
       />
