@@ -1,80 +1,34 @@
 package com.diva.backend.post.dto;
 
-import com.diva.backend.post.entity.Post;
-import com.google.firebase.database.annotations.NotNull;
-import java.time.LocalDateTime;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
+import static lombok.AccessLevel.PROTECTED;
+
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = PROTECTED, force = true)
 public class PostSelectResponseDto {
-
-    @NotNull
-    private Long postId;
-
-    private String content;
-
-    @NotNull
-    private MemberResponseDto member;
-
-    @NotNull
-    private PracticeResultResponseDto practiceResult;
-
-    @NotNull
-    private Boolean liked;
-
-    @NotNull
-    private Integer heartCount;
-
-    private LocalDateTime createDate;
-    private LocalDateTime lastModifiedDate;
+    private final Long postId;
+    private final String content;
+    private final Long memberId;
+    private final Long practiceResultId;
+    private final Long songId;
+    private final Boolean liked;
+    private final Integer heartCount;
+    private final LocalDateTime createdDate;
 
     @Builder
-    protected PostSelectResponseDto(Long postId, String content, MemberResponseDto member, PracticeResultResponseDto practiceResult, Boolean liked, Integer heartCount, LocalDateTime createDate, LocalDateTime lastModifiedDate) {
+    protected PostSelectResponseDto(Long postId, String content, Long memberId, Long practiceResultId, Long songId, Boolean liked, Integer heartCount, LocalDateTime createdDate) {
         this.postId = postId;
         this.content = content;
-        this.member = member;
-        this.practiceResult = practiceResult;
+        this.memberId = memberId;
+        this.practiceResultId = practiceResultId;
+        this.songId = songId;
         this.liked = liked;
         this.heartCount = heartCount;
-        this.createDate = createDate;
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    // Post 엔티티를 PostResponseDto로 변환
-    public static PostSelectResponseDto toPostResponseDto(Post post, Long memberId) {
-        MemberResponseDto memberResponseDto = MemberResponseDto.builder()
-                .memberId(post.getMember().getId())
-                .nickname(post.getMember().getNickname())
-                .profileImg(post.getMember().getProfileImg())
-            .build();
-
-        PracticeResultResponseDto practiceResultResponseDto = PracticeResultResponseDto.builder()
-                .practiceResultId(post.getPracticeResult().getId())
-                .score(post.getPracticeResult().getScore())
-                .song(SongResponseDto.builder()
-                        .songId(post.getPracticeResult().getSong().getId())
-                        .title(post.getPracticeResult().getSong().getTitle())
-                        .artist(post.getPracticeResult().getSong().getArtist())
-                        .coverImg(post.getPracticeResult().getSong().getCoverImg())
-                    .build())
-            .build();
-
-        Boolean liked = post.getHearts().stream().anyMatch(heart -> heart.getMember().getId().equals(memberId));
-        LocalDateTime createDate = post.getCreatedDate();
-        LocalDateTime lastModifiedDate = post.getLastModifiedDate();
-        return PostSelectResponseDto.builder()
-                .postId(post.getId())
-                .content(post.getContent())
-                .member(memberResponseDto)
-                .practiceResult(practiceResultResponseDto)
-                .liked(liked)
-                .heartCount(post.getHeartCount())
-                .createDate(createDate)
-                .lastModifiedDate(lastModifiedDate)
-            .build();
+        this.createdDate = createdDate;
     }
 }
