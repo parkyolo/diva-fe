@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface PostService {
     // 전체 게시글 조회
-    List<PostSelectResponseDto> getAllPosts(HttpServletRequest request);
+    List<PostSelectResponseDto> getPosts(HttpServletRequest request, Long postId, int pageSize);
 
     // 게시글 작성
     void createPost(Long memberId, String content, Long practiceResultId);

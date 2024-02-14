@@ -17,12 +17,16 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @RequestMapping(value = "/api/posts", consumes = APPLICATION_JSON_VALUE)
 @RequiredArgsConstructor
 public class PostController {
+
     private final PostService postService;
 
     // 전체 게시글 조회
-    @GetMapping("/list")
-    public ResponseEntity<List<PostSelectResponseDto>> getAllPosts(HttpServletRequest request) {
-        return ResponseEntity.ok(postService.getAllPosts(request));
+    @GetMapping
+    public ResponseEntity<List<PostSelectResponseDto>> getPosts(
+            HttpServletRequest request,
+            @RequestParam(required = false) Long postId,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        return ResponseEntity.ok(postService.getPosts(request, postId, pageSize));
     }
 
     // 게시글 작성
@@ -48,10 +52,13 @@ public class PostController {
 
     // 게시글 수정
     @PatchMapping("/{postId}")
-    public ResponseEntity<Object> updatePost(@RequestBody PostUpdateRequestDto requestDto, @PathVariable("postId") Long postId, HttpServletRequest request) {
+    public ResponseEntity<Object> updatePost(
+            @RequestBody PostUpdateRequestDto requestDto,
+            @PathVariable("postId") Long postId, HttpServletRequest request) {
         Long memberId = (Long) request.getAttribute("memberId");
 
         postService.updatePost(postId, memberId, requestDto);
         return ResponseEntity.noContent().build();
     }
+
 }
