@@ -58,6 +58,7 @@ const CarouselItem = ({
         height={500}
         src={song.coverUrl}
         alt={song.songTitle}
+        priority={true}
       />
     </button>
   );

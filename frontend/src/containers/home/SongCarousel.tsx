@@ -5,7 +5,7 @@ import SongInformation from './SongInformation';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import { RoundedUpArrowIcon, VolumeOff, VolumeOn } from '../../../public/svgs';
 import { RecommendedSong } from '@/types/song';
-import { mrUrl } from '@/utils/getS3URL';
+import { origMusicUrl } from '@/utils/getS3URL';
 
 interface SongCarouselProps {
   interval: number;
@@ -68,17 +68,20 @@ const SongCarousel = ({
         ></ImageCarousel>
 
         <section className="flex flex-col items-center gap-[0.5rem]">
-          <div className="flex flex-col justify-center items-center">
+          <button
+            className="flex flex-col justify-center items-center"
+            onClick={onClick}
+          >
             <RoundedUpArrowIcon className="stroke-white animate-bounce" />
             <RoundedUpArrowIcon className="stroke-white animate-bounce" />
-            <span className="font-samlip text-xl">지금 부르러 가기</span>
-          </div>
+            <span className="font-samlip text-xl mt-1">지금 부르러 가기</span>
+          </button>
 
           <SongInformation song={songs[active]} />
         </section>
 
         <audio
-          src={mrUrl({
+          src={origMusicUrl({
             artist: songs[active].artist,
             songTitle: songs[active].songTitle,
           })}

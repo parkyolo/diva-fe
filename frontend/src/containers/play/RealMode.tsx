@@ -1,29 +1,31 @@
-import { RealModeResponse, S3SongInfo } from '@/types/song';
+import { RealModeRequest, RealModeResponse, S3SongInfo } from '@/types/song';
 import PlayMonitor from './PlayMonitor';
 import LyricsComponent from './LyricsComponent';
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { infoUrl, mrUrl } from '@/utils/getS3URL';
+import { arUrl, infoUrl, mrUrl } from '@/utils/getS3URL';
 import { getMusicInfo } from '@/services/getMusicInfo';
 import { parseLyricsTiming } from '@/utils/parseLyricsTiming';
 import { parsePitchDuration } from '@/utils/parsePitchDuration';
 import { LyricsInterface } from '@/types/lyrics';
 import { PitchInterface } from '@/types/pitch';
-import { resultPage } from '../home';
+import { homePage, resultPage } from '../home';
 import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
+import ARGuide from './ARGuide';
 
 const RealMode = ({
   onModeChange,
-  setResultId,
+  setResult,
   songId,
   song,
 }: {
   onModeChange: Function;
-  setResultId: Dispatch<SetStateAction<number>>;
+  setResult: Dispatch<SetStateAction<RealModeRequest | undefined>>;
   songId: number;
   song: S3SongInfo;
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const arAudioRef = useRef<HTMLAudioElement>(null);
   const bpm = useRef<number>(0);
   const gap = useRef<number>(0);
   const musicUrl = useRef<string>(mrUrl(song));
@@ -46,22 +48,26 @@ const RealMode = ({
     mediaRecorder?.stop();
   };
 
-  // post 요청이 끝나면 점수 페이지로 넘어감
   useEffect(() => {
     if (!!response && !isLoading) {
       try {
-        setResultId(response.practiceResultId);
-      } catch (err) {
-        console.log(error);
-      } finally {
+        // post 요청이 성공하면 점수 페이지 렌더링
+        setResult({
+          practiceResultId: response.practiceResultId,
+          artist: song.artist,
+          title: song.songTitle,
+        });
         setTimeout(() => onModeChange(resultPage), 500);
+      } catch (err) {
+        // post 요청이 실패하면 홈 페이지 렌더링
+        console.log(error);
+        setTimeout(() => onModeChange(homePage), 500);
       }
     }
   }, [response]);
 
   useEffect(() => {
     if (mediaRecorder) {
-      // TODO: audio에 에코 입히기
       mediaRecorder.ondataavailable = (e) => {
         audioArray.push(e.data);
       };
@@ -78,6 +84,10 @@ const RealMode = ({
 
       mediaRecorder.start();
       audioRef.current?.play();
+      if (arAudioRef.current) {
+        arAudioRef.current?.play();
+        arAudioRef.current.volume = 0;
+      }
       audioRef.current?.addEventListener('timeupdate', handleSeconds);
       audioRef.current?.addEventListener('ended', handleAudioEnd);
     }
@@ -120,10 +130,15 @@ const RealMode = ({
         currentSeconds={currentSeconds}
         parsedLyrics={parsedLyrics}
       />
+      <ARGuide arAudioRef={arAudioRef} />
 
       <audio ref={audioRef}>
         <source src={musicUrl.current} type={'audio/mp3'} />
       </audio>
+      <audio
+        ref={arAudioRef}
+        src={arUrl({ artist: song.artist, songTitle: song.songTitle })}
+      ></audio>
     </main>
   );
 };
