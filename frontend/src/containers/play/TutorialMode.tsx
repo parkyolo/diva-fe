@@ -7,8 +7,9 @@ import { parseLyricsTiming } from '@/utils/parseLyricsTiming';
 import { PitchInterface } from '@/types/pitch';
 import { parsePitchDuration } from '@/utils/parsePitchDuration';
 import { getMusicInfo } from '@/services/getMusicInfo';
-import { infoUrl, mrUrl } from '@/utils/getS3URL';
+import { arUrl, infoUrl, mrUrl } from '@/utils/getS3URL';
 import { homePage } from '../home';
+import ARGuide from './ARGuide';
 
 const TutorialMode = ({
   onModeChange,
@@ -18,6 +19,7 @@ const TutorialMode = ({
   song: S3SongInfo;
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
+  const arAudioRef = useRef<HTMLAudioElement>(null);
   const bpm = useRef<number>(0);
   const gap = useRef<number>(0);
   const musicUrl = useRef<string>(mrUrl(song));
@@ -44,6 +46,10 @@ const TutorialMode = ({
         setPitches(parsePitchDuration(lyricsArray, bpm.current, gap.current));
 
         audioRef.current?.play();
+        if (arAudioRef.current) {
+          arAudioRef.current?.play();
+          arAudioRef.current.volume = 0;
+        }
         audioRef.current?.addEventListener('timeupdate', handleSeconds);
         audioRef.current?.addEventListener('ended', handleAudioEnd);
       });
@@ -64,10 +70,15 @@ const TutorialMode = ({
         currentSeconds={currentSeconds}
         parsedLyrics={parsedLyrics}
       />
+      <ARGuide arAudioRef={arAudioRef} />
 
       <audio ref={audioRef}>
         <source src={musicUrl.current} type={'audio/mp3'} />
       </audio>
+      <audio
+        ref={arAudioRef}
+        src={arUrl({ artist: song.artist, songTitle: song.songTitle })}
+      ></audio>
     </main>
   );
 };
