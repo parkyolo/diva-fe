@@ -7,6 +7,7 @@ import com.diva.backend.score.exception.ScoreServerErrorException;
 import com.diva.backend.song.repository.PracticeResultRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ScoreService {
@@ -73,6 +75,7 @@ public class ScoreService {
 
     // 파이썬 서버로 채점 요청
     private HttpURLConnection requestScoreAPI(Long practiceResultId, String artist, String title) throws IOException {
+        log.info("Python Url is " + pythonUrl);
         URL url = new URL(pythonUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
