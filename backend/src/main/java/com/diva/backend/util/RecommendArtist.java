@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 @Component
 public class RecommendArtist {
+    public static int MAX_DIFF = 67;
     public int noteToMidi(String note, boolean roundMidi) {
         HashMap<Character, Integer> pitchMap = new HashMap<>();
         pitchMap.put('C', 0);
