@@ -1,25 +1,30 @@
 import { useEffect, useState } from 'react';
 
 interface TimerProps {
-  onFinish: () => void;
+  setIsTimeout: any;
 }
 
-const Timer = ({ onFinish }: TimerProps) => {
+const TIMEOUT_SECONDS = 20;
+
+const Timer = ({ setIsTimeout }: TimerProps) => {
   const [count, setCount] = useState(0);
 
-useEffect(() => {
-  const intervalId = setInterval(() => {
-    setCount((count) => {
-      count = count + 1;
-      console.log(count);
-      if (count === 20) {
-        onFinish();
-        clearInterval(intervalId);
-      }
-      return count;
-    });
-  }, 1000);
-}, []);
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCount((prevCnt) => prevCnt + 1);
+    }, 1000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (count === TIMEOUT_SECONDS) {
+      console.log('timeisrunningout');
+      setIsTimeout(true);
+    }
+  }, [count]);
 
   const minutes = Math.floor(count / 60);
   const seconds = count % 60;
