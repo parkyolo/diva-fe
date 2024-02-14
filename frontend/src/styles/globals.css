@@ -107,6 +107,15 @@ main {
   -webkit-box-orient: vertical;
 }
 
+.text-overflow-one {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
 /* Chrome, Whale, Edge */
 
 /* 스크롤바 전체 기본 꾸미기 */
