@@ -5,7 +5,6 @@ import { songAtom, feedPageAtom } from '@/store/feed';
 import { useRouter } from 'next/navigation';
 import { coverUrl } from '@/utils/getS3URL';
 
-
 interface ContentProps {
   song: SangSong;
 }
@@ -26,10 +25,10 @@ const SongItems = ({ song }: ContentProps) => {
       };
       setSongData(dataTosend);
       setFeedPageAtom(0b1);
-      router.push('/feed')
+      router.push('/feed');
     }
   };
-  console.log(song)
+  console.log(song);
 
   return (
     <>
@@ -41,14 +40,13 @@ const SongItems = ({ song }: ContentProps) => {
           }}
         >
           <Image
-            src={coverUrl({ artist: song.artist,
-              songTitle: song.songTitle })}
+            src={coverUrl({ artist: song.artist, songTitle: song.songTitle })}
             alt={song.songTitle}
             width={500}
             height={500}
           />
           <div className="absolute top-0 w-full h-full  bg-opacity-45 bg-bg-black "></div>
-          <span className="w-full text-center absolute top-1/2 -translate-y-1/2  text-white">
+          <span className="w-full text-center absolute top-1/2 -translate-y-1/2 text-white text-overflow">
             {song.songTitle}
           </span>
         </div>

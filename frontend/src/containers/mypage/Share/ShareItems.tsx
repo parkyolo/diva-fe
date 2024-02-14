@@ -64,7 +64,7 @@ const ShareItems = ({ song, handleRemovePost }: ContentProps) => {
     <div className="flex flex-col gap-2 w-full">
       <div className="flex justify-between items-center w-full">
         <div className="flex gap-2 justify-start items-center">
-          <div className="">
+          <div className="text-gray text-overflow-one">
             <span>{song.songTitle}</span> &middot;&nbsp;
             <span>{song.artist}</span>
           </div>
@@ -76,8 +76,7 @@ const ShareItems = ({ song, handleRemovePost }: ContentProps) => {
       {song.content}
       <div className="relative w-full h-24">
         <Image
-          src={coverUrl({ artist:song.artist,
-            songTitle: song.songTitle })}
+          src={coverUrl({ artist: song.artist, songTitle: song.songTitle })}
           alt={song.songTitle}
           width={0}
           height={0}

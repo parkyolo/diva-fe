@@ -10,6 +10,7 @@ import SettingPage from './SettingPage';
 import MainLogo from '/public/svgs/logo.svg';
 import SettingIcon from '/public/svgs/setting.svg';
 import myPageAtom from '@/store/myPage';
+import Main from '@/components/Main';
 
 const MyPage = () => {
   const user = useAtomValue(userAtom);
@@ -39,7 +40,7 @@ const MyPage = () => {
               </button>
             }
           />
-          <main className="py-0 px-5">
+          <main className="py-2">
             <MyPageContent user={user}></MyPageContent>
           </main>
         </>
