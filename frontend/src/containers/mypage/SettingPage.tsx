@@ -83,7 +83,7 @@ const SettingPage = ({ user }: myPageProps) => {
       alert('닉네임은 한 글자 이상으로 입력해주세요');
       return;
     }
-
+    console.log('프로필유뮤', user.profileImg);
     let info: string;
     if (selectedImg) {
       info = JSON.stringify({ nickname: inputValue, profileImg: true });
