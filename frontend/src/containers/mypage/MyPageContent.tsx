@@ -14,10 +14,15 @@ const MyPageContent = ({ user }: myPageProps) => {
         <div className="rounded-full w-1/2">
           {/* TODO: default profile image 설정 필요 */}
           <Image
-            src={user.profileImg ? '' : '/images/cactus.png'}
+            src={
+              user.profileImg
+                ? `https://diva-s3.s3.ap-northeast-2.amazonaws.com/profileImg/${user.memberId}/profileImg.jpg`
+                : '/images/cactus.png'
+            }
             alt={user.nickname}
             width={350}
             height={350}
+            className="rounded-full"
           />
         </div>
         <div className="flex w-full justify-center itmes-center">
