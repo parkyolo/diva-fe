@@ -4,7 +4,6 @@ import ShareContent from './Share/ShareContent';
 
 const myPageTab = () => {
   const song = 0b00;
-  const like = 0b01;
   const share = 0b10;
   const [mode, setMode] = useState(song);
 
@@ -12,7 +11,7 @@ const myPageTab = () => {
     <>
       <div className="flex flex-col">
         <div className="flex flex-row w-full justify-around h-1/6 items-center p-5">
-          <div
+          <button
             className={
               mode === song
                 ? 'decoration-skyblue text-center font-bold underline underline-offset-8'
@@ -23,20 +22,12 @@ const myPageTab = () => {
             }}
           >
             부른 노래
-          </div>
-          <div
-            className={
-              mode === like
-                ? 'decoration-skyblue text-center font-bold underline underline-offset-8'
-                : ''
-            }
-            onClick={(e) => {
-              setMode(like);
-            }}
+          </button>
+          <div       
           >
-            찜한 노래
+            
           </div>
-          <div
+          <button
             className={
               mode === share
                 ? 'decoration-skyblue text-center font-bold underline underline-offset-8'
@@ -47,7 +38,7 @@ const myPageTab = () => {
             }}
           >
             공유한 노래
-          </div>
+          </button>
         </div>
       </div>
       <div className="basis-full">
