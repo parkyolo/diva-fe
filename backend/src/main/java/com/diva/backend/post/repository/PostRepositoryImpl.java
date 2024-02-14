@@ -7,7 +7,9 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 
+import static com.diva.backend.heart.entity.QHeart.heart;
 import static com.diva.backend.post.entity.QPost.post;
 
 @RequiredArgsConstructor
@@ -23,6 +25,19 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
             .where(post.practiceResult.isNotNull())
             .fetch();
     }
+
+    @Override
+    public Optional<Post> findByPracticeResultId(Long practiceResultId) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
+        return Optional.ofNullable(
+            queryFactory
+                .selectFrom(post)
+                .where(post.practiceResult.id.eq(practiceResultId))
+                .fetchOne()
+        );
+    }
+
 
     @Override
     public List<Post> paginationNoOffset(Long postId, int pageSize) {

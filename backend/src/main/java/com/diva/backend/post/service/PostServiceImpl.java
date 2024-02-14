@@ -1,8 +1,10 @@
 package com.diva.backend.post.service;
 
+import com.diva.backend.exception.NoPostException;
 import com.diva.backend.member.entity.Member;
 import com.diva.backend.member.repository.MemberRepository;
 import com.diva.backend.post.dto.PostSelectResponseDto;
+import com.diva.backend.post.dto.PostWithMemberAndPracticeResultResponseDto;
 import com.diva.backend.post.dto.PostUpdateRequestDto;
 import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,13 +31,31 @@ public class PostServiceImpl implements PostService {
     // 전체 게시글 조회
     @Override
     @Transactional
-    public List<PostSelectResponseDto> getPosts(HttpServletRequest request, Long postId, int pageSize) {
+    public List<PostWithMemberAndPracticeResultResponseDto> getPosts(HttpServletRequest request, Long postId, int pageSize) {
         List<Post> posts = postRepository.paginationNoOffset(postId, pageSize);
         Long memberId = (Long) request.getAttribute("memberId");
 
         return posts.stream()
-            .map(post -> PostSelectResponseDto.toPostResponseDto(post, memberId))
+            .map(post -> PostWithMemberAndPracticeResultResponseDto.toPostResponseDto(post, memberId))
             .collect(Collectors.toList());
+    }
+
+    // 실전모드 결과로 게시글 조회
+    @Transactional
+    public PostSelectResponseDto getPostByPracticeResultId(Long practiceResultId) throws NoPostException {
+        Post post = postRepository.findByPracticeResultId(practiceResultId)
+                .orElseThrow(() -> new NoPostException("해당 ID의 게시글이 존재하지 않습니다."));
+
+        return PostSelectResponseDto.builder()
+                .postId(post.getId())
+                .content(post.getContent())
+                .memberId(post.getMember().getId())
+                .practiceResultId(post.getPracticeResult().getId())
+                .songId(post.getSong().getId())
+                .liked(post.getHeartCount() > 0)
+                .heartCount(post.getHeartCount())
+                .createdDate(post.getCreatedDate())
+            .build();
     }
 
     // 게시글 작성

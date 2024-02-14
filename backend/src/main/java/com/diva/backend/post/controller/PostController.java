@@ -1,7 +1,8 @@
 package com.diva.backend.post.controller;
 
+import com.diva.backend.exception.NoPostException;
 import com.diva.backend.post.dto.PostCreateRequestDto;
-import com.diva.backend.post.dto.PostSelectResponseDto;
+import com.diva.backend.post.dto.PostWithMemberAndPracticeResultResponseDto;
 import com.diva.backend.post.dto.PostUpdateRequestDto;
 import com.diva.backend.post.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,11 +23,17 @@ public class PostController {
 
     // 전체 게시글 조회
     @GetMapping
-    public ResponseEntity<List<PostSelectResponseDto>> getPosts(
+    public ResponseEntity<List<PostWithMemberAndPracticeResultResponseDto>> getPosts(
             HttpServletRequest request,
             @RequestParam(required = false) Long postId,
             @RequestParam(defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(postService.getPosts(request, postId, pageSize));
+    }
+
+    // 실전모드 결과로 게시글 조회
+    @GetMapping("{practiceResultId}")
+    public ResponseEntity<?> getPostByPracticeResultId(@PathVariable("practiceResultId") Long practiceResultId) throws NoPostException {
+        return ResponseEntity.ok(postService.getPostByPracticeResultId(practiceResultId));
     }
 
     // 게시글 작성
@@ -61,4 +68,8 @@ public class PostController {
         return ResponseEntity.noContent().build();
     }
 
+    @ExceptionHandler(NoPostException.class)
+    public ResponseEntity<?> handleNoPostException(NoPostException e) {
+        return ResponseEntity.noContent().build();
+    }
 }
