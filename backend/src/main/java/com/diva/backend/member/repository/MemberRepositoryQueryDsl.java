@@ -12,4 +12,5 @@ public interface MemberRepositoryQueryDsl {
     Optional<Member> findNotDeletedByEmail(String email);
     Optional<Long> findIdByEmail(String email);
     Optional<Long> findNotDeletedIdByEmail(String email);
+    Optional<Member> findMemberByIdWithVocalRange(Long memberId);
 }

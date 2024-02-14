@@ -1,4 +1,4 @@
-package com.diva.backend.recommend.dto;
+package com.diva.backend.recommend.service.dto;
 
 import lombok.Builder;
 import lombok.Getter;
