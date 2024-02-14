@@ -12,6 +12,7 @@ import { PostInterface, UpdateSongs } from '@/types/post';
 import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
 import { useRouter } from 'next/navigation';
+import { coverUrl } from '@/utils/getS3URL';
 
 interface ContentProps {
   song: SharedSong;
@@ -39,57 +40,44 @@ const ShareItems = ({ song, handleRemovePost }: ContentProps) => {
     if (song.songTitle !== '' && song.artist !== '') {
       const dataTosend: UpdateSongs = {
         postId: song.postId,
-        content: '',
+        content: song.content,
         score: song.score,
         title: song.songTitle,
         artist: song.artist,
         //  TODO: 커버 이미지 S3로 받아오기
-        coverImg: '',
+        coverImg: coverUrl({ songTitle: song.songTitle }),
       };
       setPostData(dataTosend);
       setFeedPageAtom(0b10);
-      router.push('/feed')
+      router.push('/feed');
     }
   };
   const [delteisLoading, deletePost, deleteError, doDeletePost] = useFetch<
     PostInterface[]
   >(req.post.deletePost);
 
-    const handleRemove = async () => {
-      // 삭제 버튼 클릭 시 handleRemovePost 호출
-      await handleRemovePost(song.postId);
-    };
+  const handleRemove = async () => {
+    // 삭제 버튼 클릭 시 handleRemovePost 호출
+    await handleRemovePost(song.postId);
+  };
   return (
     <div className="flex flex-col gap-2 w-full">
       <div className="flex justify-between items-center w-full">
         <div className="flex gap-2 justify-start items-center">
-          {/* TODO: 유저 이미지 추가 */}
-          <Image
-            src="/images/cactus.png"
-            // src={post.profileImg}
-            alt="profile-img"
-            width={54}
-            height={54}
-            className="rounded-full"
-          ></Image>
-
-          <div>
-            <div className="font-bold text-xl">{user.nickname}</div>
-            <div className="">
-              <span>{song.songTitle}</span> &middot;&nbsp;
-              <span>{song.artist}</span>
-            </div>
+          <div className="">
+            <span>{song.songTitle}</span> &middot;&nbsp;
+            <span>{song.artist}</span>
           </div>
-          <button onClick={open}>
-            <DotsThreeVertical />
-          </button>
         </div>
+        <button onClick={open}>
+          <DotsThreeVertical />
+        </button>
       </div>
       {song.content}
       <div className="relative w-full h-24">
         <Image
-          src="/images/1.png"
-          // src={song.coverImg}
+          src={coverUrl({ artist:song.artist,
+            songTitle: song.songTitle })}
           alt={song.songTitle}
           width={0}
           height={0}

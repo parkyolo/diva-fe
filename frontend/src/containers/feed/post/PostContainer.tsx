@@ -10,15 +10,19 @@ const PostContainer = () => {
   const [isLoading, allPosts, error, getAllPosts] = useFetch<PostInterface[]>(
     req.post.getAllPosts,
   );
+
   const [deleteisLoading, deletePost, deleteError, doDeletePost] = useFetch<
     PostInterface[]
   >(req.post.deletePost);
+  
   const [doLikeisLoading, like, doLikeError, doLike] = useFetch<
     PostInterface[]
   >(req.post.doLike);
+
   useEffect(() => {
     getAllPosts();
   }, []);
+  
   console.log(allPosts);
   const handleRemovePost = async (postId: number) => {
     try {
@@ -31,7 +35,7 @@ const PostContainer = () => {
   const handleLike = async (postId: number) => {
     try {
       await doLike({ postId });
-      await getAllPosts();
+      // await getAllPosts();
     } catch (error) {
       console.log(error);
     }
@@ -42,28 +46,31 @@ const PostContainer = () => {
 
   return (
     <>
-      {Array.isArray(allPosts) ? (
+      {Array.isArray(allPosts) && allPosts.length > 0 ? (
         <div className="flex flex-col justify-center items-center gap-8">
-          {allPosts.map((post: PostInterface) => (
-            <Post
-              key={post.postId}
-              post={post}
-              isPlaying={
-                currentPlayingPostId
-                  ? currentPlayingPostId === post.postId
-                    ? true
+          {allPosts
+            .filter((post) => post.createDate)
+            .sort((a, b) => b.createDate.localeCompare(a.createDate))
+            .map((post: PostInterface) => (
+              <Post
+                key={post.postId}
+                post={post}
+                isPlaying={
+                  currentPlayingPostId
+                    ? currentPlayingPostId === post.postId
+                      ? true
+                      : false
                     : false
-                  : false
-              }
-              handleCurrentAudio={setCurrentPlayingPostId}
-              handleRemovePost={handleRemovePost}
-              handleLikePost={handleLike}
-            ></Post>
-          ))}
+                }
+                handleCurrentAudio={setCurrentPlayingPostId}
+                handleRemovePost={handleRemovePost}
+                handleLikePost={handleLike}
+              ></Post>
+            ))}
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center gap-8 p-5">
-          <p> 게시글이 없습니다</p>
+          <p>게시글이 없습니다</p>
         </div>
       )}
     </>

@@ -1,23 +1,24 @@
 export interface PostInterface {
-  postId : number;
-  content:string;
-  heartCount:number;
-  member:{
+  postId: number;
+  content: string;
+  heartCount: number;
+  member: {
     memberId: number;
     nickname: string;
     profileImg: string;
-  }
-  practiceResult:{
+  };
+  practiceResult: {
     practiceResultId: number;
-    score:number;
-    song:{
+    score: number;
+    song: {
       songId: number;
       title: string;
       artist: string;
       coverImg: string;
-    }
-  }
-  liked?:boolean;
+    };
+  };
+  liked?: boolean;
+  createDate: string;
 }
 
 export interface UpdateSongs {

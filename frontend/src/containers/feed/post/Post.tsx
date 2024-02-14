@@ -15,7 +15,8 @@ import { useAtomValue, useSetAtom } from 'jotai';
 import { feedPageAtom, postAtom } from '@/store/feed';
 import { userAtom } from '@/store/user';
 import { useRouter } from 'next/navigation';
-import { mrUrl } from '@/utils/getS3URL';
+import { mrUrl, coverUrl } from '@/utils/getS3URL';
+
 
 const Post = ({
   post,
@@ -37,6 +38,7 @@ const Post = ({
   const [isLoading, allPosts, error, getAllPosts] = useFetch<PostInterface[]>(
     req.post.getAllPosts,
   );
+
   const setFeedPageAtom = useSetAtom(feedPageAtom);
   const setPostData = useSetAtom(postAtom);
   const sendDatatoJotaiStore = () => {
@@ -47,16 +49,28 @@ const Post = ({
     ) {
       const dataTosend: UpdateSongs = {
         postId: post.postId,
-        content: '',
+        content: post.content,
         score: post.practiceResult.score,
         title: post.practiceResult.song.title,
         artist: post.practiceResult.song.artist,
-        coverImg: post.practiceResult.song.coverImg,
+        coverImg: coverUrl({ artist: post.practiceResult.song.artist,
+          songTitle: post.practiceResult.song.title }),
       };
       setPostData(dataTosend);
       setFeedPageAtom(0b10);
     }
   };
+
+  const [isLiked, setIsLiked] = useState<boolean>(false)
+  const handleLikebutton = () => {
+    if (isLiked){
+      setIsLiked(false),
+      post.heartCount -=1
+    } else {
+      setIsLiked(true),
+      post.heartCount +=1
+    }
+  }
 
   const handleRemove = async () => {
     // 삭제 버튼 클릭 시 handleRemovePost 호출
@@ -74,7 +88,7 @@ const Post = ({
     PostInterface[]
   >(req.post.doLike);
 
-  const user = useAtomValue(userAtom); // 전역으로 관리되고 있는 유저 정보
+  const user  = useAtomValue(userAtom); // 전역으로 관리되고 있는 유저 정보
 
   // 컨텐츠 더보기
   const maxContentsLength = 65;
@@ -116,8 +130,11 @@ const Post = ({
           <div className="flex gap-2 justify-start items-center">
             {/* TODO: 유저 이미지 추가  */}
             <Image
-              src="/images/cactus.png"
-              // src={post.profileImg}
+              src={
+                user.profileImg
+                  ? `https://diva-s3.s3.ap-northeast-2.amazonaws.com/profileImg/${user.memberId}/profileImg.jpg`
+                  : '/images/cactus.png'
+              }
               alt="profile-img"
               width={54}
               height={54}
@@ -162,7 +179,9 @@ const Post = ({
         </div>
         <div className="relative w-full h-24">
           <Image
-            src="/images/cactus.png"
+            // TODO: S3 커버이미지
+            src={coverUrl({ artist:post.practiceResult.song.artist,
+              songTitle: post.practiceResult.song.title })}
             alt={post.practiceResult.song.title}
             width={0}
             height={0}
@@ -187,29 +206,30 @@ const Post = ({
           )}
         </div>
 
-          <div
-            className="flex justify-start gap-2 items-center"
-            onClick={() => {
-              handleLike();
-            }}
-          >
-            {post.liked ? (
-              <LikeIcon className="fill-red stroke-red" />
+        <div
+          className="flex justify-start gap-2 items-center"
+          onClick={() => {
+            handleLike();
+            handleLikebutton();
+          }}
+        >
+          {isLiked ? (
+            <LikeIcon className="fill-red stroke-red" />
+          ) : (
+            <LikeIcon className="stroke-gray" />
+          )}
+          <div className="text-gray ">
+            <em className="not-italic font-bold text-white">
+              {post.heartCount}명
+            </em>
+            이 좋아합니다.
+            {post.heartCount === 0 ? (
+              <span> (관심을 표현해주세요!)</span>
             ) : (
-              <LikeIcon className="stroke-gray" />
+              <></>
             )}
-            <div className="text-gray ">
-              <em className="not-italic font-bold text-white">
-                {post.heartCount}명
-              </em>
-              이 좋아합니다.
-              {post.heartCount === 0 ? (
-                <span> (좋아요로 관심을 표현해주세요!)</span>
-              ) : (
-                <></>
-              )}
-            </div>
           </div>
+        </div>
 
         {isOpen && (
           <BottomSheet close={close}>

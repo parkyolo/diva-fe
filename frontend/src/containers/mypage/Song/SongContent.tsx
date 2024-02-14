@@ -31,13 +31,13 @@ useEffect(() => {
   if (!isLoading && Array.isArray(sangSongs)) {
     const filteredAndSortedSongs = sangSongs
       .filter((song) => song.createdDate) // Filtering out songs without createdDate
-      .sort((a, b) => a.createdDate.localeCompare(b.createdDate));
+      .sort((a, b) => b.createdDate.localeCompare(a.createdDate));
 
     const groupedSongs = groupBy(filteredAndSortedSongs, 'createdDate');
     setGroupedSongs(groupedSongs);
   }
 }, [isLoading, sangSongs]);
-
+  
   return (
     <div>
       <div>

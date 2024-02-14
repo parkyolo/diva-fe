@@ -28,13 +28,17 @@ const ShareContent = () => {
     <>
       {Array.isArray(sharedSongs) && sharedSongs.length > 0 ? (
         <div className="flex flex-col justify-center items-center gap-8 p-5">
-          {sharedSongs.map((song: SharedSong) => (
-            <ShareItems
-              key={song.postId}
-              song={song}
-              handleRemovePost={handleRemovePost}
-            ></ShareItems>
-          ))}
+          {sharedSongs
+            .sort((a, b) =>
+              b.lastModifiedDate.localeCompare(a.lastModifiedDate),
+            )
+            .map((song: SharedSong) => (
+              <ShareItems
+                key={song.postId}
+                song={song}
+                handleRemovePost={handleRemovePost}
+              ></ShareItems>
+            ))}
         </div>
       ) : (
         <div className="flex flex-col justify-center items-center gap-8 p-5">
