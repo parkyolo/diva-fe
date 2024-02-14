@@ -23,10 +23,10 @@ export const TOKEN_UNAVAILABLE = Symbol();
  * 액세스 토큰이 변경되면 자동으로 유저 정보를 가져옵니다.
  *
  * setUserAtom() 실행 시 멤버 정보를 가져오는 비동기 요청을 한 번 더 실행합니다.
+ *
+ * return Promise<User | typeof TOKEN_UNAVAILABLE | undefined>
  */
-export const userAtom = atomWithRefresh<
-  Promise<User | typeof TOKEN_UNAVAILABLE | undefined>
->(async (get) => {
+export const userAtom = atomWithRefresh<Promise<any>>(async (get) => {
   const accessToken = get(accessTokenAtom);
 
   if (accessToken) {
