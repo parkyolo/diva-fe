@@ -11,7 +11,7 @@ const SongInformation = ({ song }: SongInformationProps) => {
       key={song.songId}
       className="flex flex-col animate-[blink_0.5s_ease-in-out]"
     >
-      <span className="text-2xl font-bold text-center">{`${song.songTitle}`}</span>
+      <span className="text-2xl font-bold text-center text-overflow-one">{`${song.songTitle}`}</span>
       <span className="text-xl font-bold text-center">{`${song.artist}`}</span>
     </div>
   );

@@ -5,9 +5,14 @@ import BottomSheet from '@/components/BottomSheet/BottomSheet';
 import Main from '@/components/Main';
 import SongCarousel from './SongCarousel';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react';
-import { RecommendedSong, S3SongInfo } from '@/types/song';
+import {
+  RecommendedSong,
+  RecommendedSongResponse,
+  S3SongInfo,
+} from '@/types/song';
 import { useFetch } from '@/hooks/useFetch';
 import { realMode, tutorialMode } from '.';
+import { req } from '@/services';
 
 const Content = ({
   onModeChange,
@@ -20,72 +25,70 @@ const Content = ({
 }) => {
   const [isOpen, open, close] = useModal();
   const [activeMusicIdx, setActiveMusicIdx] = useState<number>(0);
-  const [recommendedSongs, setRecommendSongs] = useState<RecommendedSong[]>([
-    {
-      songId: 1,
-      songTitle: '서울의달',
-      artist: '김건모',
-      similarity: '90',
-      coverUrl: '/images/3.jpg',
-    },
-    {
-      songId: 2,
-      songTitle: '퀸카(Queencard)',
-      artist: '(여자)아이들',
-      similarity: '70',
-      coverUrl: '/images/4.jpg',
-    },
-    {
-      songId: 3,
-      songTitle: '예뻤어',
-      artist: '데이식스',
-      similarity: '50',
-      coverUrl: '/images/5.jpg',
-    },
-    {
-      songId: 4,
-      songTitle: '폰서트',
-      artist: '10cm',
-      similarity: '50',
-      coverUrl: '/images/5.jpg',
-    },
-  ]);
-  // const [isLoading, recommendedSongs, err, getRecommendedSongs] = useFetch(req.recommend.getSongRecommendation)
+  const [isLoading, recommendedSongsData, error, getRecommendedSongs] =
+    useFetch<RecommendedSongResponse[]>(req.recommend.getSongRecommendation);
+  const [recommendedSongs, setSongs] = useState<RecommendedSong[]>();
 
   const changeModeToReal = () => {
-    setActiveSong({
-      artist: recommendedSongs[activeMusicIdx].artist,
-      songTitle: recommendedSongs[activeMusicIdx].songTitle,
-    });
-    setActiveMusicId(recommendedSongs[activeMusicIdx].songId);
-    onModeChange(realMode);
+    if (recommendedSongs) {
+      setActiveMusicId(recommendedSongs[activeMusicIdx].songId);
+      setActiveSong({
+        artist: recommendedSongs[activeMusicIdx].artist,
+        songTitle: recommendedSongs[activeMusicIdx].songTitle,
+      });
+      onModeChange(realMode);
+    }
   };
 
   const changeModetoTutorial = () => {
-    setActiveSong({
-      artist: recommendedSongs[activeMusicIdx].artist,
-      songTitle: recommendedSongs[activeMusicIdx].songTitle,
-    });
-    onModeChange(tutorialMode);
+    if (recommendedSongs) {
+      setActiveMusicId(recommendedSongs[activeMusicIdx].songId);
+      setActiveSong({
+        artist: recommendedSongs[activeMusicIdx].artist,
+        songTitle: recommendedSongs[activeMusicIdx].songTitle,
+      });
+      onModeChange(tutorialMode);
+    }
   };
 
   useEffect(() => {
-    // TODO: 노래 추천 get api
-    // try {
-    //   getRecommendedSongs();
-    // }
-  });
+    if (recommendedSongsData) {
+      setSongs(
+        recommendedSongsData.map((song) => {
+          return {
+            songId: song.songId,
+            songTitle: song.title,
+            artist: song.artist,
+            similarity: song.similarity,
+            coverUrl: song.coverImg,
+          };
+        }),
+      );
+    }
+  }, [recommendedSongsData]);
+
+  useEffect(() => {
+    try {
+      getRecommendedSongs();
+    } catch (_) {
+      console.log(error);
+    }
+  }, []);
 
   return (
     <>
-      <Main className="relative">
-        <SongCarousel
-          interval={50000}
-          onClick={open}
-          songs={recommendedSongs}
-          setActiveMusicIdx={setActiveMusicIdx}
-        ></SongCarousel>
-      </Main>
+      {!!recommendedSongs ? (
+        <Main className="relative">
+          <SongCarousel
+            interval={50000}
+            onClick={open}
+            songs={recommendedSongs}
+            setActiveMusicIdx={setActiveMusicIdx}
+          ></SongCarousel>
+        </Main>
+      ) : (
+        <></>
+      )}
 
       {/* bottomsheet modal */}
       {isOpen && (

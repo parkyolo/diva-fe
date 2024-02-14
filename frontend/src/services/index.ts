@@ -1,3 +1,5 @@
+import { RealModeRequest } from '@/types/song';
+
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
 
 export type RequestConfig = {
@@ -21,6 +23,7 @@ interface IRequests {
     tutorial: IRequestConfigResolver;
     live: IRequestConfigResolver;
     saveLiveResult: IRequestConfigResolver;
+    realModeScore: IRequestConfigResolver;
   };
   recommend: {
     getSongRecommendation: IRequestConfigResolver;
@@ -80,6 +83,11 @@ const req: IRequests = {
       method: 'POST',
       url: `/sing/${songId}/upload`,
       body: record,
+    }),
+    realModeScore: ({ artist, title, practiceResultId }: RealModeRequest) => ({
+      method: 'POST',
+      url: `/sing/${practiceResultId}/score`,
+      body: JSON.stringify({ artist: artist, title: title }),
     }),
   },
   recommend: {
