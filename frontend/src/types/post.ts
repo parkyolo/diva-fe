@@ -17,7 +17,7 @@ export interface PostInterface {
       coverImg: string;
     };
   };
-  liked?: boolean;
+  liked: boolean;
   createDate: string;
 }
 
