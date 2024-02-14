@@ -21,7 +21,7 @@ const RangeCheckGuide: React.FC = () => {
         <li className="flex">
           <div className="text-center bg-btn-blackrounded-full w-[39px]">3</div>
           <p className="">
-            30초 안에 <span className="text-skyblue">자유롭게</span> 낼 수 있는{' '}
+            20초 안에 <span className="text-skyblue">자유롭게</span> 낼 수 있는{' '}
             <br />
             <span className="text-skyblue">가장 저음</span>과{' '}
             <span className="text-skyblue">가장 고음</span>을 내주세요.

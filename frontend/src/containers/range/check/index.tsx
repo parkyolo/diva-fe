@@ -15,6 +15,7 @@ import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/store/user';
+import { useRouter } from 'next/navigation';
 
 const RangeCheckPage: React.FC = () => {
   const GuidePhase = 0b00;
@@ -28,41 +29,57 @@ const RangeCheckPage: React.FC = () => {
     req.sing.saveTestResult,
   );
 
-  const [isResultLoading, setIsResultLoading] = useState(true);
-
-  const handleStartRecording = () => {
+  const handleStartRecording = async () => {
     setCurrentPhase(RecordingPhase);
-    const getAudioStream = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-        });
-        setAudioStream(stream);
-      } catch (error) {
-        console.error('Error accessing microphone:', error);
-      }
-    };
-    getAudioStream();
-  };
-
-  const handleStopRecording = () => {
-    if (audioStream) {
-      audioStream.getTracks().forEach((track) => track.stop());
-      setAudioStream(null);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+      });
+      setAudioStream(stream);
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
     }
   };
-  const stoprecording = () => {
+
+  const [isTimeout, setIsTimeout] = useState<boolean>(false);
+  const handleStopRecording = () => {
+    if (audioStream) {
+      audioStream.getTracks().forEach((track) => {
+        track.stop();
+      });
+      let audioTrack: MediaStreamTrack = audioStream.getAudioTracks()[0];
+      audioStream.removeTrack(audioTrack);
+      setAudioStream(null);
+    }
+
+    // 들어온 소리가 적을 경우 다시 테스트 유도
+    if (pitchArray.length < 10) {
+      alert('소음이 적은 환경에서 충분히 소리를 내어주세요.');
+      setCurrentPhase(GuidePhase);
+      window.location.replace('/range/check');
+      return;
+    }
+
     setCurrentPhase(LoadingPhase);
     const { minNoteName, maxNoteName } = convertHztoNote(pitchArray);
     postRange({ highestNote: maxNoteName, lowestNote: minNoteName });
-    console.log(minNoteName, maxNoteName)
+    console.log(minNoteName, maxNoteName);
   };
+  // isTimeout이 바뀌는 경우는 타이머 컴포넌트에서 20초가 지날 때 뿐
+  useEffect(() => {
+    if (isTimeout) {
+      handleStopRecording();
+    }
+  }, [isTimeout]);
 
-  // 결과 로딩할 때 일정 시간 후 '결과 확인하기' 버튼 렌더링
+  // 로딩페이즈: 로딩 컴포넌트 보여주다가 /range로 리다이렉트
+  const router = useRouter();
   useEffect(() => {
     if (currentPhase === LoadingPhase) {
       const timeoutId = setTimeout(() => {
-        setIsResultLoading(false);
+        // router.push('/range');
+        // 성능저하 이슈 해결을 위해 새로고침해서 임시 해결
+        window.location.replace('/range');
       }, 1000);
 
       return () => clearTimeout(timeoutId);
@@ -107,6 +124,7 @@ const RangeCheckPage: React.FC = () => {
               <button
                 onClick={() => {
                   setCurrentPhase(GuidePhase);
+                  window.location.replace('/range/check');
                 }}
               >
                 <LeftArrowIcon></LeftArrowIcon>
@@ -114,12 +132,8 @@ const RangeCheckPage: React.FC = () => {
             }
           ></Header>
           <main className="flex flex-col justify-evenly items-center">
-            <Timer
-              onFinish={() => {
-                stoprecording();
-                handleStopRecording();
-              }}
-            ></Timer>
+            <Timer setIsTimeout={setIsTimeout} />
+
             <PitchDetector
               audioStream={audioStream}
               pitchArr={pitchArray}
@@ -128,14 +142,7 @@ const RangeCheckPage: React.FC = () => {
               }}
             ></PitchDetector>
             <VoiceDetector></VoiceDetector>
-            <ClayButton
-              onClick={() => {
-                handleStopRecording();
-                stoprecording();
-              }}
-            >
-              녹음 중지하기
-            </ClayButton>
+            <ClayButton onClick={handleStopRecording}>녹음 중지하기</ClayButton>
           </main>
         </>
       )}
@@ -144,11 +151,6 @@ const RangeCheckPage: React.FC = () => {
         <>
           <main className="flex flex-col justify-evenly items-center">
             <Loader></Loader>
-            {!isResultLoading && (
-              <ClayButton>
-                <Link href="/range">결과 확인하기</Link>
-              </ClayButton>
-            )}
           </main>
         </>
       )}
