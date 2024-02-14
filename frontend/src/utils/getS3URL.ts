@@ -1,8 +1,16 @@
-import { S3SongInfo } from '@/types/song';
+import { S3SongInfo, S3UserRecord } from '@/types/song';
 import { User } from '@/types/user';
 
 export const mrUrl = ({ artist, songTitle }: S3SongInfo) => {
   return `https://diva-s3.s3.ap-northeast-2.amazonaws.com/song/${artist}-${songTitle}/${artist}-${songTitle}_MR.mp3`;
+};
+
+export const arUrl = ({ artist, songTitle }: S3SongInfo) => {
+  return `https://diva-s3.s3.ap-northeast-2.amazonaws.com/song/${artist}-${songTitle}/${artist}-${songTitle}_AR.wav`;
+};
+
+export const origMusicUrl = ({ artist, songTitle }: S3SongInfo) => {
+  return `https://diva-s3.s3.ap-northeast-2.amazonaws.com/song/${artist}-${songTitle}/${artist}-${songTitle}_ORIG.m4a`;
 };
 
 export const infoUrl = ({ artist, songTitle }: S3SongInfo) => {
@@ -22,4 +30,12 @@ export const userArUrl = (
   { artist, songTitle }: S3SongInfo,
 ) => {
   return `https://diva-s3.s3.ap-northeast-2.amazonaws.com/PracticeResult/${practiceResultId}/${artist}-${songTitle}_vocal.wav`;
+};
+
+export const userRecord = ({
+  practiceResultId,
+  artist,
+  title,
+}: S3UserRecord) => {
+  return `https://diva-s3.s3.ap-northeast-2.amazonaws.com/PracticeResult/${practiceResultId}/${artist}-${title}_vocal.wav`;
 };

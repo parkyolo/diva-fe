@@ -5,7 +5,7 @@ export interface SangSong {
   createdDate: string;
   artist: string;
   score: number;
-  songId? : number;
+  songId?: number;
 }
 
 export interface SharedSong {
@@ -21,6 +21,14 @@ export interface SharedSong {
   songId?: number;
 }
 
+export interface RecommendedSongResponse {
+  songId: number;
+  title: string;
+  artist: string;
+  similarity: string;
+  coverImg: string;
+}
+
 export interface RecommendedSong {
   songId: number;
   songTitle: string;
@@ -30,7 +38,7 @@ export interface RecommendedSong {
 }
 
 export interface S3SongInfo {
-  artist?: string;
+  artist: string;
   songTitle: string;
 }
 
@@ -38,8 +46,24 @@ export interface RealModeResponse {
   practiceResultId: number;
 }
 
+export interface RealModeRequest {
+  practiceResultId: number;
+  artist: string;
+  title: string;
+}
+
+export interface RealModeScore {
+  score: number;
+}
+
 export interface letsUploadSongs extends SangSong {
   content: string;
+}
+
+export interface S3UserRecord {
+  practiceResultId: number;
+  artist: string;
+  title: string;
 }
 
 type Enumerate<

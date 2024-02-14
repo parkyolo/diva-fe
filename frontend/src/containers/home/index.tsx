@@ -9,7 +9,7 @@ import PlayResult from '@/containers/play/PlayResult';
 import RealMode from '@/containers/play/RealMode';
 import TutorialMode from '@/containers/play/TutorialMode';
 import { CloseButton, LeftArrowIcon, HeaderLogo } from '../../../public/svgs';
-import { S3SongInfo } from '@/types/song';
+import { RealModeRequest, S3SongInfo } from '@/types/song';
 
 export const homePage = 0b00;
 export const realMode = 0b01;
@@ -23,7 +23,7 @@ const Home = () => {
     artist: '',
     songTitle: '',
   });
-  const [realModeResultId, setResultId] = useState<number>(0);
+  const [realModeResult, setResult] = useState<RealModeRequest>();
 
   const handleModeChange = (newMode: number) => {
     setMode(newMode);
@@ -61,7 +61,7 @@ const Home = () => {
           <RealMode
             songId={activeMusicId}
             onModeChange={handleModeChange}
-            setResultId={setResultId}
+            setResult={setResult}
             song={activeMusic}
           />
         </>
@@ -88,7 +88,7 @@ const Home = () => {
               </button>
             }
           />
-          <PlayResult />
+          <PlayResult realModeResult={realModeResult} />
         </>
       )}
     </>

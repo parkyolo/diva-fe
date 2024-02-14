@@ -40,7 +40,7 @@ const PlayMonitor = ({
     }
 
     // width 안에 들어오는 pitch 파싱
-    if (pitchesRef.current) {
+    if (pitchesRef.current && parsedPitches) {
       if (pitchesIndex < parsedPitches.length) {
         if (
           (fullWidth + parsedPitches[pitchesIndex].duration) * widthPadding <
@@ -52,7 +52,11 @@ const PlayMonitor = ({
         } else {
           const [out, ...remain] = pitches;
           setPitches(remain);
-          setFullWidth(fullWidth - out.duration);
+          if (out) {
+            setFullWidth(fullWidth - out.duration);
+          } else {
+            setFullWidth(0);
+          }
         }
       }
     }
