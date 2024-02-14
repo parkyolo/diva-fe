@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
+
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final PracticeResultRepository practiceResultRepository;
@@ -27,8 +28,8 @@ public class PostServiceImpl implements PostService {
     // 전체 게시글 조회
     @Override
     @Transactional
-    public List<PostSelectResponseDto> getAllPosts(HttpServletRequest request) {
-        List<Post> posts = postRepository.findByPracticeResultIsNotNull();
+    public List<PostSelectResponseDto> getPosts(HttpServletRequest request, Long postId, int pageSize) {
+        List<Post> posts = postRepository.paginationNoOffset(postId, pageSize);
         Long memberId = (Long) request.getAttribute("memberId");
 
         return posts.stream()
@@ -102,4 +103,5 @@ public class PostServiceImpl implements PostService {
         post.update(requestDto.getContent());
         return requestDto;
     }
+
 }

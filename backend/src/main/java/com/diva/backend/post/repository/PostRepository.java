@@ -10,7 +10,5 @@ import java.util.List;
 public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryQueryDsl {
     List<Post> findByPracticeResultIsNotNull();
 
-//    List<Post> findAllByPageId(Long pageId);
-
-    List<Post> findAllByMemberId(Long memberId);
+    List<Post> paginationNoOffset(Long postId, int pageSize);
 }
