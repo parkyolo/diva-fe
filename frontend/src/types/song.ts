@@ -5,6 +5,7 @@ export interface SangSong {
   createdDate: string;
   artist: string;
   score: number;
+  songId? : number;
 }
 
 export interface SharedSong {
@@ -16,6 +17,8 @@ export interface SharedSong {
   artist: string;
   recordUrl: string;
   score: number;
+  lastModifiedDate: string;
+  songId?: number;
 }
 
 export interface RecommendedSong {
@@ -27,7 +30,7 @@ export interface RecommendedSong {
 }
 
 export interface S3SongInfo {
-  artist: string;
+  artist?: string;
   songTitle: string;
 }
 
