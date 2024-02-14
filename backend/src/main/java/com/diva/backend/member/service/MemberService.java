@@ -11,7 +11,7 @@ public interface MemberService {
 
     MemberResponseDto getMemberInfo(Long memberId) throws NoSuchMemberException ;
 
-    MemberInfoUpdateResponseDto updateInfo(Long memberId, MemberInfoUpdateRequestDto requestDto, MultipartFile file) throws NoSuchMemberException, IllegalArgumentException;
+    MemberInfoUpdateResponseDto updateInfo(Long memberId, MemberInfoUpdateRequestDto requestDto, MultipartFile file) throws NoSuchMemberException;
 
     List<MemberPostResponseDto> getMemberPosts(Long memberId) throws NoSuchMemberException, NoPostException;
 }
