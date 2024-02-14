@@ -14,14 +14,22 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({
   const [valueToDisplay, setValueToDisplay] = useState<number>(0);
   const audioContextRef = useRef(new AudioContext());
   const analyserRef = useRef(audioContextRef.current.createAnalyser());
+
   useEffect(() => {
+    let source: MediaStreamAudioSourceNode;
     if (audioStream) {
-      let source = audioContextRef.current.createMediaStreamSource(audioStream);
+      source = audioContextRef.current.createMediaStreamSource(audioStream);
       source.connect(analyserRef.current);
       visualize();
     }
-
+    return () => {
+      if (source) {
+        console.log('disconnect source:', source);
+        source.disconnect();
+      }
+    };
   }, [audioStream]);
+
   const visualize = () => {
     let previousValueToDisplay = 0;
     let smoothingCount = 0;
@@ -40,8 +48,8 @@ const PitchDetector: React.FC<PitchDetectorProps> = ({
       let valueToDisplay = autoCorrelateValue;
       valueToDisplay = Math.round(valueToDisplay);
       if (autoCorrelateValue < 60) {
-        setValueToDisplay(0)
-      } 
+        setValueToDisplay(0);
+      }
 
       function noteIsSimilarEnough() {
         if (typeof valueToDisplay == 'number') {

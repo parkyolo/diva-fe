@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import Navigation from '@/components/Navigation';
 import Header from '@/components/Header';
 import Piano from './Piano';
@@ -11,6 +11,7 @@ import { pianoRange, rangeResult, vocalRange } from '@/types/range';
 import { VolumeOn, HeaderLogo, RightArrowIcon } from '../../../public/svgs';
 import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
+import { useRouter } from 'next/navigation';
 
 const defaultNote = 'C2';
 
