@@ -1,6 +1,6 @@
-package com.diva.backend.recommend.service;
+package com.diva.backend.recommend.service.service;
 
-import com.diva.backend.recommend.dto.RecommendedSongsResponseDto;
+import com.diva.backend.recommend.service.dto.RecommendedSongsResponseDto;
 
 import java.util.List;
 

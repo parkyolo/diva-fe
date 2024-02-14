@@ -14,4 +14,5 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     Optional<Member> findNotDeletedByEmail(String email);
     Optional<Long> findIdByEmail(String email);
     Optional<Long> findNotDeletedIdByEmail(String email);
+    Optional<Member> findMemberByIdWithVocalRange(Long memberId);
 }

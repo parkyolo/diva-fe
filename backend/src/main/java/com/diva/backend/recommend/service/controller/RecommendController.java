@@ -1,9 +1,9 @@
-package com.diva.backend.recommend.controller;
+package com.diva.backend.recommend.service.controller;
 
 import com.diva.backend.exception.NoSuchMemberException;
 import com.diva.backend.exception.NoVocalRangeException;
-import com.diva.backend.recommend.dto.RecommendedSongsResponseDto;
-import com.diva.backend.recommend.service.RecommendService;
+import com.diva.backend.recommend.service.dto.RecommendedSongsResponseDto;
+import com.diva.backend.recommend.service.service.RecommendService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
