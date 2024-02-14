@@ -56,6 +56,7 @@ const Post = ({
           artist: post.practiceResult.song.artist,
           songTitle: post.practiceResult.song.title,
         }),
+        practiceResultId: post.practiceResult.practiceResultId,
       };
       setPostData(dataTosend);
       setFeedPageAtom(0b10);

@@ -77,8 +77,7 @@ const UpdateForm = () => {
           <AudioPlayer
             artist={postData.artist}
             songTitle={postData.title}
-            // TODO: 백엔드님 practice result id 주세요.
-            // practiceResultId={postData.}
+            practiceResultId={postData.practiceResultId}
           />
           <textarea
             className="h-full w-full bg-[#0A0A0A] rounded-xl p-5 outline-none"

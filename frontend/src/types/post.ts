@@ -28,4 +28,5 @@ export interface UpdateSongs {
   score: number;
   artist: string;
   coverImg: string;
+  practiceResultId: number;
 }
