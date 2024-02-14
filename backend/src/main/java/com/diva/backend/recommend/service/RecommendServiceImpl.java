@@ -47,7 +47,7 @@ public class RecommendServiceImpl implements RecommendService {
                     return new RecommendedSongsResponseDto(song.getId(), song.getTitle(), song.getArtist(), song.getCoverImg(), similarity);
                 })
                 .sorted((song1, song2) -> song2.getSimilarity() - song1.getSimilarity())
-                .limit(3)
+                .limit(7)
                 .collect(Collectors.toList());
     }
 

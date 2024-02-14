@@ -1,6 +1,7 @@
 package com.diva.backend.post.repository;
 
 import com.diva.backend.post.entity.Post;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -8,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 import static com.diva.backend.post.entity.QPost.post;
-import static com.diva.backend.post.entity.QPracticeResult.practiceResult;
-import static com.diva.backend.song.entity.QSong.song;
 
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryQueryDsl {
@@ -26,6 +25,24 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
     }
 
     @Override
+    public List<Post> paginationNoOffset(Long postId, int pageSize) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
+        JPAQuery<Post> query = queryFactory
+                .selectFrom(post)
+                .where(post.practiceResult.isNotNull());
+
+        if (postId != null) {
+            query.where(post.id.lt(postId));
+        }
+
+        return query
+                .orderBy(post.id.desc())
+                .limit(pageSize)
+                .fetch();
+    }
+
+    @Override
     public List<Post> findAllByMemberIdWithSongWithPost(Long memberId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
         return queryFactory
@@ -37,4 +54,5 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
             .where(post.member.id.eq(memberId))
             .fetch();
     }
+
 }
