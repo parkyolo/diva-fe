@@ -89,10 +89,13 @@ def calculate_score(request):
         # after_filename = normalize('NFD', remote)
         after_filename = remote
         txt_filename = remote.replace(".mp3", "_INFO.txt")
+        print(txt_filename)
 
         song_dir = "song"
 
-        bucket.download_file(txt_filename, current_path + "/" + "scores" + "/" + song_dir + "/" + artist + "-" + title + "_INFO.txt")
+        download_to = current_path + "/" + "scores" + "/" + song_dir + "/" + artist + "-" + title + "_INFO.txt"
+        print(download_to)
+        bucket.download_file(txt_filename, download_to)
         bucket.download_file(after_filename,
                              current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3")
 
