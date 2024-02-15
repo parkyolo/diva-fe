@@ -10,15 +10,18 @@ export interface SangSong {
 
 export interface SharedSong {
   memberId: string;
-  postId: number;
   nickname: string;
-  content: string;
+  songId: number;
   songTitle: string;
   artist: string;
+  coverImg: string;
+  postId: number;
+  content: string;
+  createDate: string;
+  lastModifiedDate: string;
+  practiceResultId: number;
   recordUrl: string;
   score: number;
-  lastModifiedDate: string;
-  songId?: number;
 }
 
 export interface RecommendedSongResponse {
