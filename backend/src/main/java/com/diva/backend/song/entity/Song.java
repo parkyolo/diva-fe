@@ -5,14 +5,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 import com.diva.backend.entity.BaseEntity;
 import com.diva.backend.post.entity.Post;
 import com.diva.backend.post.entity.PracticeResult;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -60,11 +53,11 @@ public class Song extends BaseEntity {
     private SongRange songRange;
 
     @NotNull
-    @OneToMany(mappedBy = "song")
+    @OneToMany(mappedBy = "song", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PracticeResult> practiceResults = new ArrayList<>();
 
     @NotNull
-    @OneToMany(mappedBy = "song")
+    @OneToMany(mappedBy = "song" , cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
     @Builder
