@@ -41,9 +41,13 @@ public class CorsConfig {
         config.setExposedHeaders(List.of("Authorization", "AuthorizationRefresh, DeviceToken"));
 
         // Allowed Origins
-        String locahostWithPort = "http://localhost:3000";
-        config.addAllowedOrigin(locahostWithPort);
-        log.info("localhostWithPort is " + locahostWithPort);
+        String localhostWithPort = "http://localhost:3000";
+        config.addAllowedOrigin(localhostWithPort);
+        log.info("localhostWithPort is " + localhostWithPort);
+
+        String httpDomain = frontend;
+        config.addAllowedOrigin(httpDomain);
+        log.info("httpDomain is " + httpDomain);
 
         String httpDomainWithPort = frontend + ":" + frontendPort;
         config.addAllowedOrigin(httpDomainWithPort);
