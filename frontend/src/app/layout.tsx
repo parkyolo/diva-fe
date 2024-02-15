@@ -19,7 +19,7 @@ export default async function RootLayout({
   return (
     <html>
       <body>
-        <div className="relative bg-bg-black basis-full max-w-[600px] min-w-[320px] h-full max-h-[1400px] min-h-[568px] flex flex-col">
+        <div className="relative bg-bg-black basis-full max-w-[600px] min-w-[320px] h-full max-h-[1400px] min-h-[568px] flex flex-col shadow-[0px_0px_10px_4px_rgba(0,0,0,0.8)]">
           <AuthProvider landing={landing}>{children}</AuthProvider>
         </div>
       </body>
