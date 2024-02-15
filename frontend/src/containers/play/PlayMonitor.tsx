@@ -9,111 +9,74 @@ const PlayMonitor = ({
   parsedPitches: PitchInterface[];
 }) => {
   const pitchesRef = useRef<HTMLDivElement>(null);
-  const [pitches, setPitches] = useState<PitchInterface[]>([]);
-  const [fullWidth, setFullWidth] = useState<number>(0);
-  const [pitchesIndex, setPitchesIndex] = useState<number>(0);
 
-  const pivot: number = 100;
-  const widthPadding = 20;
+  const [widthPadding, setPadding] = useState<number>(0);
   const [minVal, setMinVal] = useState<number>(0);
   const [maxVal, setMaxVal] = useState<number>(0);
-  const [isCalced, setCalced] = useState<boolean>(false);
+  const [finishSeconds, setFinishSeconds] = useState<number>(0);
 
   useEffect(() => {
-    // 정규화를 위한 min, max pitch값 계산
-    if (!isCalced) {
-      if (!!parsedPitches.length) {
-        setMinVal(
-          parsedPitches.reduce(
-            (min, val) => (val.pitch < min ? val.pitch : min),
-            parsedPitches[0].pitch,
-          ),
-        );
-        setMaxVal(
-          parsedPitches.reduce(
-            (min, val) => (val.pitch > min ? val.pitch : min),
-            parsedPitches[0].pitch,
-          ),
-        );
-        setCalced(true);
-      }
+    if (finishSeconds) {
+      setPadding(4000 / finishSeconds);
     }
+  }, [finishSeconds]);
 
-    // width 안에 들어오는 pitch 파싱
-    if (pitchesRef.current && parsedPitches) {
-      if (pitchesIndex < parsedPitches.length) {
-        if (
-          (fullWidth + parsedPitches[pitchesIndex].duration) * widthPadding <
-          pitchesRef.current.clientWidth + 100
-        ) {
-          setPitches([...pitches, parsedPitches[pitchesIndex]]);
-          setFullWidth(fullWidth + parsedPitches[pitchesIndex].duration);
-          setPitchesIndex(pitchesIndex + 1);
-        } else {
-          const [out, ...remain] = pitches;
-          setPitches(remain);
-          if (out) {
-            setFullWidth(fullWidth - out.duration);
-          } else {
-            setFullWidth(0);
-          }
-        }
-      }
+  useEffect(() => {
+    if (parsedPitches.length) {
+      // 정규화를 위한 min, max pitch값 계산
+      setMinVal(
+        parsedPitches.reduce(
+          (min, val) => (val.pitch < min ? val.pitch : min),
+          parsedPitches[0].pitch,
+        ),
+      );
+      setMaxVal(
+        parsedPitches.reduce(
+          (min, val) => (val.pitch > min ? val.pitch : min),
+          parsedPitches[0].pitch,
+        ),
+      );
+
+      // 음악이 끝나는 시간 계산
+      setFinishSeconds(
+        parsedPitches[parsedPitches.length - 1].startSeconds +
+          parsedPitches[parsedPitches.length - 1].duration,
+      );
     }
-  }, [currentSeconds]);
+  }, [parsedPitches]);
 
   return (
     <>
-      <div
-        ref={pitchesRef}
-        className="flex flex-col items-center relative w-full h-1/5 overflow-x-hidden"
-      >
-        {pitches.map((pitch, index) => {
-          const leftDistance =
-            pitches
-              .slice(0, index)
-              .reduce((sum, val) => sum + val.duration, 0) * widthPadding;
+      <div className="w-full h-[120px] mb-3">
+        <div
+          ref={pitchesRef}
+          className="w-full h-[100px] fixed"
+          style={{
+            animation: `pitchbar ${finishSeconds}s`,
+          }}
+        >
+          {parsedPitches.map((pitch) => {
+            const left = pitch.startSeconds * widthPadding;
+            const width = pitch.duration * widthPadding;
+            const bottom = pitchesRef.current
+              ? ((pitch.pitch - minVal) / (maxVal - minVal)) *
+                pitchesRef.current.clientHeight
+              : 0;
 
-          return (
-            <div
-              key={pitch.startSeconds}
-              className={`absolute h-1 bg-white`}
-              style={{
-                width: `${pitch.duration * widthPadding}px`,
-                left: `${leftDistance}px`,
-                bottom: `${
-                  pitchesRef.current
-                    ? ((pitch.pitch - minVal) / (maxVal - minVal)) *
-                      pitchesRef.current.clientHeight
-                    : 0
-                }px`,
-              }}
-            >
+            return (
               <div
-                className={`relative h-full ${
-                  pitchesIndex < parsedPitches.length
-                    ? leftDistance <= pivot
-                      ? 'bg-skyblue'
-                      : 'bg-white'
-                    : pitch.startSeconds < currentSeconds
-                      ? 'bg-skyblue'
-                      : 'bg-white'
-                }`}
+                key={pitch.startSeconds}
+                className={`absolute h-1 bg-white`}
                 style={{
-                  animation: `${
-                    pitchesIndex < parsedPitches.length
-                      ? leftDistance <= pivot
-                        ? `pitchbar 0.2s ease-in-out`
-                        : ''
-                      : pitch.startSeconds < currentSeconds
-                        ? `pitchbar 0.2s ease-in-out`
-                        : ''
-                  }`,
+                  width: `${width}px`,
+                  left: `${left}px`,
+                  bottom: `${bottom}px`,
                 }}
               ></div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+        <div className="relative h-[120px] border-r-2 border-skyblue bg-skyblue/50 w-20 ml-[-2.5rem]"></div>
       </div>
     </>
   );
