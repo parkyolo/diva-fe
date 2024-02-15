@@ -1,18 +1,17 @@
+import BottomSheet from '@/components/BottomSheet/BottomSheet';
+import AudioPlayer from '@/containers/feed/AudioPlayer';
+import { useFetch } from '@/hooks/useFetch';
+import useModal from '@/hooks/useModal';
+import { req } from '@/services';
+import { feedPageAtom, postAtom } from '@/store/feed';
+import { userAtom } from '@/store/user';
+import { PostInterface, UpdateSongs } from '@/types/post';
 import { SharedSong } from '@/types/song';
-import Image from 'next/image';
-import PlayIcon from '/public/svgs/polygon.svg';
+import { coverUrl } from '@/utils/getS3URL';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import DotsThreeVertical from '/public/svgs/dots-three-vertical.svg';
-import useModal from '@/hooks/useModal';
-import BottomSheet from '@/components/BottomSheet/BottomSheet';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { userAtom } from '@/store/user';
-import { feedPageAtom, postAtom } from '@/store/feed';
-import { PostInterface, UpdateSongs } from '@/types/post';
-import { useFetch } from '@/hooks/useFetch';
-import { req } from '@/services';
-import { useRouter } from 'next/navigation';
-import { coverUrl } from '@/utils/getS3URL';
 
 interface ContentProps {
   song: SharedSong;
@@ -75,31 +74,11 @@ const ShareItems = ({ song, handleRemovePost }: ContentProps) => {
       </div>
       {song.content}
       <div className="relative w-full h-24">
-        <Image
-          src={coverUrl({ artist: song.artist, songTitle: song.songTitle })}
-          alt={song.songTitle}
-          width={0}
-          height={0}
-          sizes="100vw"
-          className="w-full h-24 rounded-xl object-cover brightness-50"
-        ></Image>
-        {isPlaying ? (
-          <button
-            onClick={handleAudioPause}
-            className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
-          >
-            <div className="font-bold text-3xl font-samlip">| |</div>
-          </button>
-        ) : (
-          <button
-            onClick={handleAudioPlay}
-            className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]"
-          >
-            <PlayIcon viewBox="0 0 50 50" />
-            <audio src={song.recordUrl}></audio>
-          </button>
-        )}
-        <audio src={song.recordUrl} ref={audioRef}></audio>
+        <AudioPlayer
+          artist={song.artist}
+          practiceResultId={song.practiceResultId}
+          songTitle={song.songTitle}
+        />
       </div>
 
       {isOpen && (

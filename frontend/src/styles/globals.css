@@ -40,6 +40,12 @@
   src: url('../../public/fonts/SDSamliphopangcheTTF/SDSamliphopangcheTTFBasic.ttf');
 }
 
+@supports (-webkit-touch-callout: none) {
+  body > div {
+    height: -webkit-fill-available;
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
