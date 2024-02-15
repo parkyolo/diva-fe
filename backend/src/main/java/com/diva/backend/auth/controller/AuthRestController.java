@@ -141,6 +141,7 @@ public class AuthRestController {
     private String getHttpAndDomain(HttpServletRequest request) {
         // request의 domain을 가져온다.
         String host = request.getHeader(HttpHeaders.HOST);
+        log.info("host: " + host);
         if (host != null && host.contains("localhost")) {
             // 프론트 local
             String[] split = host.split(":");
