@@ -25,7 +25,7 @@ spring:
 jwt:
     token:
         access:
-            expiration: 86_400_000 # 1일
+            expiration: 300_000 # 5분
 
 # SQL log
 logging:
