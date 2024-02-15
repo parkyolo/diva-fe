@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.db import transaction
 
 from rest_framework.decorators import api_view
-from rest_framework.response import Response
+from rest_framework.response import JsonResponse, Response
 from rest_framework import status
 
 from django_ratelimit.decorators import ratelimit
@@ -142,7 +142,7 @@ def calculate_score(request):
 
         print(dumps)
 
-        return Response(dumps, status=status.HTTP_200_OK)
+        return JsonResponse(dumps, status=status.HTTP_200_OK)
 
     except Exception as e:
         # GPU 할당 해제
