@@ -11,7 +11,8 @@ const groupBy = (array: SangSong[], key: keyof SangSong): Group => {
   return array.reduce((result: Group, currentValue: SangSong) => {
     const keyValue = currentValue[key]?.toString();
     if (keyValue !== undefined) {
-      (result[keyValue] = result[keyValue] || []).push(currentValue);
+      const day = keyValue.substring(0, 10);
+      (result[day] = result[day] || []).push(currentValue);
     }
     return result;
   }, {} as Group);
@@ -28,6 +29,8 @@ const SongContent = () => {
   // 데이터 페칭 후 온 노래들을 날짜별로 정렬
   useEffect(() => {
     if (!isLoading && Array.isArray(sangSongs)) {
+      // console.log(sangSongs[sangSongs.length - 1].createdDate);
+      // console.log(sangSongs[sangSongs.length - 2].createdDate);
       const filteredAndSortedSongs = sangSongs
         .filter((song) => song.createdDate) // Filtering out songs without createdDate
         .sort((a, b) => b.createdDate.localeCompare(a.createdDate));
