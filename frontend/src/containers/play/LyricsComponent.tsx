@@ -27,6 +27,10 @@ const LyricsComponent = ({
           setCurrentIndex(currentIndex + 1);
           setEndIndex(endIndex + 1);
         }
+      } else if (currentIndex + 1 < parsedLyrics.length) {
+        if (parsedLyrics[currentIndex + 1].startSeconds <= currentSeconds) {
+          setCurrentIndex(currentIndex + 1);
+        }
       }
     }
   }, [currentSeconds]);
