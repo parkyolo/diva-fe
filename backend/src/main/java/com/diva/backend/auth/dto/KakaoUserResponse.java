@@ -9,6 +9,4 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = PROTECTED, force = true)
 public class KakaoUserResponse {
     private final Long id;
-    private final String connected_at;
-    private final KakaoAccount kakao_account;
 }

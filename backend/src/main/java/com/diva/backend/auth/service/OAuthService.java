@@ -43,6 +43,7 @@ public class OAuthService {
 
         // Access Token을 이용해서 사용자 정보 요청
         KakaoUserResponse kakaoUserResponse = requestKakaoUserInfo(kakaoTokenResponse);
+        log.info("providerId: " + kakaoUserResponse.getId());
 
         return KakaoOAuthResponse.builder()
             .registrationId(provider)
