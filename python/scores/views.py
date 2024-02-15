@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.db import transaction
 
 from rest_framework.decorators import api_view
-from rest_framework.response import JsonResponse, Response
+from django.http import JsonResponse
 from rest_framework import status
 
 from django_ratelimit.decorators import ratelimit
@@ -47,7 +47,7 @@ def calculate_score(request):
 
     # practice_result_id, artist, title 중 하나라도 없으면 400을 반환한다.
     if not practice_result_id or not artist or not title:
-        return Response('{"error": "PracticeResultId, Artist, Title is required."}', status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse('{"error": "PracticeResultId, Artist, Title is required."}', status=status.HTTP_400_BAD_REQUEST)
 
     # 구조는 다음과 같다.
     bucket_name = "diva-s3"
@@ -152,4 +152,4 @@ def calculate_score(request):
         # PracticeResult에 PracticeResultId 폴더를 지운다.
         shutil.rmtree(current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id)
 
-        return Response(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse(str(e), status=status.HTTP_500_INTERNAL_SERVER_ERROR)
