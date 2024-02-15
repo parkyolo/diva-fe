@@ -85,6 +85,7 @@ public class ScoreService {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Content-Type", "application/json;");
+        connection.setRequestProperty("Accept", "application/json");
 
         // OutputStream으로 POST 데이터를 넘겨주겠다는 옵션.
         connection.setDoOutput(true);
