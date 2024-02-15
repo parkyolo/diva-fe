@@ -28,7 +28,6 @@ const SongItems = ({ song }: ContentProps) => {
       router.push('/feed');
     }
   };
-  console.log(song);
 
   return (
     <>

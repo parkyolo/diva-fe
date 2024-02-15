@@ -25,8 +25,8 @@ public class PostController {
     @GetMapping
     public ResponseEntity<List<PostWithMemberAndPracticeResultResponseDto>> getPosts(
             HttpServletRequest request,
-            @RequestParam(required = false) Long postId,
-            @RequestParam(defaultValue = "10") int pageSize) {
+            @RequestParam(name="postId", required = false) Long postId,
+            @RequestParam(name="pageSize", defaultValue = "10") int pageSize) {
         return ResponseEntity.ok(postService.getPosts(request, postId, pageSize));
     }
 
