@@ -41,7 +41,7 @@
 }
 
 @supports (-webkit-touch-callout: none) {
-  body {
+  body > div {
     height: -webkit-fill-available;
   }
 }
