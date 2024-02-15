@@ -84,7 +84,7 @@ public class ScoreService {
         URL url = new URL(pythonUrl);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setRequestMethod("POST");
-        connection.setRequestProperty("Content-Type", "application/json;charset=utf-8");
+        connection.setRequestProperty("Content-Type", "application/json;");
 
         // OutputStream으로 POST 데이터를 넘겨주겠다는 옵션.
         connection.setDoOutput(true);
