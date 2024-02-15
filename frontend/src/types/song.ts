@@ -18,10 +18,10 @@ export interface SharedSong {
   postId: number;
   content: string;
   createDate: string;
-  lastModifiedDate: string;
   practiceResultId: number;
   recordUrl: string;
   score: number;
+  lastModifiedDate: string;
 }
 
 export interface RecommendedSongResponse {
@@ -41,7 +41,7 @@ export interface RecommendedSong {
 }
 
 export interface S3SongInfo {
-  artist: string;
+  artist?: string;
   songTitle: string;
 }
 
