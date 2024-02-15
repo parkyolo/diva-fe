@@ -26,9 +26,6 @@ cloud:
             access-key: ${AWS.ACCESS}
             secret-key: ${AWS.SECRET}
 
-logging.level:
-    org.hibernate.SQL: debug
-
 # JWT
 jwt:
     secret: ${JWT.SECRET}
