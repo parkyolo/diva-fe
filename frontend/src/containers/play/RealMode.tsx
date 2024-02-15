@@ -36,8 +36,6 @@ const RealMode = ({
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
   let audioArray: BlobPart[] = [];
 
-  // const isMrLoaded = useRef<boolean>(false);
-  // const isArLoaded = useRef<boolean>(false);
   const [isMrLoaded, setIsMrLoaded] = useState<boolean>(false);
   const [isArLoaded, setIsArLoaded] = useState<boolean>(false);
 
@@ -118,7 +116,6 @@ const RealMode = ({
       .then((stream) => {
         // mediaStream으로 들어오는 오디오 데이터를 mediaRecorder로 저장
         setMediaRecorder(new MediaRecorder(stream));
-        console.log(stream);
       });
 
     // 모바일 환경에서 canplaythrough 이벤트 캐치를 위해
