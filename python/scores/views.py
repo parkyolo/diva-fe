@@ -88,7 +88,8 @@ def calculate_score(request):
 
         # after_filename = normalize('NFD', remote)
         after_filename = remote
-        txt_filename = "song/" + artist + "-" + title + "_INFO.txt"
+        txt_filename = "song" + "/" + artist + "-" + title + "/" + artist + "-" + title + "_INFO.txt"
+        print(after_filename)
         print(txt_filename)
 
         song_dir = "song"
