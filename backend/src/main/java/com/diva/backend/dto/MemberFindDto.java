@@ -1,6 +1,5 @@
 package com.diva.backend.dto;
 
-import com.diva.backend.member.entity.Member;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -14,16 +13,16 @@ public class MemberFindDto {
     @NotNull
     private Long id;
 
-    @NotBlank
-    private String email;
+    @NotNull
+    private Long providerId;
 
     @NotBlank
     private String nickname;
 
     @Builder
-    protected MemberFindDto(Long id, String email, String nickname) {
+    protected MemberFindDto(Long id, Long providerId, String nickname) {
         this.id = id;
+        this.providerId = providerId;
         this.nickname = nickname;
-        this.email = email;
     }
 }

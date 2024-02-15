@@ -24,11 +24,12 @@ public class MemberRepositoryImpl implements MemberRepositoryQueryDsl {
     }
 
     @Override
-    public Optional<Member> findMemberByEmail(String email) {
+    public Optional<Member> findByProviderId(Long providerId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
         return Optional.ofNullable(
             queryFactory.selectFrom(member)
-                .where(member.email.eq(email))
+                .where(member.providerId.eq(providerId))
                 .fetchOne()
         );
     }
@@ -41,47 +42,6 @@ public class MemberRepositoryImpl implements MemberRepositoryQueryDsl {
             queryFactory
                 .selectFrom(member)
                 .where(member.id.eq(id)
-                    .and(member.status.ne(MemberStatus.DELETED)))
-                .fetchOne()
-        );
-    }
-
-    @Override
-    public Optional<Member> findNotDeletedByEmail(String email) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-
-        return Optional.ofNullable(
-            queryFactory
-                .selectFrom(member)
-                .where(member.email.eq(email)
-                    .and(member.status.ne(MemberStatus.DELETED)))
-                .fetchOne()
-        );
-    }
-
-
-    @Override
-    public Optional<Long> findIdByEmail(String email) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-
-        return Optional.ofNullable(
-            queryFactory
-                .select(member.id)
-                .from(member)
-                .where(member.email.eq(email))
-                .fetchOne()
-        );
-    }
-
-    @Override
-    public Optional<Long> findNotDeletedIdByEmail(String email) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
-
-        return Optional.ofNullable(
-            queryFactory
-                .select(member.id)
-                .from(member)
-                .where(member.email.eq(email)
                     .and(member.status.ne(MemberStatus.DELETED)))
                 .fetchOne()
         );
