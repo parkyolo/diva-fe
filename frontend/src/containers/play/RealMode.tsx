@@ -36,6 +36,11 @@ const RealMode = ({
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder>();
   let audioArray: BlobPart[] = [];
 
+  // const isMrLoaded = useRef<boolean>(false);
+  // const isArLoaded = useRef<boolean>(false);
+  const [isMrLoaded, setIsMrLoaded] = useState<boolean>(false);
+  const [isArLoaded, setIsArLoaded] = useState<boolean>(false);
+
   const [isLoading, response, error, postRecorder] = useFetch<RealModeResponse>(
     req.sing.saveLiveResult,
   );
@@ -68,7 +73,7 @@ const RealMode = ({
   }, [response]);
 
   useEffect(() => {
-    if (mediaRecorder) {
+    if (mediaRecorder && isArLoaded && isMrLoaded) {
       mediaRecorder.ondataavailable = (e) => {
         audioArray.push(e.data);
       };
@@ -84,15 +89,15 @@ const RealMode = ({
       };
 
       mediaRecorder.start();
+      audioRef.current?.play();
       if (audioRef.current) {
         arAudioRef.current!.volume = 0.01;
         arAudioRef.current?.play();
       }
-      audioRef.current?.play();
       audioRef.current?.addEventListener('timeupdate', handleSeconds);
       audioRef.current?.addEventListener('ended', handleAudioEnd);
     }
-  }, [mediaRecorder]);
+  }, [mediaRecorder, isArLoaded, isMrLoaded]);
 
   useEffect(() => {
     getMusicInfo(infoUrl(song))
@@ -113,6 +118,7 @@ const RealMode = ({
       .then((stream) => {
         // mediaStream으로 들어오는 오디오 데이터를 mediaRecorder로 저장
         setMediaRecorder(new MediaRecorder(stream));
+        console.log(stream);
       });
 
     return () => {
@@ -133,12 +139,19 @@ const RealMode = ({
       />
       <ARGuide arAudioRef={arAudioRef} />
 
-      <audio ref={audioRef}>
-        <source src={musicUrl.current} type={'audio/mp3'} />
-      </audio>
       <audio
         ref={arAudioRef}
         src={arUrl({ artist: song.artist, songTitle: song.songTitle })}
+        onCanPlayThrough={() => {
+          setIsArLoaded(true);
+        }}
+      ></audio>
+      <audio
+        ref={audioRef}
+        onCanPlayThrough={() => {
+          setIsMrLoaded(true);
+        }}
+        src={musicUrl.current}
       ></audio>
     </main>
   );
