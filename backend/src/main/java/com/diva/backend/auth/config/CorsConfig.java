@@ -1,5 +1,6 @@
 package com.diva.backend.auth.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,7 @@ import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.OPTIONS;
 
+@Slf4j
 @Configuration
 public class CorsConfig {
     @Value("${FRONTEND}")
@@ -41,14 +43,16 @@ public class CorsConfig {
         // Allowed Origins
         String locahostWithPort = "http://localhost:3000";
         config.addAllowedOrigin(locahostWithPort);
+        log.info("localhostWithPort is " + locahostWithPort);
 
         String httpDomainWithPort = frontend + ":" + frontendPort;
         config.addAllowedOrigin(httpDomainWithPort);
+        log.info("httpDomainWithPort is " + httpDomainWithPort);
 
         String httpsDomainWithPort = frontend.replace("http", "https");
-        httpsDomainWithPort += frontendPort + ":" + frontendPort;
-
+        httpsDomainWithPort += ":" + frontendPort;
         config.addAllowedOrigin(httpsDomainWithPort);
+        log.info("httpsDomainWithPort is " + httpsDomainWithPort);
 
         // Allowed Methods
         config.setAllowedMethods(List.of(GET.name(), POST.name(), PUT.name(), PATCH.name(), DELETE.name(), OPTIONS.name()));
