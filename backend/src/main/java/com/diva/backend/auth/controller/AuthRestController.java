@@ -147,16 +147,16 @@ public class AuthRestController {
             return origin;
         }
         else {
-            String host = request.getHeader(HttpHeaders.HOST);
 
-            if (host != null) {
-                // 프론트 local, 백엔드 local
-                log.info("Front is local and Back is local");
-                String[] split = host.split(":");
-                String result = "http://" + split[0] + ":" + "3000";
-                log.info("result: " + result);
-                return result;
-            }
+//            String host = request.getHeader(HttpHeaders.HOST);
+//            if (host != null) {
+//                // 프론트 local, 백엔드 local
+//                log.info("Front is local and Back is local");
+//                String[] split = host.split(":");
+//                String result = "http://" + split[0] + ":" + "3000";
+//                log.info("result: " + result);
+//                return result;
+//            }
 
             // 프론트 dev, 백엔드 dev
             log.info("Front is dev and Back is dev");
