@@ -29,9 +29,6 @@ public class Token {
     @Column(unique = true)
     private String resourceRefreshToken;
 
-    @NotBlank
-    private String scope;
-
     // 우리 서버에서 발급한 JWT Refresh Token
     @NotBlank
     @Column(unique = true, columnDefinition = "varchar(400)")
@@ -43,10 +40,9 @@ public class Token {
     private Member member;
 
     @Builder
-    protected Token(String resourceAccessToken, String resourceRefreshToken, String scope, String refreshToken, Member member) {
+    protected Token(String resourceAccessToken, String resourceRefreshToken, String refreshToken, Member member) {
         this.resourceAccessToken = resourceAccessToken;
         this.resourceRefreshToken = resourceRefreshToken;
-        this.scope = scope;
         this.refreshToken = refreshToken;
         this.member = member;
 
