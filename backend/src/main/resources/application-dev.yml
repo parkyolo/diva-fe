@@ -22,12 +22,6 @@ jwt:
         access:
             expiration: 86_400_000 # 1일
 
-decorator:
-    datasource:
-        p6spy:
-            enable-logging: true
-# SQL log
-
 # cors
 allowed-origin: ${DOMAIN}
 # cors
