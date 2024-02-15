@@ -138,7 +138,7 @@ def calculate_score(request):
         score.score = round(score.score)
 
         # score 객체를 json으로 변환한다.
-        dumps = json.dumps(score.__dict__)
+        dumps = score.__dict__
 
         print(dumps)
 
