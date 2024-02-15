@@ -33,7 +33,7 @@ const SongItems = ({ song }: ContentProps) => {
     <>
       <div className="w-1/3 aspect-square p-1 relative">
         <div
-          className="relative cursor-pointer"
+          className="relative cursor-pointer w-full h-full"
           onClick={() => {
             sendDatatoJotaiStore();
           }}
@@ -41,8 +41,7 @@ const SongItems = ({ song }: ContentProps) => {
           <Image
             src={coverUrl({ artist: song.artist, songTitle: song.songTitle })}
             alt={song.songTitle}
-            width={500}
-            height={500}
+            fill
           />
           <div className="absolute top-0 w-full h-full  bg-opacity-45 bg-bg-black "></div>
           <span className="w-full text-center absolute top-1/2 -translate-y-1/2 text-white text-overflow">
