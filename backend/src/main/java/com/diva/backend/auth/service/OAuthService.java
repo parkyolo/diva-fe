@@ -47,7 +47,6 @@ public class OAuthService {
         return KakaoOAuthResponse.builder()
             .registrationId(provider)
             .providerId(kakaoUserResponse.getId())
-            .email(kakaoUserResponse.getKakao_account().getEmail())
             .resourceAccessToken(kakaoTokenResponse.getAccess_token())
             .resourceRefreshToken(kakaoTokenResponse.getRefresh_token())
             .scope(kakaoTokenResponse.getScope())
