@@ -88,11 +88,13 @@ def calculate_score(request):
 
         # after_filename = normalize('NFD', remote)
         after_filename = remote
-
-        bucket.download_file(after_filename,
-                             current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3")
+        txt_filename = remote.replace(".mp3", "_INFO.txt")
 
         song_dir = "song"
+
+        bucket.download_file(txt_filename, current_path + "/" + "scores" + "/" + song_dir + "/" + artist + "-" + title + "_INFO.txt")
+        bucket.download_file(after_filename,
+                             current_path + "/" + "scores" + "/" + practice_result_dir + "/" + practice_result_id + "/" + artist + "-" + title + ".mp3")
 
         # 녹음 파일을 분석한다.
         scoreSettings = ScoreSettings(id=practice_result_id,
