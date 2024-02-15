@@ -14,10 +14,17 @@ export const parsePitchDuration = (
     if (line.length === 5) {
       const [type, startBeat, duration, pitch, lyrics] = line;
       const startSeconds = convertBeat2Seconds(bpm, gap, +startBeat, delay);
+      const endSeconds = convertBeat2Seconds(
+        bpm,
+        gap,
+        +startBeat + +duration,
+        delay,
+      );
       const durationSeconds = convertBeat2Seconds(bpm, gap, +duration, delay);
 
       const newPitch: PitchInterface = {
         startSeconds: startSeconds,
+        endSeconds: endSeconds,
         duration: durationSeconds,
         pitch: +pitch,
       };
