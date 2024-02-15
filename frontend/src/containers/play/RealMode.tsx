@@ -133,7 +133,7 @@ const RealMode = ({
       />
       <ARGuide arAudioRef={arAudioRef} />
 
-      <audio ref={audioRef} controls>
+      <audio ref={audioRef}>
         <source src={musicUrl.current} type={'audio/mp3'} />
       </audio>
       <audio

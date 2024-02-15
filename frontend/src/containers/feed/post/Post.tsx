@@ -115,11 +115,11 @@ const Post = ({
             <div className="w-[54px] aspect-square relative rounded-full overflow-hidden shrink-0">
               <Image
                 src={
-                  user.profileImg
-                    ? `https://diva-s3.s3.ap-northeast-2.amazonaws.com/profileImg/${user.memberId}/profileImg.jpg`
+                  post.member.profileImg
+                    ? `https://diva-s3.s3.ap-northeast-2.amazonaws.com/profileImg/${post.member.memberId}/profileImg.jpg`
                     : '/images/cactus.png'
                 }
-                alt="profile-img"
+                alt="프로필 이미지입니다"
                 fill
               ></Image>
             </div>

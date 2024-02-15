@@ -31,8 +31,6 @@ export const useFetch = <T>(
           ? undefined
           : { 'Content-Type': 'application/json' };
 
-      console.log('rest body', rest.body);
-
       const response: Response = await fetch(`/api${url}`, {
         headers: {
           Authorization: accessToken,
@@ -42,14 +40,11 @@ export const useFetch = <T>(
       });
 
       if (response.ok) {
-        console.log('response is ok');
         const responseBody = await response.text();
 
-        console.log('response is ok2');
         // response body 유무에 따른 분기
         if (responseBody.trim() !== '') {
           // Check if the response body is not empty
-          console.log('response is ok3');
           result = JSON.parse(responseBody);
           setData(result);
         } else {
