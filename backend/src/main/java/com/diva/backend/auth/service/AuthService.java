@@ -48,7 +48,6 @@ public class AuthService {
             Token token = Token.builder()
                 .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())
                 .resourceRefreshToken(kakaoOAuthResponse.getResourceRefreshToken())
-                .scope(kakaoOAuthResponse.getScope())
                 .refreshToken(jwts[1])
                 .member(member)
                 .build();
@@ -76,7 +75,6 @@ public class AuthService {
             Token token = Token.builder()
                     .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())
                     .resourceRefreshToken(kakaoOAuthResponse.getResourceRefreshToken())
-                    .scope(kakaoOAuthResponse.getScope())
                     .refreshToken(jwts[1])
                     .member(newMember)
                     .build();

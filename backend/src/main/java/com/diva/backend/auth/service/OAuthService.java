@@ -50,7 +50,6 @@ public class OAuthService {
             .providerId(kakaoUserResponse.getId())
             .resourceAccessToken(kakaoTokenResponse.getAccess_token())
             .resourceRefreshToken(kakaoTokenResponse.getRefresh_token())
-            .scope(kakaoTokenResponse.getScope())
             .build();
     }
 
