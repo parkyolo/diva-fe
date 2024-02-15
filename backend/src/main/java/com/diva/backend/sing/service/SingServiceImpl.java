@@ -114,13 +114,15 @@ public class SingServiceImpl implements SingService{
                                         .build();
 
         // S3에 파일 업로드
-        Long practiceResultId = practiceResultRepository.save(practiceResult).getId();
+        PracticeResult newPracticeResult = practiceResultRepository.save(practiceResult);
+        Long practiceResultId = newPracticeResult.getId();
         String artist = song.getArtist();
         String title = song.getTitle();
         String url = "PracticeResult/" + practiceResultId + "/" + artist + "-" + title + ".mp3";
         s3Uploader.uploadFile(url, multipartFile);
         return PracticeResultUploadResponseDto.builder()
             .practiceResultId(practiceResultId)
+            .createdDate(newPracticeResult.getCreatedDate())
             .build();
     }
 
