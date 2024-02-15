@@ -22,9 +22,10 @@ const PlayResult = ({
 }) => {
   // 공유하기 버튼 누르면 업로드 폼으로 이동
   const router = useRouter();
+  const setFeedPageAtom = useSetAtom(feedPageAtom);
+  const setSongData = useSetAtom(songAtom);
+
   const handleShare = () => {
-    const setFeedPageAtom = useSetAtom(feedPageAtom);
-    const setSongData = useSetAtom(songAtom);
     if (realModeResult && resultResponse) {
       const dataTosend: SangSong = {
         practiceResultId: realModeResult.practiceResultId,
