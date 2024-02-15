@@ -56,10 +56,15 @@ public class ScoreService {
         }
 
         // 응답 코드가 200인 경우
-        ScoreResponseDto scoreResponseDto = objectMapper.readValue(
-                new BufferedReader(new InputStreamReader(first.getInputStream())),
-                ScoreResponseDto.class
-        );
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(first.getInputStream()));
+        // bufferedReader -> String
+        StringBuffer output = new StringBuffer();
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            output.append(line);
+        }
+
+        ScoreResponseDto scoreResponseDto = objectMapper.readValue(output.toString(), ScoreResponseDto.class);
 
         // 채점 결과 반영
         practiceResult.setScore(scoreResponseDto.getScore());
