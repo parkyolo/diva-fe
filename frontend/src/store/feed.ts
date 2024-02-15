@@ -18,6 +18,7 @@ const initialPostForm: UpdateSongs = {
   score: 0,
   artist: '',
   coverImg: '',
+  practiceResultId: 0,
 };
 
 const feedPage = 0b0;
