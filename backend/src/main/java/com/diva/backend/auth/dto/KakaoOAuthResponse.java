@@ -13,14 +13,12 @@ public class KakaoOAuthResponse {
     private final Long providerId;
     private final String resourceAccessToken;
     private final String resourceRefreshToken;
-    private final String scope;
 
     @Builder
-    protected KakaoOAuthResponse(String registrationId, Long providerId, String resourceAccessToken, String resourceRefreshToken, String scope) {
+    protected KakaoOAuthResponse(String registrationId, Long providerId, String resourceAccessToken, String resourceRefreshToken) {
         this.registrationId = registrationId;
         this.providerId = providerId;
         this.resourceAccessToken = resourceAccessToken;
         this.resourceRefreshToken = resourceRefreshToken;
-        this.scope = scope;
     }
 }
