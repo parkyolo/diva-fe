@@ -50,10 +50,10 @@ public class MemberLogInSuccessHandler implements AuthenticationSuccessHandler {
 //        PrincipalUserDetails principal = (PrincipalUserDetails) authentication.getPrincipal();
 //
 //        String email = principal.getMember().getEmail();
-        String email = (String) request.getAttribute("email");
+        Long memberId = (Long) request.getAttribute("memberId");
 
         try {
-            Member member = memberRepository.findNotDeletedByEmail(email).orElseThrow(() -> new NoSuchMemberException(SUCH.getMessage() + MEMBER.getMessage() + NOT_EXISTS.getMessage()));
+            Member member = memberRepository.findById(memberId).orElseThrow(() -> new NoSuchMemberException(SUCH.getMessage() + MEMBER.getMessage() + NOT_EXISTS.getMessage()));
 
             // access token, refresh token을 헤더에 실어서 보낸다.
             response.setContentType("application/json");

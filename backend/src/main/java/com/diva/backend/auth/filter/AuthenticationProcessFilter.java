@@ -5,7 +5,6 @@ import static com.diva.backend.enumstorage.messages.Messages.INVALID;
 import static com.diva.backend.enumstorage.response.Status.FAIL;
 import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 
-import com.diva.backend.auth.dto.MemberFromJWT;
 import com.diva.backend.auth.exception.InvalidAccessTokenException;
 import com.diva.backend.auth.service.JwtService;
 import com.diva.backend.dto.Response;
@@ -51,14 +50,11 @@ public class AuthenticationProcessFilter extends OncePerRequestFilter {
             // access token에서 email 검증
             String accessToken = jwtService.extractAccessToken(request);
             //System.out.println("accessToken : " + accessToken);
-            MemberFromJWT memberFromJWT = jwtService.validateAndExtractEmailFromAccessToken(
+            Long memberId = jwtService.validateAndExtractMemberIdFromAccessToken(
                 accessToken);
 
             // request에 memberId 담기
-            request.setAttribute("memberId", memberFromJWT.getMemberId());
-
-            // request에 email 담기
-            request.setAttribute("email", memberFromJWT.getEmail());
+            request.setAttribute("memberId", memberId);
 
             // Header에 accessToken 담기
             jwtService.setAccessTokenOnHeader(response, accessToken);

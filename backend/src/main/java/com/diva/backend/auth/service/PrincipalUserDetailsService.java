@@ -20,12 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class PrincipalUserDetailsService implements UserDetailsService {
     private final MemberRepository memberRepository;
 
-    //이런 요청이 들어왔는데, 얘 혹시 회원이야?
+    // 이런 요청이 들어왔는데, 얘 혹시 회원이야?
     @Transactional(noRollbackFor = UsernameNotFoundException.class) // UserNameNotFoundException이 발생할 때, rollback하지 않는다.
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Member를 찾는다.
-        Member member = memberRepository.findNotDeletedByEmail(email)
+        Member member = memberRepository.findById(Long.parseLong(email))
                 // 없으면, UsernameNotFoundException 발생
                 .orElseThrow(() -> new UsernameNotFoundException(SUCH.getMessage() + MEMBER.getMessage() + NOT_EXISTS.getMessage()));
 
