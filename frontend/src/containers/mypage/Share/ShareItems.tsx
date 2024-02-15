@@ -44,8 +44,8 @@ const ShareItems = ({ song, handleRemovePost }: ContentProps) => {
         score: song.score,
         title: song.songTitle,
         artist: song.artist,
-        //  TODO: 커버 이미지 S3로 받아오기
-        coverImg: coverUrl({ songTitle: song.songTitle }),
+        coverImg: coverUrl({ artist: song.artist, songTitle: song.songTitle }),
+        practiceResultId: song.practiceResultId,
       };
       setPostData(dataTosend);
       setFeedPageAtom(0b10);
