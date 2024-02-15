@@ -146,11 +146,6 @@ export function useCarousel(
   });
 
   useEffect(() => {
-    const id = setTimeout(() => dispatch({ type: 'next', length }), interval);
-    return () => clearTimeout(id);
-  }, [state.offset, state.active]);
-
-  useEffect(() => {
     const id = setTimeout(() => dispatch({ type: 'done' }), transitionTime);
     return () => clearTimeout(id);
   }, [state.desired]);

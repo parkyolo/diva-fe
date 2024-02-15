@@ -1,17 +1,17 @@
-import { RealModeRequest, RealModeResponse, S3SongInfo } from '@/types/song';
-import PlayMonitor from './PlayMonitor';
-import LyricsComponent from './LyricsComponent';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
-import { arUrl, infoUrl, mrUrl } from '@/utils/getS3URL';
-import { getMusicInfo } from '@/services/getMusicInfo';
-import { parseLyricsTiming } from '@/utils/parseLyricsTiming';
-import { parsePitchDuration } from '@/utils/parsePitchDuration';
-import { LyricsInterface } from '@/types/lyrics';
-import { PitchInterface } from '@/types/pitch';
-import { homePage, resultPage } from '../home';
 import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
+import { getMusicInfo } from '@/services/getMusicInfo';
+import { LyricsInterface } from '@/types/lyrics';
+import { PitchInterface } from '@/types/pitch';
+import { RealModeResponse, RealModeResult, S3SongInfo } from '@/types/song';
+import { arUrl, infoUrl, mrUrl } from '@/utils/getS3URL';
+import { parseLyricsTiming } from '@/utils/parseLyricsTiming';
+import { parsePitchDuration } from '@/utils/parsePitchDuration';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { homePage, resultPage } from '../home';
 import ARGuide from './ARGuide';
+import LyricsComponent from './LyricsComponent';
+import PlayMonitor from './PlayMonitor';
 
 const RealMode = ({
   onModeChange,
@@ -20,7 +20,7 @@ const RealMode = ({
   song,
 }: {
   onModeChange: Function;
-  setResult: Dispatch<SetStateAction<RealModeRequest | undefined>>;
+  setResult: Dispatch<SetStateAction<RealModeResult | undefined>>;
   songId: number;
   song: S3SongInfo;
 }) => {
@@ -56,6 +56,7 @@ const RealMode = ({
           practiceResultId: response.practiceResultId,
           artist: song.artist,
           title: song.songTitle,
+          createdDate: response.createdDate,
         });
         setTimeout(() => onModeChange(resultPage), 500);
       } catch (err) {
@@ -132,7 +133,7 @@ const RealMode = ({
       />
       <ARGuide arAudioRef={arAudioRef} />
 
-      <audio ref={audioRef}>
+      <audio ref={audioRef} controls>
         <source src={musicUrl.current} type={'audio/mp3'} />
       </audio>
       <audio

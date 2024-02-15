@@ -1,114 +1,104 @@
 import Header from '@/components/Header';
 import { feedPage, feedPageAtom, songAtom } from '@/store/feed';
-import { SangSong, letsUploadSongs } from '@/types/song';
+import { SangSong } from '@/types/song';
 import { useAtomValue, useSetAtom } from 'jotai';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import LeftArrow from '/public/svgs/left_arrow.svg';
 import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
-import { PostInterface } from '@/types/post';
-import { coverUrl, mrUrl, userImgUrl } from '@/utils/getS3URL';
-import { PlayIcon } from '../../../public/svgs';
+import { userImgUrl } from '@/utils/getS3URL';
 import AudioPlayer from './AudioPlayer';
 import { userAtom } from '@/store/user';
 import { User } from '@/types/user';
 import { useRouter } from 'next/navigation';
+import { PostInterface } from '@/types/post';
+import { reFetchingAtom } from './store';
 
 const UploadForm = () => {
+  const router = useRouter();
   const user: User = useAtomValue(userAtom);
   const songData: SangSong = useAtomValue(songAtom);
   const [inputValue, setInputValue] = useState<string>();
+  const [defaultValue, setDefaultValue] = useState<string>('');
   const setFeedPageAtom = useSetAtom(feedPageAtom);
-  const [postIsLoading, allPosts, getPostError, getAllPosts] = useFetch<
-    PostInterface[]
-  >(req.post.getAllPosts);
+  const setFetching = useSetAtom(reFetchingAtom);
 
-  useEffect(() => {
-    getAllPosts();
-    return () => {
-      handleCurrentPage();
-    };
-  }, []);
+  const [getLoading, getResponse, getError, getPost] = useFetch<PostInterface>(
+    req.post.getPost,
+  );
+  const [postLoading, postResponse, postError, postSongFeed] = useFetch(
+    req.post.writePost,
+  );
+  const [updateLoading, updateResponse, updateError, updateSongFeed] = useFetch(
+    req.post.updatePost,
+  );
+  const [isUploaded, setIsUploaded] = useState<boolean>(false);
+  const [getLoaded, setLoadState] = useState<boolean>(false);
 
   const handleInputChange = (e: any) => {
     setInputValue(e.target.value);
   };
 
-  const router = useRouter();
-  const handleCurrentPage = () => {
+  const routeMypage = () => {
     setFeedPageAtom(feedPage);
     router.push('/mypage');
   };
 
-  // 유저가 플레이한 음성기록 플레이
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const mrAudioRef = useRef<HTMLAudioElement>(null);
-  const arAudioRef = useRef<HTMLAudioElement>(null);
-  const handleAudioPause = () => {
-    mrAudioRef.current?.pause();
-    arAudioRef.current?.pause();
-    setIsPlaying(false);
-  };
-  const handleAudioPlay = () => {
-    mrAudioRef.current?.play();
-    arAudioRef.current?.play();
-    setIsPlaying(true);
-  };
-
-  const [defaultValue, setDefaultValue] = useState<string>('');
-
-  const [isLoading, sharedsongs, error, postSongFeed] = useFetch<
-    [letsUploadSongs]
-  >(req.post.writePost);
-
-  const [updateisLoading, updateePost, updateError, doUpdatePost] = useFetch<
-    PostInterface[]
-  >(req.post.updatePost);
-
-  // 이미 작성된 적이 있는 노래면 입력 문구를 예전에 게시글 문구로 바꿔줌
-  useEffect(() => {
-    if (allPosts) {
-      const alreadyWritten = allPosts.find(
-        (post: PostInterface) =>
-          post.practiceResult.practiceResultId === songData.practiceResultId,
-      );
-
-      if (alreadyWritten && alreadyWritten.content !== defaultValue) {
-        setDefaultValue(alreadyWritten.content);
+  const handleUpload = () => {
+    if (isUploaded) {
+      if (!getLoading && getLoaded && getResponse) {
+        try {
+          updateSongFeed({
+            postId: getResponse.postId,
+            content: inputValue,
+          }).then((_) => {
+            setFeedPageAtom(feedPage);
+            setFetching(true);
+          });
+        } catch (_) {
+          console.log(updateError);
+        }
       }
-    }
-  }, [allPosts, songData.practiceResultId, defaultValue]);
-
-  // 게시글이 작성된 적이 있으면 게시 말고 수정으로
-  const handleUpload = async () => {
-    if (allPosts) {
-      const alreadyWritten = allPosts.find(
-        (post: PostInterface) =>
-          post.practiceResult.practiceResultId === songData.practiceResultId,
-      );
-      if (alreadyWritten) {
-        await doUpdatePost({
-          postId: alreadyWritten.postId,
-          content: inputValue,
-        });
-      } else {
-        await postSongFeed({
+    } else {
+      try {
+        postSongFeed({
           content: inputValue,
           practiceResultId: songData.practiceResultId,
+          score: songData.score,
+          songId: songData.songId,
+          title: songData.songTitle,
+          artist: songData.artist,
+        }).then((_) => {
+          setFeedPageAtom(feedPage);
+          setFetching(true);
         });
+      } catch (_) {
+        console.log(postError);
+        routeMypage();
       }
     }
-    await getAllPosts();
-
-    handleCurrentPage();
   };
+
+  useEffect(() => {
+    if (getLoading) {
+      setLoadState(true);
+    }
+    if (!getLoading && getLoaded && getResponse) {
+      setIsUploaded(true);
+      setDefaultValue(getResponse.content);
+    }
+  }, [getLoading]);
+
+  useEffect(() => {
+    getPost(songData.practiceResultId);
+  }, []);
 
   return (
     <>
       <Header
         LeftComponent={
-          <button onClick={handleCurrentPage}>
+          <button onClick={routeMypage}>
             <LeftArrow />
           </button>
         }
@@ -122,7 +112,11 @@ const UploadForm = () => {
         <div className="flex flex-col h-full gap-5">
           <div className="flex flex-row justify-start items-center gap-4">
             <div className="rounded-full overflow-hidden relative w-[6rem] aspect-square">
-              <Image src={userImgUrl(user)} alt={user.nickname} fill />
+              <Image
+                src={user.profileImg ? userImgUrl(user) : '/images/cactus.png'}
+                alt={user.nickname}
+                fill
+              />
             </div>
             <div className="flex w-full justify-center itmes-center flex-col">
               <div className="text-2xl font-bold px-2 text-overflow">
