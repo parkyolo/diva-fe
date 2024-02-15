@@ -143,9 +143,9 @@ main::-webkit-scrollbar-track {
 /* PlayMonitor의 pitchbar에 칠해지는 색 */
 @keyframes pitchbar {
   0% {
-    transform: translateX(0);
+    transform: translateX(2.5rem);
   }
   100% {
-    transform: translateX(-4000px);
+    transform: translateX(calc(-4000px + -2.5rem));
   }
 }
