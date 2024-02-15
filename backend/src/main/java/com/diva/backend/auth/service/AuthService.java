@@ -1,14 +1,13 @@
 package com.diva.backend.auth.service;
 
-import static com.diva.backend.auth.enumstorage.messages.error.oauth2.OAuth2ErrorMessage.NO_SUCH_OAUTH_2;
+import static com.diva.backend.enumstorage.messages.MemberMessages.MEMBER;
+import static com.diva.backend.enumstorage.messages.Messages.NOT_EXISTS;
+import static com.diva.backend.enumstorage.messages.Messages.SUCH;
 
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.diva.backend.auth.dto.KakaoOAuthResponse;
-import com.diva.backend.auth.entity.OAuth2;
 import com.diva.backend.auth.entity.Token;
 import com.diva.backend.auth.exception.NoSuchRefreshTokenInDBException;
-import com.diva.backend.auth.exception.oauth2.NoSuchOAuth2Exception;
-import com.diva.backend.auth.repository.OAuth2Repository;
 import com.diva.backend.auth.repository.TokenRepository;
 import com.diva.backend.dto.MemberFindDto;
 import com.diva.backend.member.entity.Member;
@@ -36,29 +35,24 @@ public class AuthService {
 //    private final DeviceTokenRepository deviceTokenRepository;
     private final TokenRepository tokenRepository;
     private final MemberRepository memberRepository;
-    private final OAuth2Repository oAuth2Repository;
 
     @Transactional
-    public MemberFindDto signIn(KakaoOAuthResponse kakaoOAuthResponse, HttpServletResponse response) {
+    public MemberFindDto signIn(KakaoOAuthResponse kakaoOAuthResponse, HttpServletResponse response) throws NoSuchMemberException {
         try {
-            // registrationId와 providerId로 OAuth2를 찾는다.
-            OAuth2 oAuth2 = oAuth2Repository.findByRegistrationIdAndProviderIdWithToken(kakaoOAuthResponse.getRegistrationId(), kakaoOAuthResponse.getProviderId())
-                .orElseThrow(() -> new NoSuchOAuth2Exception(NO_SUCH_OAUTH_2.getMessage()));
+            // providerId로 Member를 찾는다.
+            Member member = memberRepository.findByProviderId(kakaoOAuthResponse.getProviderId())
+                .orElseThrow(() -> new NoSuchMemberException(SUCH.getMessage() + MEMBER.getMessage() + NOT_EXISTS.getMessage()));
 
-            // 있으면, 연관된 Member를 찾는다.
-            Member member = oAuth2.getMember();
-
-            String[] jwts = jwtService.issueJwts(member.getId(), member.getEmail());
+            String[] jwts = jwtService.issueJwts(member.getId());
 
             Token token = Token.builder()
                 .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())
                 .resourceRefreshToken(kakaoOAuthResponse.getResourceRefreshToken())
                 .scope(kakaoOAuthResponse.getScope())
                 .refreshToken(jwts[1])
-                .oAuth2(oAuth2)
+                .member(member)
                 .build();
 
-            oAuth2Repository.save(oAuth2);
             tokenRepository.save(token);
 
             setHeader(response, jwts);
@@ -66,36 +60,26 @@ public class AuthService {
             // member를 리턴한다.
             return member.toMemberFindDto();
         }
-        // OAuth2가 없다는건, 처음 로그인하는 회원이라는 뜻이다.
-        catch (NoSuchOAuth2Exception exception) {
+        // Member가 없다는건, 처음 로그인하는 회원이라는 뜻이다.
+        catch (NoSuchMemberException e) {
             // Member를 생성한다.
             Member member = Member.builder()
-                .email(kakaoOAuthResponse.getEmail())
-                .nickname(RandomNickname.getRandomNickname())
-                .build();
-
-            // OAuth2를 생성한다.
-            OAuth2 oAuth2 = OAuth2.builder()
-                .member(member)
-                .registrationId(kakaoOAuthResponse.getRegistrationId())
                 .providerId(kakaoOAuthResponse.getProviderId())
+                .nickname(RandomNickname.getRandomNickname())
                 .build();
 
             // Member를 저장한다.
             Member newMember = memberRepository.save(member);
 
-            String[] jwts = jwtService.issueJwts(newMember.getId(), kakaoOAuthResponse.getEmail());
+            String[] jwts = jwtService.issueJwts(newMember.getId());
 
             Token token = Token.builder()
                     .resourceAccessToken(kakaoOAuthResponse.getResourceAccessToken())
                     .resourceRefreshToken(kakaoOAuthResponse.getResourceRefreshToken())
                     .scope(kakaoOAuthResponse.getScope())
                     .refreshToken(jwts[1])
-                    .oAuth2(oAuth2)
+                    .member(newMember)
                     .build();
-
-            // OAuth2를 저장한다.
-            oAuth2Repository.save(oAuth2);
 
             // Token을 저장한다.
             tokenRepository.save(token);
@@ -139,10 +123,10 @@ public class AuthService {
 
         // Header에서 refreshToken 추출
         String refreshToken = jwtService.extractRefreshToken(request);
-        String emailFromRefreshToken = jwtService.validateAndExtractEmailFromRefreshToken(refreshToken);
+        Long memberIdFromRefreshToken = jwtService.validateAndExtractMemberIdFromRefreshToken(refreshToken);
 
         // token들을 재발급한다.
-        return jwtService.reissueJwts(emailFromRefreshToken, refreshToken);
+        return jwtService.reissueJwts(memberIdFromRefreshToken, refreshToken);
 //        , deviceToken);
     }
 

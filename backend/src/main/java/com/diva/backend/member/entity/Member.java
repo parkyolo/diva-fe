@@ -1,6 +1,6 @@
 package com.diva.backend.member.entity;
 
-import com.diva.backend.auth.entity.OAuth2;
+import com.diva.backend.auth.entity.Token;
 import com.diva.backend.dto.MemberFindDto;
 import com.diva.backend.entity.BaseEntity;
 import com.diva.backend.entity.Notification;
@@ -36,9 +36,9 @@ public class Member extends BaseEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @NotBlank
-    @Column(name = "member_email", unique = true, length = 30)
-    private String email;
+    @NotNull
+    @Column(name = "PROVIDER_ID")
+    private Long providerId;
 
     @Setter
     @NotBlank
@@ -60,28 +60,28 @@ public class Member extends BaseEntity {
 
     @JsonManagedReference
     @NotNull
-    @OneToMany(mappedBy = "member")
-    private List<OAuth2> oAuth2s = new ArrayList<>();
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Token> tokens = new ArrayList<>();
 
     @JsonManagedReference
     @NotNull
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Notification> notifications = new HashSet<>();
 
     @NotNull
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Heart> hearts = new ArrayList<>();
 
     @NotNull
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PracticeResult> practiceResults = new ArrayList<>();
 
     @NotNull
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
     @NotNull
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SavedSong> savedSongs = new ArrayList<>();
 
 //    @NotNull
@@ -90,8 +90,8 @@ public class Member extends BaseEntity {
     private VocalRange vocalRange;
 
     @Builder
-    protected Member(String email, String nickname) {
-        this.email = email;
+    protected Member(Long providerId, String nickname) {
+        this.providerId = providerId;
         this.profileImg = false;
         this.nickname = nickname;
         this.role = MEMBER;
@@ -104,8 +104,8 @@ public class Member extends BaseEntity {
     }
 
     //==연관관계 메소드==//
-    public void addOAuth2(OAuth2 oAuth2) {
-        oAuth2s.add(oAuth2);
+    public void addToken(Token token) {
+        this.tokens.add(token);
     }
 
     public void addPracticeResult(PracticeResult practiceResult) {
@@ -120,7 +120,7 @@ public class Member extends BaseEntity {
     public MemberFindDto toMemberFindDto() {
         return MemberFindDto.builder()
             .id(id)
-            .email(email)
+            .providerId(providerId)
             .nickname(nickname)
             .build();
     }

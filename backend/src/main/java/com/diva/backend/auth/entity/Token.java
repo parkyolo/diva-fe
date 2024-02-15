@@ -1,5 +1,6 @@
 package com.diva.backend.auth.entity;
 
+import com.diva.backend.member.entity.Member;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,18 +39,18 @@ public class Token {
 
     @NotNull
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "OAUTH2_ID")
-    private OAuth2 oAuth2;
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
 
     @Builder
-    protected Token(String resourceAccessToken, String resourceRefreshToken, String scope, String refreshToken, OAuth2 oAuth2) {
+    protected Token(String resourceAccessToken, String resourceRefreshToken, String scope, String refreshToken, Member member) {
         this.resourceAccessToken = resourceAccessToken;
         this.resourceRefreshToken = resourceRefreshToken;
         this.scope = scope;
         this.refreshToken = refreshToken;
-        this.oAuth2 = oAuth2;
+        this.member = member;
 
-        this.oAuth2.addToken(this);
+        this.member.addToken(this);
     }
 
     // == 비즈니스 로직 == //
