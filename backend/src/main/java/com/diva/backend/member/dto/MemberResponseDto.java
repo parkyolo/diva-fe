@@ -9,16 +9,14 @@ public class MemberResponseDto {
     private final Long memberId;
 
     private final String nickname;
-    private final String email;
     private final Boolean profileImg;
     private final String profileImgUrl;
     private final VocalRangeDto vocalRange;
 
     @Builder
-    public MemberResponseDto(Long memberId, String nickname, String email, Boolean profileImg, String profileImgUrl, VocalRangeDto vocalRange) {
+    public MemberResponseDto(Long memberId, String nickname, Boolean profileImg, String profileImgUrl, VocalRangeDto vocalRange) {
         this.memberId = memberId;
         this.nickname = nickname;
-        this.email = email;
         this.profileImg = profileImg;
         this.profileImgUrl = profileImgUrl;
         this.vocalRange = vocalRange;
@@ -28,7 +26,6 @@ public class MemberResponseDto {
         return MemberResponseDto.builder()
             .memberId(member.getId())
             .nickname(member.getNickname())
-            .email(member.getEmail())
             .profileImg(member.getProfileImg())
             .profileImgUrl(profileImgUrl)
             .vocalRange(vocalRangeDto)
