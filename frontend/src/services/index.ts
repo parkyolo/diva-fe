@@ -1,3 +1,4 @@
+import { feedRequest } from '@/types/post';
 import { RealModeRequest } from '@/types/song';
 
 type Method = 'GET' | 'POST' | 'PATCH' | 'DELETE';
@@ -32,6 +33,7 @@ interface IRequests {
   post: {
     getMyPosts: IRequestConfigResolver;
     getAllPosts: IRequestConfigResolver;
+    getPost: IRequestConfigResolver;
     writePost: IRequestConfigResolver;
     deletePost: IRequestConfigResolver;
     updatePost: IRequestConfigResolver;
@@ -105,9 +107,15 @@ const req: IRequests = {
       method: 'GET',
       url: '/members/posts',
     }),
-    getAllPosts: () => ({
+    getAllPosts: (param: feedRequest) => ({
       method: 'GET',
-      url: '/posts/list',
+      url: param.postId
+        ? `/posts?postId=${param.postId}&pageSize=${param.pageSize}`
+        : `/posts?postId=&pageSize=${param.pageSize}`,
+    }),
+    getPost: (practiceResultId: number) => ({
+      method: 'GET',
+      url: `/posts/${practiceResultId}`,
     }),
     writePost: (data: {
       content: string;

@@ -1,15 +1,15 @@
 'use client';
 
-import Content from '@/containers/home/Content';
-import Navigation from '@/components/Navigation';
-import { useState } from 'react';
 import Header from '@/components/Header';
-import Link from 'next/link';
+import Navigation from '@/components/Navigation';
+import Content from '@/containers/home/Content';
 import PlayResult from '@/containers/play/PlayResult';
 import RealMode from '@/containers/play/RealMode';
 import TutorialMode from '@/containers/play/TutorialMode';
-import { CloseButton, LeftArrowIcon, HeaderLogo } from '../../../public/svgs';
-import { RealModeRequest, S3SongInfo } from '@/types/song';
+import { RealModeResult, S3SongInfo } from '@/types/song';
+import Link from 'next/link';
+import { useState } from 'react';
+import { CloseButton, HeaderLogo, LeftArrowIcon } from '../../../public/svgs';
 
 export const homePage = 0b00;
 export const realMode = 0b01;
@@ -23,13 +23,17 @@ const Home = () => {
     artist: '',
     songTitle: '',
   });
-  const [realModeResult, setResult] = useState<RealModeRequest>();
+  const [realModeResult, setResult] = useState<RealModeResult>();
 
   const handleModeChange = (newMode: number) => {
     setMode(newMode);
   };
 
   const handleGoBack = () => {
+    setMode(homePage);
+  };
+
+  const handleSkipButton = () => {
     setMode(homePage);
   };
 
@@ -85,6 +89,11 @@ const Home = () => {
             LeftComponent={
               <button onClick={handleGoBack}>
                 <LeftArrowIcon />
+              </button>
+            }
+            RightComponent={
+              <button onClick={handleSkipButton}>
+                <span className="font-samlip text-skyblue">건너뛰기</span>
               </button>
             }
           />
