@@ -19,7 +19,9 @@ const RangeCheckGuide: React.FC = () => {
           마이크를 세팅해주세요.
         </li>
         <li className="flex">
-          <div className="text-center bg-btn-blackrounded-full w-[39px]">3</div>
+          <div className="text-center bg-btn-black rounded-full w-[39px]">
+            3
+          </div>
           <p className="">
             20초 안에 <span className="text-skyblue">자유롭게</span> 낼 수 있는{' '}
             <br />
