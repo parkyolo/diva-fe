@@ -34,11 +34,12 @@ public class SongRepositoryImpl implements SongRepositoryQueryDsl {
                 .from(song)
                 .leftJoin(song.songRange, songRange).fetchJoin()
                 .where(song.id.in(
-                    JPAExpressions
-                            .select(songRange.song.id)
-                            .from(songRange)
-                            .orderBy(similarity.desc())
+                        JPAExpressions
+                                .select(songRange.song.id)
+                                .from(songRange)
+                                .orderBy(similarity.desc())
                 ))
+                .orderBy(similarity.desc())
                 .limit(7)
                 .fetch();
 
