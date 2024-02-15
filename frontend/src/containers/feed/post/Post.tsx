@@ -1,94 +1,41 @@
 'use client';
 
 import Image from 'next/image';
-import DotsThreeVertical from '/public/svgs/dots-three-vertical.svg';
-import LikeIcon from '/public/svgs/like.svg';
 import PostContent from './PostContent';
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
 import useModal from '@/hooks/useModal';
 import BottomSheet from '../../../components/BottomSheet/BottomSheet';
-import PlayIcon from '/public/svgs/polygon.svg';
-import { PostInterface, UpdateSongs } from '@/types/post';
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from 'react';
+import { useAtomValue, useSetAtom } from 'jotai';
+import { PostInterface } from '@/types/post';
 import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
-import { useAtomValue, useSetAtom } from 'jotai';
-import { feedPageAtom, postAtom } from '@/store/feed';
+import { feedPage, feedPageAtom, postAtom, updateForm } from '@/store/feed';
 import { userAtom } from '@/store/user';
-import { useRouter } from 'next/navigation';
 import { mrUrl, coverUrl, userArUrl } from '@/utils/getS3URL';
+import { LikeIcon, PlayIcon, MenuIcon } from '../../../../public/svgs';
+import { reFetchingAtom } from '../store';
 
 const Post = ({
   post,
   isPlaying,
   handleCurrentAudio,
-  handleRemovePost,
-  handleLikePost,
 }: {
   post: PostInterface;
   isPlaying: boolean;
   handleCurrentAudio: Dispatch<SetStateAction<number | null>>;
-  handleRemovePost: (postId: number) => void;
-  handleLikePost: (postId: number) => void;
 }) => {
-  const [deleteisLoading, deletePost, deleteError, doDeletePost] = useFetch<
-    PostInterface[]
-  >(req.post.deletePost);
-
-  const [isLoading, allPosts, error, getAllPosts] = useFetch<PostInterface[]>(
-    req.post.getAllPosts,
-  );
-
+  const user = useAtomValue(userAtom);
   const setFeedPageAtom = useSetAtom(feedPageAtom);
   const setPostData = useSetAtom(postAtom);
-  const sendDatatoJotaiStore = () => {
-    if (
-      post.practiceResult.song.title !== '' &&
-      post.practiceResult.song.artist !== '' &&
-      post.practiceResult.song.coverImg !== ''
-    ) {
-      const dataTosend: UpdateSongs = {
-        postId: post.postId,
-        content: post.content,
-        score: post.practiceResult.score,
-        title: post.practiceResult.song.title,
-        artist: post.practiceResult.song.artist,
-        coverImg: coverUrl({
-          artist: post.practiceResult.song.artist,
-          songTitle: post.practiceResult.song.title,
-        }),
-        practiceResultId: post.practiceResult.practiceResultId,
-      };
-      setPostData(dataTosend);
-      setFeedPageAtom(0b10);
-    }
-  };
-
+  const setReFetching = useSetAtom(reFetchingAtom);
+  const [deleteLoading, deleteResponse, deleteError, deletePost] = useFetch(
+    req.post.deletePost,
+  );
+  const [likeLoading, likeResponse, likeError, postLike] = useFetch(
+    req.post.doLike,
+  );
   const [isLiked, setIsLiked] = useState<boolean>(post.liked);
-  const handleLikebutton = () => {
-    if (isLiked) {
-      setIsLiked(false), (post.heartCount -= 1);
-    } else {
-      setIsLiked(true), (post.heartCount += 1);
-    }
-  };
-
-  const handleRemove = async () => {
-    // 삭제 버튼 클릭 시 handleRemovePost 호출
-    await handleRemovePost(post.postId);
-  };
-
-  const handleLike = async () => {
-    handleLikePost(post.postId);
-  };
-  const router = useRouter();
-  const [doUnLikeisLoading, unlike, doUnLikeError, doUnlike] = useFetch<
-    PostInterface[]
-  >(req.post.doUnlike);
-  const [doLikeisLoading, like, doLikeError, doLike] = useFetch<
-    PostInterface[]
-  >(req.post.doLike);
-
-  const user = useAtomValue(userAtom); // 전역으로 관리되고 있는 유저 정보
+  const [heartCount, setHeartCount] = useState<number>(post.heartCount);
 
   // 컨텐츠 더보기
   const maxContentsLength = 65;
@@ -126,9 +73,40 @@ const Post = ({
     handleCurrentAudio(post.postId);
   };
 
-  const handleAudioEnd = () => {
-    handleCurrentAudio(null);
+  const handleUpdate = () => {
+    setFeedPageAtom(updateForm);
+    setPostData({
+      postId: post.postId,
+      content: post.content,
+      title: post.practiceResult.song.title,
+      score: post.practiceResult.score,
+      artist: post.practiceResult.song.artist,
+      coverImg: post.practiceResult.song.coverImg,
+      practiceResultId: post.practiceResult.practiceResultId,
+    });
   };
+
+  const handleRemove = () => {
+    try {
+      deletePost({ postId: post.postId });
+      setReFetching(true);
+      setFeedPageAtom(feedPage);
+    } catch (_) {
+      console.log(deleteError);
+    }
+  };
+
+  const handleLike = () => {
+    try {
+      postLike({ postId: post.postId });
+      if (isLiked) setHeartCount(heartCount - 1);
+      else setHeartCount(heartCount + 1);
+      setIsLiked(!isLiked);
+    } catch (_) {
+      console.log(likeError);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col gap-2 w-full">
@@ -155,7 +133,7 @@ const Post = ({
           </div>
           {post.member.memberId === user.memberId ? (
             <button onClick={open}>
-              <DotsThreeVertical />
+              <MenuIcon />
             </button>
           ) : (
             <></>
@@ -211,7 +189,6 @@ const Post = ({
             </button>
           )}
 
-          {/* TODO: S3에서 사용자 노래 받아오기 */}
           <audio
             src={mrUrl({
               artist: post.practiceResult.song.artist,
@@ -229,45 +206,26 @@ const Post = ({
         </div>
 
         <div className="flex justify-start gap-2 items-center">
-          <div
-            onClick={() => {
-              handleLike();
-              handleLikebutton();
-            }}
-          >
+          <button onClick={handleLike} className="active:animate-ping">
             {isLiked ? (
               <LikeIcon className="fill-red stroke-red" />
             ) : (
               <LikeIcon className="stroke-gray" />
             )}
-          </div>
+          </button>
           <div className="text-gray ">
-            <em className="not-italic font-bold text-white">
-              {post.heartCount}명
-            </em>
+            <em className="not-italic font-bold text-white">{heartCount}명</em>
             이 좋아합니다.
-            {post.heartCount === 0 ? (
-              <span> (관심을 표현해주세요!)</span>
-            ) : (
-              <></>
-            )}
+            {heartCount === 0 ? <span> (관심을 표현해주세요!)</span> : <></>}
           </div>
         </div>
 
         {isOpen && (
           <BottomSheet close={close}>
-            <BottomSheet.Button
-              btnColor="bg-blue"
-              onClick={() => sendDatatoJotaiStore()}
-            >
+            <BottomSheet.Button btnColor="bg-blue" onClick={handleUpdate}>
               수정하기
             </BottomSheet.Button>
-            <BottomSheet.Button
-              btnColor="bg-btn-black"
-              onClick={() => {
-                handleRemove();
-              }}
-            >
+            <BottomSheet.Button btnColor="bg-btn-black" onClick={handleRemove}>
               삭제하기
             </BottomSheet.Button>
           </BottomSheet>

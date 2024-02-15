@@ -50,6 +50,9 @@ export const useFetch = <T>(
         } else {
           // Handle empty response body
           console.warn('Empty response body');
+          if (Object.is(requestConfigResolver, req.post.getPost)) {
+            setData(null);
+          }
         }
 
         setIsLoading(false);
