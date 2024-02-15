@@ -96,6 +96,8 @@ public class AuthRestController {
     // 필요한 인자가 없으면
     @ExceptionHandler({IllegalArgumentException.class, ConstraintViolationException.class})
     public ResponseEntity<?> handle400Exception(Exception e) {
+        log.info(e.getMessage());
+
         // 400 Bad Request
         return ResponseEntity.badRequest()
             .body(Response.builder()
