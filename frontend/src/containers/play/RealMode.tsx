@@ -121,6 +121,10 @@ const RealMode = ({
         console.log(stream);
       });
 
+    // 모바일 환경에서 canplaythrough 이벤트 캐치를 위해
+    audioRef.current?.load();
+    arAudioRef.current?.load();
+
     return () => {
       audioRef.current?.removeEventListener('timeupdate', handleSeconds);
       audioRef.current?.removeEventListener('ended', handleAudioEnd);
