@@ -38,10 +38,7 @@ const PlayMonitor = ({
       );
 
       // 음악이 끝나는 시간 계산
-      setFinishSeconds(
-        parsedPitches[parsedPitches.length - 1].startSeconds +
-          parsedPitches[parsedPitches.length - 1].duration,
-      );
+      setFinishSeconds(parsedPitches[parsedPitches.length - 1].endSeconds);
     }
   }, [parsedPitches]);
 
@@ -57,7 +54,8 @@ const PlayMonitor = ({
         >
           {parsedPitches.map((pitch) => {
             const left = pitch.startSeconds * widthPadding;
-            const width = pitch.duration * widthPadding;
+            const width =
+              (pitch.endSeconds - pitch.startSeconds) * widthPadding;
             const bottom = pitchesRef.current
               ? ((pitch.pitch - minVal) / (maxVal - minVal)) *
                 pitchesRef.current.clientHeight
@@ -76,7 +74,7 @@ const PlayMonitor = ({
             );
           })}
         </div>
-        <div className="relative h-[120px] border-r-2 border-skyblue bg-skyblue/50 w-20 ml-[-2.5rem]"></div>
+        <div className="relative h-[120px] border-r-2 border-skyblue bg-skyblue/50 w-[5rem] ml-[-2.5rem]"></div>
       </div>
     </>
   );
