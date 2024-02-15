@@ -30,3 +30,8 @@ export interface UpdateSongs {
   coverImg: string;
   practiceResultId: number;
 }
+
+export interface feedRequest {
+  postId: number;
+  pageSize: number;
+}

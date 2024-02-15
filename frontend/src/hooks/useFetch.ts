@@ -50,6 +50,9 @@ export const useFetch = <T>(
         } else {
           // Handle empty response body
           console.warn('Empty response body');
+          if (Object.is(requestConfigResolver, req.post.getPost)) {
+            setData(null);
+          }
         }
 
         setIsLoading(false);
@@ -88,14 +91,14 @@ export const useFetch = <T>(
           setData(result);
         } else {
           setIsLoading(false);
-          setError(error);
+          setError(await response.json());
           if (process.env.NODE_ENV === 'development') {
             alert('서버에서 데이터를 가져오지 못했습니다');
           }
         }
       } else {
         setIsLoading(false);
-        setError(error);
+        setError(await response.json());
         if (process.env.NODE_ENV === 'development') {
           alert('서버에서 데이터를 가져오지 못했습니다');
         }

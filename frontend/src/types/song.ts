@@ -47,12 +47,20 @@ export interface S3SongInfo {
 
 export interface RealModeResponse {
   practiceResultId: number;
+  createdDate: string;
 }
 
 export interface RealModeRequest {
   practiceResultId: number;
   artist: string;
   title: string;
+}
+
+export interface RealModeResult {
+  practiceResultId: number;
+  artist: string;
+  title: string;
+  createdDate: string;
 }
 
 export interface RealModeScore {
