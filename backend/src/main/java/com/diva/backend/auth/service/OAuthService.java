@@ -13,9 +13,11 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuthService {
@@ -62,6 +64,9 @@ public class OAuthService {
 
         // OutputStream으로 POST 데이터를 넘겨주겠다는 옵션.
         connection.setDoOutput(true);
+
+        log.info("kakaoClientId: " + kakaoClientId);
+        log.info("kakaoClientSecret: " + kakaoClientSecret);
 
         // POST 데이터를 넘겨주기 위한 OutputStream
         try (OutputStream os = connection.getOutputStream()) {
