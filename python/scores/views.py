@@ -140,6 +140,8 @@ def calculate_score(request):
         # score 객체를 json으로 변환한다.
         dumps = json.dumps(score.__dict__)
 
+        print(dumps)
+
         return Response(dumps, status=status.HTTP_200_OK)
 
     except Exception as e:
