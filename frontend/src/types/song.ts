@@ -41,7 +41,7 @@ export interface RecommendedSong {
 }
 
 export interface S3SongInfo {
-  artist?: string;
+  artist: string;
   songTitle: string;
 }
 
