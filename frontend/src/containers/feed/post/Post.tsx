@@ -210,7 +210,7 @@ const Post = ({
             {isLiked ? (
               <LikeIcon className="fill-red stroke-red" />
             ) : (
-              <LikeIcon className="stroke-gray" />
+              <></>
             )}
           </button>
           <div className="text-gray ">

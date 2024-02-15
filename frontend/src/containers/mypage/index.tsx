@@ -11,15 +11,18 @@ import MainLogo from '/public/svgs/logo.svg';
 import SettingIcon from '/public/svgs/setting.svg';
 import myPageAtom from '@/store/myPage';
 import Main from '@/components/Main';
+import { useEffect } from 'react';
 
 const MyPage = () => {
   const user = useAtomValue(userAtom);
-
   const myPage = 0b0;
   const settingPage = 0b1;
   const [isMyPage] = useAtom(myPageAtom);
   const setMyPageAtom = useSetAtom(myPageAtom);
-
+  useEffect(()=> {
+    setMyPageAtom(myPage)
+  },[])
+  
   const handleMyPageToSetting = () => {
     setMyPageAtom(settingPage);
   };
