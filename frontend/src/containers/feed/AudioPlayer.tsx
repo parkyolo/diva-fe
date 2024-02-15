@@ -16,15 +16,15 @@ const AudioPlayer = ({
 }: AudioPlayerProps) => {
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const mrAudioRef = useRef<HTMLAudioElement>(null);
-  const arAudioRef = useRef<HTMLAudioElement>(null);
+  const userARAudioRef = useRef<HTMLAudioElement>(null);
   const handleAudioPause = () => {
     mrAudioRef.current?.pause();
-    arAudioRef.current?.pause();
+    userARAudioRef.current?.pause();
     setIsPlaying(false);
   };
   const handleAudioPlay = () => {
     mrAudioRef.current?.play();
-    arAudioRef.current?.play();
+    userARAudioRef.current?.play();
     setIsPlaying(true);
   };
 
@@ -56,7 +56,6 @@ const AudioPlayer = ({
           <PlayIcon viewBox="0 0 50 50" />
         </button>
       )}
-      {/* TODO: S3에서 사용자 노래 받아오기 */}
       <audio
         src={mrUrl({
           artist,
@@ -66,7 +65,7 @@ const AudioPlayer = ({
       ></audio>
       <audio
         src={userArUrl(practiceResultId, { artist, songTitle })}
-        ref={arAudioRef}
+        ref={userARAudioRef}
       ></audio>
     </div>
   );

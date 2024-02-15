@@ -23,21 +23,20 @@ const SongContent = () => {
   useEffect(() => {
     getsangSongs();
   }, []);
-  console.log(sangSongs);
   // 날짜별로 그룹화 된 노래 (key: 날짜 - value: 부른 노래의 배열)
   const [groupedSongs, setGroupedSongs] = useState<Group>({});
   // 데이터 페칭 후 온 노래들을 날짜별로 정렬
-useEffect(() => {
-  if (!isLoading && Array.isArray(sangSongs)) {
-    const filteredAndSortedSongs = sangSongs
-      .filter((song) => song.createdDate) // Filtering out songs without createdDate
-      .sort((a, b) => b.createdDate.localeCompare(a.createdDate));
+  useEffect(() => {
+    if (!isLoading && Array.isArray(sangSongs)) {
+      const filteredAndSortedSongs = sangSongs
+        .filter((song) => song.createdDate) // Filtering out songs without createdDate
+        .sort((a, b) => b.createdDate.localeCompare(a.createdDate));
 
-    const groupedSongs = groupBy(filteredAndSortedSongs, 'createdDate');
-    setGroupedSongs(groupedSongs);
-  }
-}, [isLoading, sangSongs]);
-  
+      const groupedSongs = groupBy(filteredAndSortedSongs, 'createdDate');
+      setGroupedSongs(groupedSongs);
+    }
+  }, [isLoading, sangSongs]);
+
   return (
     <div>
       <div>
