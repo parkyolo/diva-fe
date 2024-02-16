@@ -13,7 +13,7 @@
 
 ## **🎵 목차**
 
-- [사용자](#**🎵-사용자**)
+- [사용자](#🎵-사용자)
 - [주요 기능](#🎵-주요-기능)
 - [서비스 화면](#🎵-서비스-화면)
 - [기술 소개](#🎵-기술-소개)
@@ -304,9 +304,9 @@ Settings → Annotation Processors 에서 `Enable Annotation Processing` 클릭
 - **FrontEnd**
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
 <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
-<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=로고.js&logoColor=white">
+<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
 <img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white">
-<img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs.js&logoColor=white">
+<img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
 <img src="https://img.shields.io/badge/Jotai-000000?style=for-the-badge&logo=Jotai.js&logoColor=white">
 
 - **Data**
@@ -323,7 +323,7 @@ Settings → Annotation Processors 에서 `Enable Annotation Processing` 클릭
 
 - **협업 툴**
 <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white">
-<img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white">
+<img src="https://img.shields.io/badge/jirasoftware-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white">
 <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white">
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
