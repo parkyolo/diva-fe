@@ -2,15 +2,143 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('./reset.css');
-
-:root {
+@font-face {
+  font-family: 'SpoqaHanSansNeo';
+  font-weight: 400;
+  src:
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Regular.woff2')
+      format('woff2'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Regular.woff')
+      format('woff'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Regular.ttf')
+      format('truetype');
+}
+@font-face {
+  font-family: 'SpoqaHanSansNeo';
+  font-weight: 500;
+  src:
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Medium.woff2')
+      format('woff2'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Medium.woff')
+      format('woff'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Medium.ttf')
+      format('truetype');
+}
+@font-face {
+  font-family: 'SpoqaHanSansNeo';
+  font-weight: 700;
+  src:
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Bold.woff2')
+      format('woff2'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Bold.woff')
+      format('woff'),
+    url('../../public/fonts/SpoqaHanSansNeo_TTF_subset/SpoqaHanSansNeo-Bold.ttf')
+      format('truetype');
+}
+@font-face {
+  font-family: 'SDSamliphopangche';
+  src: url('../../public/fonts/SDSamliphopangcheTTF/SDSamliphopangcheTTFBasic.ttf');
 }
 
-@media (prefers-color-scheme: dark) {
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  max-width: 375px;
-  margin: 0 auto;
+  background-color: #1f2021;
+  height: 100dvh;
+  width: 100vw;
+  color: #f3f3f3;
+  font-size: 20px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+:root {
+  font-size: 16px;
+}
+
+@media screen and (max-width: 380px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-height: 700px) {
+  :root {
+    font-size: 14px;
+  }
+}
+
+@media screen and (min-height: 1024px) {
+  :root {
+    font-size: 20px;
+  }
+}
+
+/* text-base w-full px-7 py-10 overflow-y-scroll basis-full */
+main {
+  font-size: 1rem;
+  width: 100%;
+  padding: 2.5rem 1.75rem;
+  overflow-y: scroll;
+  flex-basis: 100%;
+}
+
+.font-featuring {
+  font-feature-settings:
+    'clig' off,
+    'liga' off;
+}
+
+.carousel-container {
+  perspective: 450px;
+  transform-style: preserve-3d;
+}
+
+.text-overflow {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.text-overflow-one {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-break: break-all;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+/* Chrome, Whale, Edge */
+
+/* 스크롤바 전체 기본 꾸미기 */
+main::-webkit-scrollbar,
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 20px;
+}
+
+/* 스크롤바 막대 꾸미기 */
+main::-webkit-scrollbar-thumb,
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #595656; /* 스크롤바 막대 색상 */
+  border-radius: 12px;
+}
+
+/* 스크롤바 트랙 꾸미기 */
+main::-webkit-scrollbar-track,
+.scrollbar::-webkit-scrollbar-track {
+  background-color: '#111318';
+}
+
+/* 드래그 하는 동안 클릭 이벤트 방지 용도 */
+.dragging {
+  pointer-events: none;
 }
