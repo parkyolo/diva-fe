@@ -89,7 +89,8 @@ const RealMode = ({
       mediaRecorder.start();
       audioRef.current?.play();
       if (audioRef.current) {
-        arAudioRef.current!.volume = 0.01;
+        // arAudioRef.current!.volume = 0.01;
+        arAudioRef.current!.muted = true;
         arAudioRef.current?.play();
       }
       audioRef.current?.addEventListener('timeupdate', handleSeconds);
