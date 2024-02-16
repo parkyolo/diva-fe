@@ -7,7 +7,7 @@ export const parsePitchDuration = (
   gap: number,
 ) => {
   let parsedPitches: PitchInterface[] = [];
-  const delay = 1;
+  const delay = 0.5;
 
   for (let i = 10; i < pitchArray.length - 1; i++) {
     const line = pitchArray[i].trim().split(' ');

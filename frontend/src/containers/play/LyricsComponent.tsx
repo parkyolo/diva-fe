@@ -1,36 +1,46 @@
 import { LyricsInterface } from '@/types/lyrics';
 import { useEffect, useRef, useState } from 'react';
 
-const cntLyricsToShow = 11;
-
 const LyricsComponent = ({
   currentSeconds,
   parsedLyrics,
+  isTutorial,
+  audio,
+  arAudio,
 }: {
   currentSeconds: number;
   parsedLyrics: LyricsInterface[];
+  isTutorial: boolean;
+  audio: HTMLAudioElement;
+  arAudio: HTMLAudioElement;
 }) => {
   const LyricsRef = useRef<HTMLDivElement>(null);
-  const [startIndex, setStartIndex] = useState<number>(0);
+  const currentLyricsRef = useRef<HTMLDivElement>(null);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-  const [endIndex, setEndIndex] = useState<number>(cntLyricsToShow);
+
+  useEffect(() => {
+    if (LyricsRef.current && currentLyricsRef.current) {
+      LyricsRef.current.scrollTo({
+        top:
+          currentLyricsRef.current.offsetTop - LyricsRef.current.clientHeight,
+      });
+    }
+  }, [currentIndex]);
+
+  // 튜토리얼 모드에서 가사 클릭 시 해당 위치로 음악 이동
+  const handleCurrentLyrics = (index: number) => {
+    audio.currentTime = parsedLyrics[index].startSeconds;
+    arAudio.currentTime = parsedLyrics[index].startSeconds;
+    setCurrentIndex(index);
+  };
 
   useEffect(() => {
     if (!!parsedLyrics && currentSeconds) {
-      if (currentIndex < cntLyricsToShow / 2) {
-        if (parsedLyrics[currentIndex + 1].startSeconds <= currentSeconds) {
-          setCurrentIndex(currentIndex + 1);
-        }
-      } else if (endIndex < parsedLyrics.length) {
-        if (parsedLyrics[currentIndex + 1].startSeconds <= currentSeconds) {
-          setStartIndex(startIndex + 1);
-          setCurrentIndex(currentIndex + 1);
-          setEndIndex(endIndex + 1);
-        }
-      } else if (currentIndex + 1 < parsedLyrics.length) {
-        if (parsedLyrics[currentIndex + 1].startSeconds <= currentSeconds) {
-          setCurrentIndex(currentIndex + 1);
-        }
+      if (
+        currentIndex + 1 < parsedLyrics.length &&
+        parsedLyrics[currentIndex + 1].startSeconds <= currentSeconds
+      ) {
+        setCurrentIndex(currentIndex + 1);
       }
     }
   }, [currentSeconds]);
@@ -39,20 +49,26 @@ const LyricsComponent = ({
     <>
       <div
         ref={LyricsRef}
-        className="flex flex-col flex-wrap justify-center items-center w-full grow gap-3"
+        className="flex flex-col justify-center items-center grow w-full overflow-scroll scrollbar"
       >
-        {parsedLyrics.map((lyrics, index) => {
-          if (index >= startIndex && index < endIndex) {
+        <div className="h-full flex flex-col items-center gap-3">
+          {parsedLyrics.map((lyrics, index) => {
             return (
               <div
                 key={index}
-                className={index === currentIndex ? 'text-xl' : 'text-gray'}
+                className={
+                  index === currentIndex ? 'text-2xl' : 'text-gray text-xl'
+                }
+                onClick={
+                  isTutorial ? () => handleCurrentLyrics(index) : () => {}
+                }
+                ref={index === currentIndex ? currentLyricsRef : null}
               >
                 {lyrics.lyrics}
               </div>
             );
-          }
-        })}
+          })}
+        </div>
       </div>
     </>
   );
