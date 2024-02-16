@@ -25,7 +25,6 @@ const RealMode = ({
   song: S3SongInfo;
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const arAudioRef = useRef<HTMLAudioElement>(null);
   const bpm = useRef<number>(0);
   const gap = useRef<number>(0);
   const musicUrl = useRef<string>(mrUrl(song));
@@ -37,7 +36,6 @@ const RealMode = ({
   let audioArray: BlobPart[] = [];
 
   const [isMrLoaded, setIsMrLoaded] = useState<boolean>(false);
-  const [isArLoaded, setIsArLoaded] = useState<boolean>(false);
 
   const [isLoading, response, error, postRecorder] = useFetch<RealModeResponse>(
     req.sing.saveLiveResult,
@@ -71,7 +69,7 @@ const RealMode = ({
   }, [response]);
 
   useEffect(() => {
-    if (mediaRecorder && isArLoaded && isMrLoaded) {
+    if (mediaRecorder && isMrLoaded) {
       mediaRecorder.ondataavailable = (e) => {
         audioArray.push(e.data);
       };
@@ -88,14 +86,10 @@ const RealMode = ({
 
       mediaRecorder.start();
       audioRef.current?.play();
-      if (audioRef.current) {
-        arAudioRef.current!.volume = 0.01;
-        arAudioRef.current?.play();
-      }
       audioRef.current?.addEventListener('timeupdate', handleSeconds);
       audioRef.current?.addEventListener('ended', handleAudioEnd);
     }
-  }, [mediaRecorder, isArLoaded, isMrLoaded]);
+  }, [mediaRecorder, isMrLoaded]);
 
   useEffect(() => {
     getMusicInfo(infoUrl(song))
@@ -120,7 +114,6 @@ const RealMode = ({
 
     // 모바일 환경에서 canplaythrough 이벤트 캐치를 위해
     audioRef.current?.load();
-    arAudioRef.current?.load();
 
     return () => {
       audioRef.current?.removeEventListener('timeupdate', handleSeconds);
@@ -130,7 +123,7 @@ const RealMode = ({
 
   return (
     <main className="flex flex-col">
-      {audioRef.current && arAudioRef.current ? (
+      {audioRef.current ? (
         <>
           <PlayMonitor
             currentSeconds={currentSeconds}
@@ -141,20 +134,11 @@ const RealMode = ({
             parsedLyrics={parsedLyrics}
             isTutorial={false}
             audio={audioRef.current}
-            arAudio={arAudioRef.current}
           />
-          <ARGuide arAudioRef={arAudioRef} />
         </>
       ) : (
         <></>
       )}
-      <audio
-        ref={arAudioRef}
-        src={arUrl({ artist: song.artist, songTitle: song.songTitle })}
-        onCanPlayThrough={() => {
-          setIsArLoaded(true);
-        }}
-      ></audio>
       <audio
         ref={audioRef}
         onCanPlayThrough={() => {

@@ -19,7 +19,6 @@ const TutorialMode = ({
   song: S3SongInfo;
 }) => {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const arAudioRef = useRef<HTMLAudioElement>(null);
   const bpm = useRef<number>(0);
   const gap = useRef<number>(0);
   const musicUrl = useRef<string>(mrUrl(song));
@@ -28,7 +27,6 @@ const TutorialMode = ({
   const [currentSeconds, setCurrentSeconds] = useState<number>(0);
 
   const [isMrLoaded, setIsMrLoaded] = useState<boolean>(false);
-  const [isArLoaded, setIsArLoaded] = useState<boolean>(false);
 
   const handleSeconds = () => {
     if (audioRef.current) setCurrentSeconds(audioRef.current.currentTime);
@@ -51,7 +49,6 @@ const TutorialMode = ({
 
     // 모바일 환경에서 canplaythrough 이벤트 캐치를 위해
     audioRef.current?.load();
-    arAudioRef.current?.load();
 
     return () => {
       audioRef.current?.removeEventListener('timeupdate', handleSeconds);
@@ -60,20 +57,16 @@ const TutorialMode = ({
   }, []);
 
   useEffect(() => {
-    if (isArLoaded && isMrLoaded) {
+    if (isMrLoaded) {
       audioRef.current?.play();
-      if (audioRef.current) {
-        arAudioRef.current!.volume = 0.01;
-        arAudioRef.current?.play();
-      }
       audioRef.current?.addEventListener('timeupdate', handleSeconds);
       audioRef.current?.addEventListener('ended', handleAudioEnd);
     }
-  }, [isArLoaded, isMrLoaded]);
+  }, [isMrLoaded]);
 
   return (
     <main className="flex flex-col">
-      {audioRef.current && arAudioRef.current ? (
+      {audioRef.current ? (
         <>
           <PlayMonitor
             currentSeconds={currentSeconds}
@@ -84,21 +77,12 @@ const TutorialMode = ({
             parsedLyrics={parsedLyrics}
             isTutorial={true}
             audio={audioRef.current}
-            arAudio={arAudioRef.current}
           />
-          <ARGuide arAudioRef={arAudioRef} />
         </>
       ) : (
         <></>
       )}
 
-      <audio
-        ref={arAudioRef}
-        src={arUrl({ artist: song.artist, songTitle: song.songTitle })}
-        onCanPlayThrough={() => {
-          setIsArLoaded(true);
-        }}
-      ></audio>
       <audio
         ref={audioRef}
         onCanPlayThrough={() => {
