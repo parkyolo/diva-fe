@@ -5,9 +5,6 @@ buildscript {
     }
     ext {
         set('springCloudVersion', "2021.0.0")
-
-        // queryDsl
-        queryDslVersion = "5.0.0"
     }
 }
 
@@ -17,7 +14,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.1.4'
 }
 
-group = 'com.checkitout'
+group = 'com.diva'
 version = '0.0.1-SNAPSHOT'
 
 java {
@@ -67,8 +64,14 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 
+    // SpringBoot Test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+
+    // AWS SDK 추가
+//    implementation platform('com.amazonaws:aws-java-sdk-bom:1.12.529')
+//    implementation 'com.amazonaws:aws-java-sdk-s3'
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE'
 }
 
 tasks.named('test') {
@@ -82,21 +85,19 @@ dependencyManagement {
 }
 
 // querydsl 추가 시작
-apply plugin: "com.ewerk.gradle.plugins.querydsl"
+//apply plugin: "com.ewerk.gradle.plugins.querydsl"
 def querydslDir = "$buildDir/generated/querydsl"
-querydsl {
-    library = "com.querydsl:querydsl-apt:${queryDslVersion}"
-    jpa = true
-    querydslSourcesDir = querydslDir
-}
-sourceSets {
-    main.java.srcDir querydslDir
-}
+
 configurations {
     querydsl.extendsFrom compileClasspath
 }
-compileQuerydsl {
-    options.annotationProcessorPath = configurations.querydsl
+
+tasks.withType(JavaCompile) {
+    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+}
+
+clean.doLast {
+    file(querydslDir).deleteDir()
 }
 // querydsl 추가 끝
 

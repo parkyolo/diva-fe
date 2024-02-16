@@ -1,0 +1,30 @@
+server:
+    port: ${SERVER.PORT}
+
+spring:
+    config:
+        import: 'aws-parameterstore:'
+        activate:
+            on-profile: dev
+
+    datasource:
+        url: jdbc:mysql://${MY_SQL.HOST}:${MY_SQL.PORT}/${MY_SQL.DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
+        username: ${DB.USERNAME}
+        password: ${DB.PASSWORD}
+
+    jpa:
+        hibernate:
+            ddl-auto: ${JPA.DDL_AUTO}
+
+# JWT
+jwt:
+    token:
+        access:
+            expiration: 86_400_000 # 1일
+
+# cors
+allowed-origin: ${DOMAIN}
+# cors
+
+# domain
+domain: ${DOMAIN}
