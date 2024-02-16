@@ -1,4 +1,4 @@
-![Architecture](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/Architecture.png)
+![Architecture](/img/Architecture.png)
 # 1. Stack
 
 ## Frontend
@@ -29,7 +29,7 @@
 
 1. ERD
 2. Dump
-   [Dump20240215.sql](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/sql/Dump20240215.sql)
+   [Dump20240215.sql](/sql/Dump20240215.sql)
 
 
 # 4. 로컬 환경 세팅
@@ -72,25 +72,7 @@ S10P11A607/frontend로 이동
 
 1. [Oracle Java SE 17](https://download.oracle.com/java/17/archive/jdk-17.0.9_windows-x64_bin.exe) 설치
 2. [MySQL](https://downloads.mysql.com/archives/get/p/25/file/mysql-installer-community-8.0.34.0.msi) 설치
-    - 설치 단계
-
-      ![[Full] 선택 시  Workbench까지 다운 받아짐](https://prod-files-secure.s3.us-west-2.amazonaws.com/7c627ca3-6c47-48ff-b3f2-5d897f6a09ae/bb9cc4fe-d867-40b1-987a-fb4c67bf558f/Untitled.png)
-
-      [Full] 선택 시  Workbench까지 다운 받아짐
-
-      ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7c627ca3-6c47-48ff-b3f2-5d897f6a09ae/29d48ab1-6f39-4011-b22c-a215b49eaf95/Untitled.png)
-
-      ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7c627ca3-6c47-48ff-b3f2-5d897f6a09ae/d7539776-e198-4dbf-8641-2a55743465d0/Untitled.png)
-
-      ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7c627ca3-6c47-48ff-b3f2-5d897f6a09ae/5e0d585a-9959-4a29-ba02-c2437ece6d78/Untitled.png)
-
-      ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7c627ca3-6c47-48ff-b3f2-5d897f6a09ae/60baa629-900c-4ad7-9b62-0b165e2bfcb4/Untitled.png)
-
 3. [IntelliJ](https://www.jetbrains.com/ko-kr/idea/download/?section=windows) 설치(community 버전도 가능)
-    - 설치 단계
-
-      ![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7c627ca3-6c47-48ff-b3f2-5d897f6a09ae/5639d318-b78b-4ef7-a19f-8fcdcf50cf9c/Untitled.png)
-
 4. AWS Parameter Store
     - `C:\Users\${USER}\.aws`에 이 파일들을 넣어주세요.
     - 이 파일은 보안 이슈로 따로 요청해주세요.
@@ -100,32 +82,32 @@ S10P11A607/frontend로 이동
 
 1. Enable Annotation Processing
 
-![1](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/1.png)
+![1](/img/1.png)
 
 1. Edit
 
-![2](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/2.png)
+![2](/img/2.png)
 
 1. Modify Options
 
-![3](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/3.png)
+![3](/img/3.png)
 
 1. Add VM Options
 
-![4](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/4.png)
+![4](/img/4.png)
 
 ```java
 -Dspring.profiles.active=local
 ```
 
-![5](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/5.png)
+![5](/img/5.png)
 
 1. 실행
 2. ***Could not find class file*** 에러 시 참고해보세요
 
 https://lahezy.tistory.com/94
 
-![위 링크에 추가로 참고해주세요 링크 먼저 보셈!](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/6.png)
+![위 링크에 추가로 참고해주세요 링크 먼저 보셈!](/img/6.png)
 
 위 링크에 추가로 참고해x주세요 링크 먼저 보셈!
 
@@ -151,27 +133,27 @@ new item을 눌러 **DivaBackendDevCloneAndBuild**라는 이름으로 pipeline �
 
 configuration
 
-![7](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/7.png)
+![7](/img/7.png)
 
 advanced를 눌러 generate secret token
 
-![8](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/8.png)
+![8](/img/8.png)
 
 gitlab에서
 
-![9](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/9.png)
+![9](/img/9.png)
 
 add new webhook
 
-![10](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/10.png)
+![10](/img/10.png)
 
 url과 secret token을 채우고 trigger 옵션에 push events를 활성화 / develop branch 설정
 
-![11](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/11.png)
+![11](/img/11.png)
 
 pipeline에 아래 코드 복붙하고 save
 
-![12](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/12.png)
+![12](/img/12.png)
 
 ```bash
 pipeline {
@@ -213,7 +195,7 @@ configuration
 
 build trigger 설정
 
-![13](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/13.png)
+![13](/img/13.png)
 
 pipeline에 아래 코드 복붙하고 save
 
@@ -281,7 +263,7 @@ configuration
 
 build trigger 설정
 
-![14](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/14.png)
+![14](/img/14.png)
 
 pipeline에 아래 코드 복붙하고 save
 
@@ -355,7 +337,7 @@ configuration
 
 build trigger 설정
 
-![15](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/15.png)
+![15](/img/15.png)
 
 pipeline에 아래 코드 복붙하고 save
 
@@ -442,7 +424,7 @@ configuration
 
 build trigger 설정
 
-![16](https://lab.ssafy.com/s10-webmobile2-sub2/S10P12A607/-/blob/develop/exec/img/16.png)
+![16](/img/16.png)
 
 pipeline에 아래 코드 복붙하고 save
 
