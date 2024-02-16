@@ -62,7 +62,7 @@ const TutorialMode = ({
   useEffect(() => {
     if (isArLoaded && isMrLoaded) {
       audioRef.current?.play();
-      if (arAudioRef.current) {
+      if (audioRef.current) {
         arAudioRef.current!.volume = 0.01;
         arAudioRef.current?.play();
       }
