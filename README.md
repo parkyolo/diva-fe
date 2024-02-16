@@ -337,7 +337,7 @@ Settings → Annotation Processors 에서 `Enable Annotation Processing` 클릭
       <img src="/img/기현.jpg" alt="류기현" />
     </td>
     <td align="center">
-      <img src="/img/지영.jpg" alt="박지영" />
+      <img src="/img/지영.png" alt="박지영" />
     </td>
     <td align="center">
       <img src="/img/근학.jpg" alt="이근학" />
@@ -365,7 +365,7 @@ Settings → Annotation Processors 에서 `Enable Annotation Processing` 클릭
       <img src="/img/수지.jpg" alt="이수지" />
     </td>
     <td align="center">
-      <img src="/img/이초.jpg" alt="최이초" />
+      <img src="/img/이초.png" alt="최이초" />
     </td>
   </tr>
   <tr>
