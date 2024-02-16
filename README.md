@@ -295,8 +295,8 @@ Settings → Annotation Processors 에서 `Enable Annotation Processing` 클릭
 <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
 <img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
-<img src="https://img.shields.io/badge/jpa-6DB33F?style=for-the-badge&logo=jpa&logoColor=white">
-<img src="https://img.shields.io/badge/QueryDSL-6DB33F?style=for-the-badge&logo=QueryDSL&logoColor=white">
+<img src="https://img.shields.io/badge/jpa-000000?style=for-the-badge&logo=jpa&logoColor=white">
+<img src="https://img.shields.io/badge/QueryDSL-000000?style=for-the-badge&logo=QueryDSL&logoColor=white">
 <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white">
 <img src="https://img.shields.io/badge/django-092E20?style=for-the-badge&logo=django&logoColor=white">
 <img src="https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white">
@@ -312,8 +312,8 @@ Settings → Annotation Processors 에서 `Enable Annotation Processing` 클릭
 - **Data**
 <img src="https://img.shields.io/badge/tensorflow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white">
 <img src="https://img.shields.io/badge/pytorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white">
-<img src="https://img.shields.io/badge/librosa-61DAFB?style=for-the-badge&logo=librosa&logoColor=black">
-<img src="https://img.shields.io/badge/WhisperX by OpenAI-61DAFB?style=for-the-badge&logo=WhisperX by OpenAI&logoColor=black">
+<img src="https://img.shields.io/badge/librosa-000000?style=for-the-badge&logo=librosa&logoColor=black">
+<img src="https://img.shields.io/badge/WhisperX by OpenAI-000000?style=for-the-badge&logo=WhisperX by OpenAI&logoColor=black">
 
 - **CI/CD**
 <img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">
