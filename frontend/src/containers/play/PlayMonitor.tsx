@@ -9,6 +9,7 @@ const PlayMonitor = ({
   parsedPitches: PitchInterface[];
 }) => {
   const pitchesRef = useRef<HTMLDivElement>(null);
+  const pivot = 100;
 
   const [widthPadding, setPadding] = useState<number>(0);
   const [minVal, setMinVal] = useState<number>(0);
@@ -17,7 +18,7 @@ const PlayMonitor = ({
 
   useEffect(() => {
     if (finishSeconds) {
-      setPadding(4000 / finishSeconds);
+      setPadding(8000 / finishSeconds);
     }
   }, [finishSeconds]);
 
@@ -44,37 +45,44 @@ const PlayMonitor = ({
 
   return (
     <>
-      <div className="w-full h-[120px] mb-3">
+      <div className="mb-3">
         <div
-          ref={pitchesRef}
-          className="w-full h-[100px] fixed"
+          className="flex absolute h-2"
           style={{
-            animation: `pitchbar ${finishSeconds}s`,
+            width: `${pitchesRef ? pitchesRef.current?.scrollWidth : 0}px`,
+            left: `${-currentSeconds * widthPadding + pivot}px`,
           }}
         >
-          {parsedPitches.map((pitch) => {
-            const left = pitch.startSeconds * widthPadding;
-            const width =
-              (pitch.endSeconds - pitch.startSeconds) * widthPadding;
-            const bottom = pitchesRef.current
-              ? ((pitch.pitch - minVal) / (maxVal - minVal)) *
-                pitchesRef.current.clientHeight
-              : 0;
+          <div ref={pitchesRef} className="flex flex-nowrap relative h-28">
+            {parsedPitches.map((pitch) => {
+              const left = pitch.startSeconds * widthPadding;
+              const width =
+                (pitch.endSeconds - pitch.startSeconds) * widthPadding;
+              const bottom = pitchesRef.current
+                ? ((pitch.pitch - minVal) / (maxVal - minVal)) *
+                  pitchesRef.current.clientHeight
+                : 0;
 
-            return (
-              <div
-                key={pitch.startSeconds}
-                className={`absolute h-1 bg-white`}
-                style={{
-                  width: `${width}px`,
-                  left: `${left}px`,
-                  bottom: `${bottom}px`,
-                }}
-              ></div>
-            );
-          })}
+              return (
+                <div
+                  key={pitch.startSeconds}
+                  className={`absolute h-1 bg-white`}
+                  style={{
+                    width: `${width}px`,
+                    left: `${left}px`,
+                    bottom: `${bottom}px`,
+                  }}
+                ></div>
+              );
+            })}
+          </div>
         </div>
-        <div className="relative h-[120px] border-r-2 border-skyblue bg-skyblue/50 w-[5rem] ml-[-2.5rem]"></div>
+        <div
+          className="relative h-28 border-r-2 border-skyblue bg-skyblue/50 ml-[-2.5rem]"
+          style={{
+            width: `${pivot}px`,
+          }}
+        ></div>
       </div>
     </>
   );
