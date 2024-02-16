@@ -38,7 +38,6 @@ const RealMode = ({
 
   const [isMrLoaded, setIsMrLoaded] = useState<boolean>(false);
   const [isArLoaded, setIsArLoaded] = useState<boolean>(false);
-  const arButtonRef = useRef<HTMLButtonElement>(null);
 
   const [isLoading, response, error, postRecorder] = useFetch<RealModeResponse>(
     req.sing.saveLiveResult,
@@ -117,32 +116,6 @@ const RealMode = ({
       .then((stream) => {
         // mediaStream으로 들어오는 오디오 데이터를 mediaRecorder로 저장
         setMediaRecorder(new MediaRecorder(stream));
-
-        // Create a MediaStreamAudioSourceNode
-        // Feed the HTMLMediaElement into it
-        const audioCtx = new AudioContext();
-        const source = audioCtx.createMediaElementSource(arAudioRef.current!);
-
-        // Create a biquadfilter
-        const biquadFilter = audioCtx.createBiquadFilter();
-        biquadFilter.type = 'lowshelf';
-        biquadFilter.frequency.value = 1000;
-        biquadFilter.gain.value = 0.01;
-        // connect the AudioBufferSourceNode to the gainNode
-        // and the gainNode to the destination, so we can play the
-        // music and adjust the volume using the mouse cursor
-        source.connect(biquadFilter);
-        biquadFilter.connect(audioCtx.destination);
-
-        arButtonRef.current?.addEventListener('click', () => {
-          if (biquadFilter.gain.value > 0.1) {
-            biquadFilter.gain.value = 0.01;
-            console.log('high');
-          } else {
-            biquadFilter.gain.value = 0.3;
-            console.log('low');
-          }
-        });
       });
 
     // 모바일 환경에서 canplaythrough 이벤트 캐치를 위해
@@ -165,17 +138,7 @@ const RealMode = ({
         currentSeconds={currentSeconds}
         parsedLyrics={parsedLyrics}
       />
-      {/* <ARGuide arAudioRef={arAudioRef} /> */}
-      <button
-        className="font-samlip text-xl outline-none border shadow-[3px_-3px_10px_1px_rgba(255,255,255,0.3)] rounded-xl w-10/12 py-2 mx-auto"
-        ref={arButtonRef}
-      >
-        {arAudioRef.current && !arAudioRef.current.muted ? (
-          <span>노래 가이드 끄기</span>
-        ) : (
-          <span>노래 가이드 켜기</span>
-        )}
-      </button>
+      <ARGuide arAudioRef={arAudioRef} />
 
       <audio
         ref={arAudioRef}
@@ -183,7 +146,6 @@ const RealMode = ({
         onCanPlayThrough={() => {
           setIsArLoaded(true);
         }}
-        crossOrigin="anonymous"
       ></audio>
       <audio
         ref={audioRef}
