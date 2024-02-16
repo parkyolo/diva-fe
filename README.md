@@ -176,8 +176,7 @@
     - QueryDSL: 5.0.0
 - **FrontEnd**
  <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
- <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"/>
- <img src="https://img.shields.io/badge/nodedotjs-#339933?style=flat&logo=nodedotjs&logoColor=white"/>
+ <img src="https://img.shields.io/badge/nodedotjs-339933?style=flat&logo=nodedotjs&logoColor=white"/>
  <img src="https://img.shields.io/badge/typescript-#3178C6?style=flat&logo=typescript&logoColor=white"/>
  <img src="https://img.shields.io/badge/pnpm-#F69220?style=flat&logo=pnpm&logoColor=black"/>
  <img src="https://img.shields.io/badge/nextdotjs-#000000?style=flat&logo=nextdotjs&logoColor=white"/>
