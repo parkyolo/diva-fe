@@ -175,10 +175,10 @@
     - QueryDSL: 5.0.0
 - **FrontEnd**
  <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
- <img src="https://img.shields.io/badge/nodedotjs-339933?style=for-the-badge&logo=nodedotjs&logoColor=white"/>
- <img src="https://img.shields.io/badge/typescript-#3178C6?style=flat&logo=typescript&logoColor=white">
- <img src="https://img.shields.io/badge/pnpm-F69220?style=flat&logo=pnpm&logoColor=black"/>
- <img src="https://img.shields.io/badge/nextdotjs-#000000?style=flat&logo=nextdotjs&logoColor=white"/>
+ <img src="https://img.shields.io/badge/nodedotjs-339933?style=for-the-badge&logo=nodedotjs&logoColor=white">
+ <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
+ <img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=black"/>
+ <img src="https://img.shields.io/badge/nextdotjs-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"/>
     - Jotai: 2.6.1
 - **Data**
  <img src="https://img.shields.io/badge/tensorflow-#FF6F00?style=flat&logo=tensorflow&logoColor=white"/>
