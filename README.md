@@ -19,7 +19,6 @@
 - [기술 소개](#🎶-기술-소개)
 - [개발 환경](#🎶-개발-환경)
 - [기술 스택](#🎶-기술-스택)
-- [프로젝트 산출물](#🎶-프로젝트-산출물)
 - [팀원 소개](#🎶-팀원-소개)
 
 
@@ -53,11 +52,164 @@
 > 사용자는 자신이 실전 모드에서 부른 노래의 결과를 게시글 형태로 피드에 공유할 수 있습니다. 이를 통해 다른 사용자들과 음악 경험을 공유하고, 소통할 수 있는 기회를 제공합니다. 
 
 
-## **🎶 서비스 화면 (시연 영상) +** 사용 방법
+## **🎶 서비스 화면**
 
+<table>
+  <tr>
+    <td align="center">
+      <img src="/img/1.png" alt="홈 화면" />
+    </td>
+    <td align="center">
+      <img src="/img/2.png" alt="테스트 시작 전 화면" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>홈 화면</b><br>
+      <b>(카카오 로그인 클릭 후 로그인 진행)</b>
+    </td>
+    <td align="center">
+      <b>테스트 시작 전 화면</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/img/3.png" alt="테스트 화면" />
+    </td>
+    <td align="center">
+      <img src="/img/4.png" alt="테스트 화면" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>테스트 화면</b>
+    </td>
+    <td align="center">
+      <b>테스트 화면</b><br>
+      <b>(음성이 제대로 인식되지 않는 경우)</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/img/5.png" alt="테스트 결과 화면" />
+    </td>
+    <td align="center">
+      <img src="/img/6.png" alt="결과 자세히 보기 창" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>테스트 결과 화면</b><br>
+      <b>(결과 자세히 보기 클릭)</b>
+    </td>
+    <td align="center">
+      <b>결과 자세히 보기 창</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/img/7.png" alt="테스트 결과 화면" />
+    </td>
+    <td align="center">
+      <img src="/img/8.png" alt="추천 노래 목록 화면" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>테스트 결과 화면</b><br>
+      <b>(추천 노래 살펴보기 클릭)</b>
+    </td>
+    <td align="center">
+      <b>추천 노래 목록 화면</b><br>
+      <b>(원하는 노래의 앨범 커버 이미지 클릭)</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/img/9.png" alt="모드 선택 화면 " />
+    </td>
+    <td align="center">
+      <img src="/img/10.png" alt="튜토리얼 모드 화면" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>모드 선택 화면 </b><br>
+      <b>(튜토리얼 모드 클릭)</b>
+    </td>
+    <td align="center">
+      <b>튜토리얼 모드 화면</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/img/11.png" alt="모드 선택 화면" />
+    </td>
+    <td align="center">
+      <img src="/img/12.png" alt="실전 모드 화면" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>모드 선택 화면</b><br>
+      <b>(실전 모드 클릭)</b>
+    </td>
+    <td align="center">
+      <b>실전 모드 화면</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/img/13.png" alt="결과 대기 화면" />
+    </td>
+    <td align="center">
+      <img src="/img/14.png" alt="실전 모드 결과 화면" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>결과 대기 화면</b>
+    </td>
+    <td align="center">
+      <b>실전 모드 결과 화면</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/img/15.png" alt="포스트 작성 화면" />
+    </td>
+    <td align="center">
+      <img src="/img/16.png" alt="피드 화면" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>포스트 작성 화면</b>
+    </td>
+    <td align="center">
+      <b>피드 화면</b>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="/img/17.png" alt="마이페이지 화면" />
+    </td>
+    <td align="center">
+      <img src="/img/18.png" alt="마이페이지 화면" />
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <b>마이페이지 화면</b><br>
+      <b>(부른 노래 탭 클릭 시)</b>
+    </td>
+    <td align="center">
+      <b>마이페이지 화면</b><br>
+      <b>(공유한 노래 탭 클릭 시)</b>
+    </td>
+  </tr>
+</table>
 
-
-스크린 샷을 통해 사용 방법을 자세히 설명합니다.
 
 ## **🎶 기술 소개**
 
@@ -176,39 +328,19 @@ Settings → Annotation Processors 에서 `Enable Annotation Processing` 클릭
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
 
-## **🎶 프로젝트 산출물**
-
-기능 명세서
-
-FIgma
-
-API 설계
-
-DB 명세서
-
-<img src="/DIVA_ERD.png">
-
-발표 자료
-
 
 ## **🎶** 팀원 소개
 
 <table>
   <tr>
     <td align="center">
-      <a href="https://github.com/meenyweeny">
-        <img src="https://github.com/meenyweeny.png" alt="류기현" />
-      </a>
+      <img src="/img/기현.jpg" alt="류기현" />
     </td>
     <td align="center">
-      <a href="https://github.com/yichoya">
-        <img src="https://github.com/yichoya.png" alt="박지영" />
-      </a>
+      <img src="/img/지영.jpg" alt="박지영" />
     </td>
     <td align="center">
-      <a href="https://github.com/meenyweeny">
-        <img src="https://github.com/meenyweeny.png" alt="이근학" />
-      </a>
+      <img src="/img/근학.jpg" alt="이근학" />
     </td>
   </tr>
   <tr>
@@ -227,19 +359,13 @@ DB 명세서
   </tr>
   <tr>
     <td align="center">
-      <a href="https://github.com/meenyweeny">
-        <img src="https://github.com/meenyweeny.png" alt="차명훈" />
-      </a>
+      <img src="/img/명훈.jpg" alt="차명훈" />
     </td>
     <td align="center">
-      <a href="https://github.com/yichoya">
-        <img src="https://github.com/yichoya.png" alt="이수지" />
-      </a>
+      <img src="/img/수지.jpg" alt="이수지" />
     </td>
     <td align="center">
-      <a href="https://github.com/meenyweeny">
-        <img src="https://github.com/meenyweeny.png" alt="최이초" />
-      </a>
+      <img src="/img/이초.jpg" alt="최이초" />
     </td>
   </tr>
   <tr>
