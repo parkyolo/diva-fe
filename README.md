@@ -13,6 +13,7 @@
 
 **더욱 나은 가창력**을 발휘할 수 있도록 돕는 서비스입니다.
 
+
 ## **🎶** 목차
 
 ---
@@ -26,6 +27,7 @@
 - [프로젝트 산출물](#프로젝트 산출물)
 - [팀원 소개](#팀원 소개)
 
+
 ## **🎶 사용자**
 
 - 들을 노래는 많지만 부를 노래는 없는 사람 ‼️
@@ -35,6 +37,7 @@
 - 내 목소리와 어울리는 노래를 찾지 못한 사람 ‼️
 
 저희 서비스는 위와 같은 사람들을 위해 사용자의 목소리 기반으로 맞춤 노래를 추천해주는 서비스입니다.
+
 
 ## **🎶 주요 기능**
 
@@ -60,9 +63,11 @@
 사용자는 자신이 실전 모드에서 부른 노래의 결과를 게시글 형태로 피드에 공유할 수 있습니다. 이를 통해 다른 사용자들과 음악 경험을 공유하고, 소통할 수 있는 기회를 제공합니다.
 > 
 
+
 ## **🎶 서비스 화면 (시연 영상) +** 사용 방법
 
 ---
+
 
 스크린 샷을 통해 사용 방법을 자세히 설명합니다.
 
@@ -78,6 +83,7 @@
 > 기기를 통해 입력된 오디오 소스를 실시간으로 분석
 > 
 
+
 > **2️⃣ UltraSinger**
 > 
 > 
@@ -91,6 +97,7 @@
 > 
 > 사용자의 노래 파일 채점
 > 
+
 
 ## **🎶** 개발 환경
 
@@ -151,10 +158,12 @@
 
 추가하고 RUN
 
+
 ## **🎶 기술 스택**
 
 ---
- <img src="https://img.shields.io/badge/아이콘의 내용-아이콘의 바탕 색?style=flat&logo=로고의 이름&logoColor=white"/>
+ <img alt="springboot" src ="https://img.shields.io/badge/springboot.svg?&style=for-the-badge&logo=springboot&logoColor=#6DB33F"/>
+
 
 - **Backend**
  <img src="https://img.shields.io/badge/springboot-#6DB33F?style=flat&logo=springboot&logoColor=white"/>
@@ -189,6 +198,7 @@
  <img src="https://img.shields.io/badge/notion-#000000?style=flat&logo=notion&logoColor=white"/>
  <img src="https://img.shields.io/badge/figma-#F24E1E?style=flat&logo=figma&logoColor=white"/>
 
+
 ## **🎶 프로젝트 산출물**
 
 ---
@@ -205,22 +215,34 @@ DB 명세서
 
 발표 자료
 
+
 ## **🎶** 팀원 소개
 
 ---
 
-류기현 박지영 이근학 차명훈 이수지 최이초
 <table>
-  <tbody>
-    <tr>
-      <td align="center"><a href=""><img src="width="100px;" alt=""/><br /><sub><b>FE 팀장 : </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀원 : </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀원 : </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>FE 팀원 : </b></sub></a><br /></td>
-     <tr/>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>BE 부팀장 : </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>BE 팀원 : </b></sub></a><br /></td>
-      <td align="center"><a href=""><img src="" width="100px;" alt=""/><br /><sub><b>BE 팀원 : </b></sub></a><br /></td>
-    </tr>
-  </tbody>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/meenyweeny">
+        <img src="https://github.com/meenyweeny.png" alt="이경민" />
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/yichoya">
+        <img src="https://github.com/yichoya.png" alt="최이초" />
+      </a>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="이미지 주소">
+        <b>류기현</b>
+      </a>
+    </td>
+    <td align="center">
+      <a href="이미지 주소">
+        <b>박지영</b>
+      </a>
+    </td>
+  </tr>
 </table>
