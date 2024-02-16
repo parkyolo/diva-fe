@@ -138,7 +138,7 @@ def calculate_score(request):
         score = Score(final_score)
 
         # 점수를 보정한다.
-        score.score = min(100, 50 + score.score)
+        score.score = min(100, 70 + score.score)
 
         # 점수를 소수 첫번째 자리에서 반올림한다.
         score.score = round(score.score)
