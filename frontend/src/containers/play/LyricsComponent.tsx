@@ -6,13 +6,11 @@ const LyricsComponent = ({
   parsedLyrics,
   isTutorial,
   audio,
-  arAudio,
 }: {
   currentSeconds: number;
   parsedLyrics: LyricsInterface[];
   isTutorial: boolean;
   audio: HTMLAudioElement;
-  arAudio: HTMLAudioElement;
 }) => {
   const LyricsRef = useRef<HTMLDivElement>(null);
   const currentLyricsRef = useRef<HTMLDivElement>(null);
@@ -30,7 +28,6 @@ const LyricsComponent = ({
   // 튜토리얼 모드에서 가사 클릭 시 해당 위치로 음악 이동
   const handleCurrentLyrics = (index: number) => {
     audio.currentTime = parsedLyrics[index].startSeconds;
-    arAudio.currentTime = parsedLyrics[index].startSeconds;
     setCurrentIndex(index);
   };
 
