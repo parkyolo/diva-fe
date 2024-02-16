@@ -1,4 +1,4 @@
-![Architecture](/img/Architecture.png)
+![Architecture](/exec/img/Architecture.png)
 # 1. Stack
 
 ## Frontend
@@ -82,32 +82,32 @@ S10P11A607/frontend로 이동
 
 1. Enable Annotation Processing
 
-![1](/img/1.png)
+![1](/exec/img/1.png)
 
 1. Edit
 
-![2](/img/2.png)
+![2](/exec/img/2.png)
 
 1. Modify Options
 
-![3](/img/3.png)
+![3](/exec/img/3.png)
 
 1. Add VM Options
 
-![4](/img/4.png)
+![4](/exec/img/4.png)
 
 ```java
 -Dspring.profiles.active=local
 ```
 
-![5](/img/5.png)
+![5](/exec/img/5.png)
 
 1. 실행
 2. ***Could not find class file*** 에러 시 참고해보세요
 
 https://lahezy.tistory.com/94
 
-![위 링크에 추가로 참고해주세요 링크 먼저 보셈!](/img/6.png)
+![위 링크에 추가로 참고해주세요 링크 먼저 보셈!](/exec/img/6.png)
 
 위 링크에 추가로 참고해x주세요 링크 먼저 보셈!
 
@@ -133,27 +133,27 @@ new item을 눌러 **DivaBackendDevCloneAndBuild**라는 이름으로 pipeline �
 
 configuration
 
-![7](/img/7.png)
+![7](/exec/img/7.png)
 
 advanced를 눌러 generate secret token
 
-![8](/img/8.png)
+![8](/exec/img/8.png)
 
 gitlab에서
 
-![9](/img/9.png)
+![9](/exec/img/9.png)
 
 add new webhook
 
-![10](/img/10.png)
+![10](/exec/img/10.png)
 
 url과 secret token을 채우고 trigger 옵션에 push events를 활성화 / develop branch 설정
 
-![11](/img/11.png)
+![11](/exec/img/11.png)
 
 pipeline에 아래 코드 복붙하고 save
 
-![12](/img/12.png)
+![12](/exec/img/12.png)
 
 ```bash
 pipeline {
@@ -195,7 +195,7 @@ configuration
 
 build trigger 설정
 
-![13](/img/13.png)
+![13](/exec/img/13.png)
 
 pipeline에 아래 코드 복붙하고 save
 
@@ -263,7 +263,7 @@ configuration
 
 build trigger 설정
 
-![14](/img/14.png)
+![14](/exec/img/14.png)
 
 pipeline에 아래 코드 복붙하고 save
 
@@ -337,7 +337,7 @@ configuration
 
 build trigger 설정
 
-![15](/img/15.png)
+![15](/exec/img/15.png)
 
 pipeline에 아래 코드 복붙하고 save
 
@@ -424,7 +424,7 @@ configuration
 
 build trigger 설정
 
-![16](/img/16.png)
+![16](/exec/img/16.png)
 
 pipeline에 아래 코드 복붙하고 save
 
