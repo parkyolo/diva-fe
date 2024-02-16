@@ -73,15 +73,24 @@ const TutorialMode = ({
 
   return (
     <main className="flex flex-col">
-      <PlayMonitor
-        currentSeconds={currentSeconds}
-        parsedPitches={parsedPitches}
-      />
-      <LyricsComponent
-        currentSeconds={currentSeconds}
-        parsedLyrics={parsedLyrics}
-      />
-      <ARGuide arAudioRef={arAudioRef} />
+      {audioRef.current && arAudioRef.current ? (
+        <>
+          <PlayMonitor
+            currentSeconds={currentSeconds}
+            parsedPitches={parsedPitches}
+          />
+          <LyricsComponent
+            currentSeconds={currentSeconds}
+            parsedLyrics={parsedLyrics}
+            isTutorial={true}
+            audio={audioRef.current}
+            arAudio={arAudioRef.current}
+          />
+          <ARGuide arAudioRef={arAudioRef} />
+        </>
+      ) : (
+        <></>
+      )}
 
       <audio
         ref={arAudioRef}
