@@ -163,7 +163,7 @@
 
 ---
  <img alt="springboot" src ="https://img.shields.io/badge/springboot(1).svg?&style=for-the-badge&logo=springboot&logoColor=#6DB33F"/>
-
+<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white">
 
 - **Backend**
  <img src="https://img.shields.io/badge/springboot-#6DB33F?style=flat&logo=springboot&logoColor=white"/>
