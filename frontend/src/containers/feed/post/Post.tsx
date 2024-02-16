@@ -125,9 +125,16 @@ const Post = ({
             </div>
             <div>
               <div className="font-bold text-xl">{post.member.nickname}</div>
-              <div className="text-overflow-one">
-                <span>{post.practiceResult.song.title}</span> &middot;&nbsp;
-                <span>{post.practiceResult.song.artist}</span>
+              <div className="flex flex-row justify-between">
+                <div className="text-overflow-one">
+                  {post.practiceResult.song.title} &middot;&nbsp;
+                  {post.practiceResult.song.artist} &nbsp;
+                </div>
+                <div className="rounded-2xl bg-blue">
+                  &nbsp;&nbsp;
+                  {post.practiceResult.score}
+                  &nbsp;&nbsp;
+                </div>
               </div>
             </div>
           </div>
@@ -139,7 +146,7 @@ const Post = ({
             <></>
           )}
         </div>
-        <div className="">
+        <div>
           {post.content.length > maxContentsLength ? (
             more ? (
               <>
