@@ -119,33 +119,26 @@ main {
 /* Chrome, Whale, Edge */
 
 /* 스크롤바 전체 기본 꾸미기 */
-main::-webkit-scrollbar {
+main::-webkit-scrollbar,
+.scrollbar::-webkit-scrollbar {
   width: 8px;
   height: 20px;
 }
 
 /* 스크롤바 막대 꾸미기 */
-main::-webkit-scrollbar-thumb {
+main::-webkit-scrollbar-thumb,
+.scrollbar::-webkit-scrollbar-thumb {
   background: #595656; /* 스크롤바 막대 색상 */
   border-radius: 12px;
 }
 
 /* 스크롤바 트랙 꾸미기 */
-main::-webkit-scrollbar-track {
+main::-webkit-scrollbar-track,
+.scrollbar::-webkit-scrollbar-track {
   background-color: '#111318';
 }
 
 /* 드래그 하는 동안 클릭 이벤트 방지 용도 */
 .dragging {
   pointer-events: none;
-}
-
-/* PlayMonitor의 pitchbar에 칠해지는 색 */
-@keyframes pitchbar {
-  0% {
-    transform: translateX(2.5rem);
-  }
-  100% {
-    transform: translateX(calc(-4000px + -2.5rem));
-  }
 }
