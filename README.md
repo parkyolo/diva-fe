@@ -162,7 +162,7 @@
 ## **🎶 기술 스택**
 
 ---
- <img alt="springboot" src ="https://img.shields.io/badge/springboot.svg?&style=for-the-badge&logo=springboot&logoColor=#6DB33F"/>
+ <img alt="springboot" src ="https://img.shields.io/badge/springboot(1).svg?&style=for-the-badge&logo=springboot&logoColor=#6DB33F"/>
 
 
 - **Backend**
