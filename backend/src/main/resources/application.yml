@@ -9,6 +9,22 @@ spring:
         properties:
             hibernate:
                 default_batch_fetch_size: 100
+    servlet:
+        multipart:
+            max-file-size: 50MB
+            max-request-size: 50MB
+cloud:
+    aws:
+        s3:
+            bucket: diva-s3
+        region:
+            static: ap-northeast-2
+            auto: false
+        stack:
+            auto: false
+        credentials:
+            access-key: ${AWS.ACCESS}
+            secret-key: ${AWS.SECRET}
 
 # JWT
 jwt:
@@ -21,7 +37,6 @@ jwt:
             header: AuthorizationRefresh
 
 server:
-    port: ${SERVER.PORT}
     error:
         include-message: always
         include-binding-errors: always
