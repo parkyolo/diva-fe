@@ -1,14 +1,14 @@
-import { atom } from 'jotai';
+import { vocalRange } from './range';
 
 export interface User {
+  memberId: number;
   nickname: string;
-  accessToken?: string;
-  refreshToken?: string;
-  isMember: boolean;
+  profileImg: boolean;
+  email: string;
+  vocalRange: vocalRange;
 }
 
-// 기본 유저 상태
-export const userState = atom<User>({
-  nickname: 'no name',
-  isMember: false,
-});
+export interface UserPatch {
+  nickname: string;
+  profileImg: boolean;
+}

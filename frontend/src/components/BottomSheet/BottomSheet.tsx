@@ -12,7 +12,7 @@ const BottomSheet = ({ children, close }: Props) => {
       <div className="bg-bg-black basis-full opacity-55" onClick={close}></div>
       <article className="animate-slideup bg-gradient-conic flex flex-col gap-[20px] px-[30px] py-[26px] rounded-t-[30px]">
         <div className="w-[50px] h-[6px] bg-gray opacity-10 m-auto"></div>
-        <div className="flex flex-col gap-[10px] text-2xl">{children}</div>
+        <div className="flex flex-col gap-[10px] text-xl">{children}</div>
       </article>
     </div>
   );

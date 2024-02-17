@@ -1,56 +1,110 @@
 'use client';
+
 import useModal from '@/hooks/useModal';
-
 import BottomSheet from '@/components/BottomSheet/BottomSheet';
-import type { NextPage } from 'next';
-import Image from 'next/image';
-import Carousel from './Carousel';
+import Main from '@/components/Main';
+import SongCarousel from './SongCarousel';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import {
+  RecommendedSong,
+  RecommendedSongResponse,
+  S3SongInfo,
+} from '@/types/song';
+import { useFetch } from '@/hooks/useFetch';
+import { realMode, tutorialMode } from '.';
+import { req } from '@/services';
 
-import card1 from '@/../public/images/2.jpg';
-import card2 from '@/../public/images/3.jpg';
-import card3 from '@/../public/images/4.jpg';
-import card4 from '@/../public/images/5.jpg';
-
-const ImagesItems = [
-  <Image className="h-[280px] w-[280px]" src={card1} alt="card1" />,
-  <Image className="h-full w-full" src={card2} alt="card2" />,
-  <Image className="h-full w-full" src={card3} alt="card3" />,
-  <Image className="h-full w-full" src={card4} alt="card4" />,
-];
-
-// import Carousel from './Carousel';
-const Content = () => {
+const Content = ({
+  onModeChange,
+  setActiveMusicId,
+  setActiveSong,
+}: {
+  onModeChange: Function;
+  setActiveMusicId: Dispatch<SetStateAction<number>>;
+  setActiveSong: Dispatch<SetStateAction<S3SongInfo>>;
+}) => {
   const [isOpen, open, close] = useModal();
+  const [activeMusicIdx, setActiveMusicIdx] = useState<number>(0);
+  const [isLoading, recommendedSongsData, error, getRecommendedSongs] =
+    useFetch<RecommendedSongResponse[]>(req.recommend.getSongRecommendation);
+  const [recommendedSongs, setSongs] = useState<RecommendedSong[]>();
+
+  const changeModeToReal = () => {
+    if (recommendedSongs) {
+      setActiveMusicId(recommendedSongs[activeMusicIdx].songId);
+      setActiveSong({
+        artist: recommendedSongs[activeMusicIdx].artist,
+        songTitle: recommendedSongs[activeMusicIdx].songTitle,
+      });
+      onModeChange(realMode);
+    }
+  };
+
+  const changeModetoTutorial = () => {
+    if (recommendedSongs) {
+      setActiveMusicId(recommendedSongs[activeMusicIdx].songId);
+      setActiveSong({
+        artist: recommendedSongs[activeMusicIdx].artist,
+        songTitle: recommendedSongs[activeMusicIdx].songTitle,
+      });
+      onModeChange(tutorialMode);
+    }
+  };
+
+  useEffect(() => {
+    if (recommendedSongsData) {
+      setSongs(
+        recommendedSongsData.map((song) => {
+          return {
+            songId: song.songId,
+            songTitle: song.title,
+            artist: song.artist,
+            similarity: song.similarity,
+            coverUrl: song.coverImg,
+          };
+        }),
+      );
+    }
+  }, [recommendedSongsData]);
+
+  useEffect(() => {
+    try {
+      getRecommendedSongs();
+    } catch (_) {
+      console.log(error);
+    }
+  }, []);
 
   return (
-    <div className="flex flex-col p-[60px] px-[33px] content-between self-stretch items-center flex-1">
-      <span className="font-featuring text-center text-[24px] font-sans not-italic font-bold leading-normal">
-        나의 음역대와 일치도
-      </span>
-      <span className="font-featuring text-center text-[32px] font-sans font-bold not-italic leading-normal text-skyblue">
-        67%{}
-      </span>
-      <figure className="flex flex-col content-center items-center gap-[0px] w-[550px] h-[280px]">
-        <Carousel items={ImagesItems} onClick={open}></Carousel>
-      </figure>
-      <section className="flex flex-col items-center gap-[6px] w-[157px] h-[93px]">
-        <div>별</div>
-        <span className="font-featuring text-white text-2xl not-italic font-bold leading-normal">
-          노래 제목
-        </span>
-        <span className="font-featuring text-white text-xl not-italic font-bold leading-normal">
-          노래 가수
-        </span>
-      </section>
+    <>
+      {!!recommendedSongs ? (
+        <Main className="relative">
+          <SongCarousel
+            interval={50000}
+            onClick={open}
+            songs={recommendedSongs}
+            setActiveMusicIdx={setActiveMusicIdx}
+          ></SongCarousel>
+        </Main>
+      ) : (
+        <></>
+      )}
+
+      {/* bottomsheet modal */}
       {isOpen && (
         <BottomSheet close={close}>
-          <BottomSheet.Button btnColor="bg-blue">실전모드</BottomSheet.Button>
-          <BottomSheet.Button btnColor="bg-btn-black">
+          <BottomSheet.Button btnColor="bg-blue" onClick={changeModeToReal}>
+            실전모드
+          </BottomSheet.Button>
+          <BottomSheet.Button
+            btnColor="bg-btn-black"
+            onClick={changeModetoTutorial}
+          >
             튜토리얼
           </BottomSheet.Button>
         </BottomSheet>
       )}
-    </div>
+    </>
   );
 };
 
