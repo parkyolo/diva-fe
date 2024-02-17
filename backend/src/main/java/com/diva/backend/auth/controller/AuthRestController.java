@@ -140,12 +140,12 @@ public class AuthRestController {
     }
 
     private String getHttpAndDomain(HttpServletRequest request) {
-        Enumeration<String> headerNames = httpRequest.getHeaderNames();
+        Enumeration<String> headerNames = request.getHeaderNames();
 
         while (headerNames.hasMoreElements()) {
             String headerName = headerNames.nextElement();
             log.info("headerName: " + headerName);
-            log.info("headerValue: " + httpRequest.getHeader(headerName));
+            log.info("headerValue: " + request.getHeader(headerName));
         }
 
         // request의 domain을 가져온다.
