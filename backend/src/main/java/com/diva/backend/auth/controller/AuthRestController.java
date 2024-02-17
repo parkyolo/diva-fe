@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import static com.diva.backend.auth.service.JwtService.*;
 import static com.diva.backend.enumstorage.cause.JwtCause.JWT;
@@ -139,6 +140,14 @@ public class AuthRestController {
     }
 
     private String getHttpAndDomain(HttpServletRequest request) {
+        Enumeration<String> headerNames = httpRequest.getHeaderNames();
+
+        while (headerNames.hasMoreElements()) {
+            String headerName = headerNames.nextElement();
+            log.info("headerName: " + headerName);
+            log.info("headerValue: " + httpRequest.getHeader(headerName));
+        }
+
         // request의 domain을 가져온다.
         String host = request.getHeader(HttpHeaders.HOST);
         log.info("host: " + host);
