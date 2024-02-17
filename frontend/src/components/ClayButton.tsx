@@ -3,7 +3,7 @@
 import React from 'react';
 interface ClayButtonProps {
   children?: React.ReactNode;
-  onClick: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 const ClayButton = ({ onClick, children }: ClayButtonProps) => {
   return (

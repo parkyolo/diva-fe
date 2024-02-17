@@ -1,15 +1,14 @@
 'use client';
 
-import Logo from '@/components/Logo';
-import Login from '@/components/login/Login';
-
-const Header = () => {
+interface Props {
+  LeftComponent: React.ReactNode;
+  RightComponent?: React.ReactNode | null;
+}
+const Header = ({ LeftComponent, RightComponent }: Props) => {
   return (
-    <header>
-      <div>
-        <Logo />
-        <Login />
-      </div>
+    <header className="flex items-center w-100vw h-10 bg-transparent mx-5 my-3.5 justify-between">
+      {LeftComponent}
+      {!RightComponent ? <></> : RightComponent}
     </header>
   );
 };
