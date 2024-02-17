@@ -140,22 +140,13 @@ public class AuthRestController {
     }
 
     private String getHttpAndDomain(HttpServletRequest request) {
-        Enumeration<String> headerNames = request.getHeaderNames();
-
-        while (headerNames.hasMoreElements()) {
-            String headerName = headerNames.nextElement();
-            log.info("headerName: " + headerName);
-            log.info("headerValue: " + request.getHeader(headerName));
-        }
-
         // request의 domain을 가져온다.
         String xForwardedHost = request.getHeader("x-forwarded-host");
         log.info("x-forwarded-host: " + xForwardedHost);
         // http://localhost:3000/auth/login/oauth2/code/kakao?code=EGhvUbUYMBzvBOTjYaZlN5HDY-ST_SFqVyCH1IaxHfdfK4PNaKB066Q7kH0KPXNOAAABjbYKJreo9NUiJo7xnA
         if (xForwardedHost != null && xForwardedHost.contains("localhost")) {
             // 프론트 local
-            String[] split = xForwardedHost.split("/");
-            String result = split[0] + "//" + split[2];
+            String result = "http://" + xForwardedHost;
             log.info("result: " + result);
             return result;
         }
