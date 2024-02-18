@@ -9,7 +9,7 @@ const myPageTab = () => {
 
   return (
     <>
-      <div className="flex flex-row w-full justify-around h-1/6 items-center p-5 text-xl font-normal text-gray">
+      <div className="flex flex-row w-full justify-start gap-10 items-center pt-5 text-xl font-normal text-gray">
         <button
           className={
             mode === song
@@ -36,7 +36,7 @@ const myPageTab = () => {
         </button>
       </div>
 
-      <div className="basis-full">
+      <div className="basis-full pt-8">
         {mode === song ? (
           <>
             <SongContent />

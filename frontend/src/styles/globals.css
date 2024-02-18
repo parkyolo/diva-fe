@@ -78,11 +78,10 @@ body {
   }
 }
 
-/* text-base w-full px-7 py-10 overflow-y-scroll basis-full */
 main {
   font-size: 1rem;
   width: 100%;
-  padding: 2.5rem 1.75rem;
+  padding: 0 1.75rem;
   overflow-y: scroll;
   flex-basis: 100%;
 }
