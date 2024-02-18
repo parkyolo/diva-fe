@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PracticeResultRepository extends JpaRepository<PracticeResult, Long> {
-    Optional<PracticeResult> findByIdWithSong(Long id);
-    List<PracticeResult> findByMemberId(Long memberId);
+    Optional<PracticeResult> findByIdWithSongWithScore(Long id);
+    List<PracticeResult> findByMemberIdWithScore(Long memberId);
     Optional<PracticeResult> findByPostIdWithMemberAndPost(Long postId);
     PracticeResult findByPostId(Long postId);
 

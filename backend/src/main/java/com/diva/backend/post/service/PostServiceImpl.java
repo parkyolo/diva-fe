@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -66,7 +65,7 @@ public class PostServiceImpl implements PostService {
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 회원이 존재하지 않습니다."));
 
         // Practice Result와 Song을 Join해서 가져온다.
-        PracticeResult practiceResult = practiceResultRepository.findByIdWithSong(practiceResultId)
+        PracticeResult practiceResult = practiceResultRepository.findByIdWithSongWithScore(practiceResultId)
             .orElseThrow(() -> new IllegalArgumentException("해당 ID의 실전모드 결과가 존재하지 않습니다."));
 
         Song song = practiceResult.getSong();
