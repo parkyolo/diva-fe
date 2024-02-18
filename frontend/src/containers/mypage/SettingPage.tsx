@@ -9,7 +9,6 @@ import { useSetAtom } from 'jotai';
 import { useRouter } from 'next/navigation';
 import { ChangeEvent, useEffect, useState } from 'react';
 import LeftArrow from '/public/svgs/left_arrow.svg';
-import Main from '@/components/Main';
 import Image from 'next/image';
 
 interface myPageProps {
@@ -103,13 +102,6 @@ const SettingPage = ({ user }: myPageProps) => {
     setMyPageAtom(0b0);
   };
 
-  // useEffect(() => {
-  //   if (userInfo && !isLoading) {
-  //     setUserAtom();
-  //     setMyPageAtom(0b0);
-  //   }
-  // }, [userInfo]);
-
   return (
     <>
       <Header
@@ -124,7 +116,7 @@ const SettingPage = ({ user }: myPageProps) => {
           </button>
         }
       />
-      <Main>
+      <main className="flex flex-col justify-start items-center gap-10 py-10">
         <div className="flex flex-col items-center gap-6 w-full px-6">
           <div className="flex flex-col gap-4">
             <div className="w-[200px] h-[200px] rounded-full overflow-hidden relative border-2 border-gray">
@@ -135,12 +127,6 @@ const SettingPage = ({ user }: myPageProps) => {
                 fill
                 priority={true}
               />
-              {/* <img
-                key={Date.now()}
-                src={preview}
-                alt="사용자가 선택한 프로필 사진입니다"
-                className="object-cover aspect-square"
-              /> */}
             </div>
             <label className="text-2xl text-skyblue font-bold text-center cursor-pointer">
               사진 수정
@@ -176,7 +162,7 @@ const SettingPage = ({ user }: myPageProps) => {
         >
           로그아웃
         </button>
-      </Main>
+      </main>
     </>
   );
 };
