@@ -78,7 +78,7 @@ const Content = ({
   return (
     <>
       {!!recommendedSongs ? (
-        <Main className="relative">
+        <Main className="relative py-10">
           <SongCarousel
             interval={50000}
             onClick={open}

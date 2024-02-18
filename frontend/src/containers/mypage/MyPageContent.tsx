@@ -10,8 +10,8 @@ interface myPageProps {
 const MyPageContent = ({ user }: myPageProps) => {
   return (
     <>
-      <div className="flex flex-row w-full gap-10 mb-4">
-        <div className="rounded-full overflow-hidden w-[24%] aspect-square relative shrink-0">
+      <div className="flex flex-row w-full gap-5 mb-4">
+        <div className="rounded-full overflow-hidden w-16 aspect-square relative shrink-0">
           <Image
             src={
               user.profileImg
@@ -22,7 +22,7 @@ const MyPageContent = ({ user }: myPageProps) => {
             fill
           />
         </div>
-        <div className="flex items-center text-2xl font-bold basis-full">
+        <div className="flex items-center text-2xl font-bold">
           {user.nickname}
         </div>
       </div>
