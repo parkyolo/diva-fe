@@ -20,7 +20,9 @@ const LyricsComponent = ({
     if (LyricsRef.current && currentLyricsRef.current) {
       LyricsRef.current.scrollTo({
         top:
-          currentLyricsRef.current.offsetTop - LyricsRef.current.clientHeight,
+          currentLyricsRef.current.offsetTop -
+          LyricsRef.current.clientHeight +
+          LyricsRef.current.clientHeight / 3,
       });
     }
   }, [currentIndex]);
