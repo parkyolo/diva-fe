@@ -28,7 +28,7 @@ export const reissueToken = async (
     setAccessTokenWithLocalStorage(reissuedAccessToken);
   } else {
     if (process.env.NODE_ENV === 'development') {
-      alert('서버에서 리이슈 토큰을 가져오지 못했습니다');
+      console.error('서버에서 리이슈 토큰을 가져오지 못했습니다');
     }
   }
 
