@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface SongRepository extends JpaRepository<Song, Long> {
     Song findSongById(Long songId);
-    List<RecommendedSongsResponseDto> getTop3SimilarSongs(int membersMaxMidi);
+    List<RecommendedSongsResponseDto> getTopSimilarSongs(int membersMaxMidi, Long genre, int count);
 }

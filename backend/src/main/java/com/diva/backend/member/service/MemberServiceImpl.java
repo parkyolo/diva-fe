@@ -32,7 +32,7 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public MemberResponseDto getMemberInfo(Long memberId) throws NoSuchMemberException{
-        Member member = memberRepository.findById(memberId)
+        Member member = memberRepository.findByIdWithVocalRange(memberId)
                 // NULL일 경우 exception 처리
                 .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
         // profileImg가 ture인 경우에는 S3에 저장된 이미지의 주소를 함께 넘겨줘야함
@@ -44,7 +44,6 @@ public class MemberServiceImpl implements MemberService {
         }
 
         VocalRange vocalRange = member.getVocalRange();
-//        VocalRange vocalRange = vocalRangeRepository.findByMemberId(member.getId());
         VocalRangeDto vocalRangeDto = null;
         if (vocalRange != null) {
             vocalRangeDto = VocalRangeDto.from(vocalRange);
