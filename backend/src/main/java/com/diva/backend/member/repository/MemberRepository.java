@@ -9,6 +9,7 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryQueryDsl {
     Optional<Member> findMemberById(Long memberId);
+    Optional<Member> findByIdWithVocalRange(Long memberId);
     Optional<Member> findByProviderId(Long providerId);
     Optional<Member> findNotDeletedById(long id);
     Optional<Member> findMemberByIdWithVocalRange(Long memberId);

@@ -21,7 +21,7 @@ public class SongRepositoryImpl implements SongRepositoryQueryDsl {
     private final EntityManager em;
 
     @Override
-    public List<RecommendedSongsResponseDto> getTop3SimilarSongs(int membersMaxMidi) {
+    public List<RecommendedSongsResponseDto> getTopSimilarSongs(int membersMaxMidi, Long genre, int count) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
         NumberExpression<Double> similarity =
@@ -37,10 +37,11 @@ public class SongRepositoryImpl implements SongRepositoryQueryDsl {
                         JPAExpressions
                                 .select(songRange.song.id)
                                 .from(songRange)
+                                .where(songRange.genre.eq(genre))
                                 .orderBy(similarity.desc())
                 ))
                 .orderBy(similarity.desc())
-                .limit(7)
+                .limit(count)
                 .fetch();
 
         return results.stream()
