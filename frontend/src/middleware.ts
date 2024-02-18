@@ -13,5 +13,5 @@ export function middleware(request: NextRequest) {
 export const config = {
   // TODO: '/' 이외의 다른 요청은 모두 검사하게 변경
   // matcher: '/((?!_next|auth|mypage|$).*)',
-  matcher: '/range',
+  matcher: ['/range', '/mypage', '/feed'],
 };
