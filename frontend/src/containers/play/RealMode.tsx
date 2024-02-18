@@ -122,7 +122,7 @@ const RealMode = ({
   }, []);
 
   return (
-    <main className="flex flex-col relative overflow-hidden">
+    <main className="flex flex-col relative overflow-hidden py-10">
       {audioRef.current ? (
         <>
           <PlayMonitor
