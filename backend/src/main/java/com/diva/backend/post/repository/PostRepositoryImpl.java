@@ -45,22 +45,28 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
     public List<Post> paginationNoOffset(Long postId, int pageSize) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
+        JPAQuery<Long> noOffset = queryFactory
+            .select(post.id)
+            .from(post)
+            .where(post.practiceResult.isNotNull())
+            .orderBy(post.id.desc())
+            .limit(pageSize);
+
+        if (postId != null) {
+            noOffset.where(post.id.lt(postId));
+        }
+
+        List<Long> ids = noOffset.fetch();
+
         JPAQuery<Post> query = queryFactory
                 .selectFrom(post)
                 .leftJoin(post.member).fetchJoin()
                 .leftJoin(post.practiceResult, practiceResult).fetchJoin()
                 .leftJoin(post.hearts, heart).fetchJoin()
                 .leftJoin(post.song, song).fetchJoin()
-                .where(post.practiceResult.isNotNull());
+                .where(post.id.in(ids));
 
-        if (postId != null) {
-            query.where(post.id.lt(postId));
-        }
-
-        return query
-                .orderBy(post.id.desc())
-                .limit(pageSize)
-                .fetch();
+        return query.fetch();
     }
 
     @Override
