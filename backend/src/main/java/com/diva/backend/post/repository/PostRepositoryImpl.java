@@ -11,6 +11,8 @@ import java.util.Optional;
 
 import static com.diva.backend.heart.entity.QHeart.heart;
 import static com.diva.backend.post.entity.QPost.post;
+import static com.diva.backend.post.entity.QPracticeResult.practiceResult;
+import static com.diva.backend.song.entity.QSong.song;
 
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryQueryDsl {
@@ -45,6 +47,10 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
 
         JPAQuery<Post> query = queryFactory
                 .selectFrom(post)
+                .leftJoin(post.member).fetchJoin()
+                .leftJoin(post.practiceResult, practiceResult).fetchJoin()
+                .leftJoin(post.hearts, heart).fetchJoin()
+                .leftJoin(post.song, song).fetchJoin()
                 .where(post.practiceResult.isNotNull());
 
         if (postId != null) {
