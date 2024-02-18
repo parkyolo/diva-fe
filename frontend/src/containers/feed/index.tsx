@@ -76,7 +76,7 @@ const Feed = () => {
     const handleScroll = () => {
       if (!!viewportRef.current) {
         const { scrollHeight, scrollTop, clientHeight } = viewportRef.current;
-        if (scrollTop + clientHeight >= scrollHeight) {
+        if (scrollTop + clientHeight + 1 > scrollHeight) {
           setFetching(true);
         }
       }
