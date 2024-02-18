@@ -48,18 +48,10 @@ public class SongServiceImpl implements SongService{
     @Transactional
     @Override
     public List<PracticeResultResponseDto> getPracticeResults(Long memberId) throws NoSuchMemberException, NoPracticeResultException {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchMemberException("해당하는 회원이 없습니다."));
+        List<PracticeResult> list = practiceResultRepository.findByMemberIdWithScore(memberId);
 
-        List<PracticeResult> list = practiceResultRepository.findByMemberId(memberId);
-        // log
-//        for (PracticeResult p : list) {
-//            log.info("result score : {} , song {}", p.getScore(), p.getSong().getTitle());
-//        }
-        List<PracticeResultResponseDto> practiceResultList = new ArrayList<>();
-        for (PracticeResult practiceResult : list) {
-            practiceResultList.add(PracticeResultResponseDto.from(practiceResult));
-        }
-        return practiceResultList;
+        return list.stream()
+            .map(PracticeResultResponseDto::from)
+            .toList();
     }
 }
