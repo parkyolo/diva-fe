@@ -34,6 +34,7 @@ const AuthProvider = ({
   useLayoutEffect(() => {
     // 토큰이 유효하지 않은 경우 토큰 리이슈
     if (user === TOKEN_UNAVAILABLE) {
+      console.log('hi');
       reissueToken(accessToken, setAccessTokenWithLocalStorage);
     }
 
@@ -47,6 +48,7 @@ const AuthProvider = ({
     // 서버사이드에서 리프레시 토큰이 없을 시 로컬 스토리지의 액세스 토큰을 초기화하는 것으로 로그아웃 처리.
     // 따로 백엔드 서버로 로그아웃 요청을 보내진 않음.
     if (!refreshTokenCookie) {
+      console.log('no refresh token');
       setAccessTokenWithLocalStorage(RESET);
     }
   }, [user]);

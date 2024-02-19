@@ -19,6 +19,7 @@ export default async function RootLayout({
   children,
 }: RootLayoutProps) {
   const refreshToken = await getRefreshTokenCookie();
+  console.log('root layout refreshtoken', refreshToken);
   return (
     <html>
       <Head>
