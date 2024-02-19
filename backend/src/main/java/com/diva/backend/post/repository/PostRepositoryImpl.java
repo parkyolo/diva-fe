@@ -64,7 +64,8 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
                 .leftJoin(post.practiceResult, practiceResult).fetchJoin()
                 .leftJoin(post.hearts, heart).fetchJoin()
                 .leftJoin(post.song, song).fetchJoin()
-                .where(post.id.in(ids));
+                .where(post.id.in(ids))
+                .orderBy(post.id.desc());
 
         return query.fetch();
     }
