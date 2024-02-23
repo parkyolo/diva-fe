@@ -4,12 +4,14 @@ import ClientOnly from '@/components/ClientOnly';
 import { reissueToken } from '@/services/reissueToken';
 import { TOKEN_UNAVAILABLE, accessTokenAtom, userAtom } from '@/store/user';
 import { useAtom, useAtomValue } from 'jotai';
+import { RESET } from 'jotai/utils';
 import { redirect, usePathname } from 'next/navigation';
 import { useLayoutEffect } from 'react';
 
 interface AuthProviderProps {
   children: React.ReactNode;
   landing: React.ReactNode;
+  refreshTokenCookie: string;
 }
 
 /**
@@ -20,15 +22,19 @@ interface AuthProviderProps {
  * @param param0
  * @returns
  */
-const AuthProvider = ({ children, landing }: AuthProviderProps) => {
+const AuthProvider = ({
+  children,
+  landing,
+  refreshTokenCookie,
+}: AuthProviderProps) => {
   const user = useAtomValue(userAtom);
   const [accessToken, setAccessTokenWithLocalStorage] =
     useAtom(accessTokenAtom);
-
   const pathname = usePathname();
   useLayoutEffect(() => {
     // 토큰이 유효하지 않은 경우 토큰 리이슈
     if (user === TOKEN_UNAVAILABLE) {
+      console.log('hi');
       reissueToken(accessToken, setAccessTokenWithLocalStorage);
     }
 
@@ -37,6 +43,13 @@ const AuthProvider = ({ children, landing }: AuthProviderProps) => {
       if (!user.vocalRange && pathname !== '/range/check') {
         redirect('/range/check');
       }
+    }
+
+    // 서버사이드에서 리프레시 토큰이 없을 시 로컬 스토리지의 액세스 토큰을 초기화하는 것으로 로그아웃 처리.
+    // 따로 백엔드 서버로 로그아웃 요청을 보내진 않음.
+    if (!refreshTokenCookie) {
+      console.log('no refresh token');
+      setAccessTokenWithLocalStorage(RESET);
     }
   }, [user]);
 

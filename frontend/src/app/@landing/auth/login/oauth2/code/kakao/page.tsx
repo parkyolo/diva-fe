@@ -25,10 +25,9 @@ const KakaoLogin: NextPage = () => {
         response.headers.get('AuthorizationRefresh') ?? '';
 
       // 리프레쉬 토큰 쿠키에 저장
-      setRefreshTokenCookie(refreshToken);
+      await setRefreshTokenCookie(refreshToken);
       // 액세스 토큰 전역 상태+로컬스토리지에 저장
       setAccessTokenWithLocalStorage(accessToken);
-
       router.push('/');
     } else {
       console.log('로그인 실패', response.status);
@@ -43,8 +42,7 @@ const KakaoLogin: NextPage = () => {
     }
   }, []);
 
-  //TODO: 로그인 로드 중 띄울 화면 지정하기
-  return <>로그인 중</>;
+  return <></>;
 };
 
 export default KakaoLogin;

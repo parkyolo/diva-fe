@@ -13,13 +13,13 @@
 
 ## **🎵 목차**
 
-- [사용자](#🎵-사용자)
-- [주요 기능](#🎵-주요-기능)
-- [서비스 화면](#🎵-서비스-화면)
-- [기술 소개](#🎵-기술-소개)
-- [개발 환경](#🎵-개발-환경)
-- [기술 스택](#🎵-기술-스택)
-- [팀원 소개](#🎵-팀원-소개)
+- [사용자](#-사용자)
+- [주요 기능](#-주요-기능)
+- [서비스 화면](#-서비스-화면)
+- [기술 소개](#-기술-소개)
+- [개발 환경](#-개발-환경)
+- [기술 스택](#-기술-스택)
+- [팀원 소개](#-팀원-소개)
 
 
 ## **🎵 사용자**
@@ -49,7 +49,7 @@
 >'노래 부르기' 기능은 사용자가 가사와 음정 가이드를 따라 노래를 부를 수 있게 도와주며, 실력 향상을 위한 튜토리얼 모드와 실전 같은 경험을 제공하는 실전 모드를 제공합니다.
 
 > 4️⃣ **자신이 부른 노래를 피드에 공유**
-> 사용자는 자신이 실전 모드에서 부른 노래의 결과를 게시글 형태로 피드에 공유할 수 있습니다. 이를 통해 다른 사용자들과 음악 경험을 공유하고, 소통할 수 있는 기회를 제공합니다. 
+> 사용자는 자신이 실전 모드에서 부른 노래의 결과를 게시글 형태로 피드에 공유할 수 있습니다. 이를 통해 다른 사용자들과 음악 경험을 공유하고, 소통할 기회를 제공합니다.
 
 
 ## **🎵 서비스 화면**
@@ -304,9 +304,9 @@ Settings → Annotation Processors 에서 `Enable Annotation Processing` 클릭
 - **FrontEnd**
 <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black">
 <img src="https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white">
-<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=로고.js&logoColor=white">
+<img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
 <img src="https://img.shields.io/badge/pnpm-F69220?style=for-the-badge&logo=pnpm&logoColor=white">
-<img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs.js&logoColor=white">
+<img src="https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white">
 <img src="https://img.shields.io/badge/Jotai-000000?style=for-the-badge&logo=Jotai.js&logoColor=white">
 
 - **Data**
@@ -323,7 +323,7 @@ Settings → Annotation Processors 에서 `Enable Annotation Processing` 클릭
 
 - **협업 툴**
 <img src="https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white">
-<img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white">
+<img src="https://img.shields.io/badge/jirasoftware-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white">
 <img src="https://img.shields.io/badge/mattermost-0058CC?style=for-the-badge&logo=mattermost&logoColor=white">
 <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
 <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">

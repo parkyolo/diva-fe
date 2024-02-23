@@ -24,6 +24,17 @@ public class MemberRepositoryImpl implements MemberRepositoryQueryDsl {
     }
 
     @Override
+    public Optional<Member> findByIdWithVocalRange(Long memberId) {
+        JPAQueryFactory queryFactory = new JPAQueryFactory(em);
+
+        return Optional.ofNullable(
+            queryFactory.selectFrom(member)
+                .leftJoin(member.vocalRange).fetchJoin()
+                .where(member.id.eq(memberId))
+                .fetchOne());
+    }
+
+    @Override
     public Optional<Member> findByProviderId(Long providerId) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
