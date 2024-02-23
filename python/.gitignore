@@ -8,3 +8,5 @@ UltraSingerScore/__pycache__/
 
 scores/__pycache__/
 scores/migrations/__pycache__/
+
+*/__pycache__/

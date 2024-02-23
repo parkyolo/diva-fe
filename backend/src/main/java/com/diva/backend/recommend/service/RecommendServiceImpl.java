@@ -1,4 +1,4 @@
-package com.diva.backend.recommend.service.service;
+package com.diva.backend.recommend.service;
 
 import com.diva.backend.exception.NoSuchMemberException;
 import com.diva.backend.exception.NoVocalRangeException;
@@ -7,6 +7,7 @@ import com.diva.backend.member.repository.MemberRepository;
 import com.diva.backend.recommend.service.dto.RecommendedSongsResponseDto;
 import com.diva.backend.song.repository.SongRepository;
 import com.diva.backend.util.RecommendArtist;
+import java.util.ArrayList;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,11 +16,11 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class RecommendServiceImpl implements RecommendService {
+public class RecommendServiceImpl implements
+    com.diva.backend.recommend.service.service.RecommendService {
 
     private final MemberRepository memberRepository;
     private final SongRepository songRepository;
-    private final RecommendArtist recommendArtist;
 
     @Transactional
     @Override
@@ -34,6 +35,12 @@ public class RecommendServiceImpl implements RecommendService {
         // 회원의 최고 음역대 midi 값
         int membersHighestMidi = member.getVocalRange().getHighestMidi();
 
-        return songRepository.getTop3SimilarSongs(membersHighestMidi);
+        List<RecommendedSongsResponseDto> result = new ArrayList<>(10);
+        songRepository.getTopSimilarSongs(membersHighestMidi, 1L, 7)
+                .forEach(result::add);
+        songRepository.getTopSimilarSongs(membersHighestMidi, 2L, 3)
+                .forEach(result::add);
+
+        return result;
     }
 }
