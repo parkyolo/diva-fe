@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import '@/styles/globals.css';
 import AuthProvider from '@/containers/auth/AuthProvider';
 import Head from 'next/head';
+import { getRefreshTokenCookie } from './action';
 
 export const metadata: Metadata = {
   title: 'diva',
@@ -17,6 +18,8 @@ export default async function RootLayout({
   landing,
   children,
 }: RootLayoutProps) {
+  const refreshToken = await getRefreshTokenCookie();
+  console.log('root layout refreshtoken', refreshToken);
   return (
     <html>
       <Head>
@@ -27,7 +30,9 @@ export default async function RootLayout({
       </Head>
       <body>
         <div className="relative bg-bg-black basis-full max-w-[600px] min-w-[320px] h-full max-h-[1400px] min-h-[568px] flex flex-col shadow-[0px_0px_10px_4px_rgba(0,0,0,0.8)]">
-          <AuthProvider landing={landing}>{children}</AuthProvider>
+          <AuthProvider landing={landing} refreshTokenCookie={refreshToken}>
+            {children}
+          </AuthProvider>
         </div>
       </body>
     </html>

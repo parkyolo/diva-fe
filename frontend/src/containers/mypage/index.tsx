@@ -7,11 +7,9 @@ import { useAtom, useAtomValue, useSetAtom } from 'jotai';
 import Link from 'next/link';
 import MyPageContent from './MyPageContent';
 import SettingPage from './SettingPage';
-import MainLogo from '/public/svgs/logo.svg';
-import SettingIcon from '/public/svgs/setting.svg';
 import myPageAtom from '@/store/myPage';
-import Main from '@/components/Main';
 import { useEffect } from 'react';
+import { HeaderLogo, SettingIcon } from '../../../public/svgs/index';
 
 const MyPage = () => {
   const user = useAtomValue(userAtom);
@@ -19,10 +17,10 @@ const MyPage = () => {
   const settingPage = 0b1;
   const [isMyPage] = useAtom(myPageAtom);
   const setMyPageAtom = useSetAtom(myPageAtom);
-  useEffect(()=> {
-    setMyPageAtom(myPage)
-  },[])
-  
+  useEffect(() => {
+    setMyPageAtom(myPage);
+  }, []);
+
   const handleMyPageToSetting = () => {
     setMyPageAtom(settingPage);
   };
@@ -34,7 +32,7 @@ const MyPage = () => {
           <Header
             LeftComponent={
               <Link href="/">
-                <MainLogo />
+                <HeaderLogo />
               </Link>
             }
             RightComponent={

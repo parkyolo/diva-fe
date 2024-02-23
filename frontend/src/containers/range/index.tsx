@@ -77,7 +77,7 @@ const Range = () => {
           </Link>
         }
       />
-      <main>
+      <main className="py-10">
         <section className="flex flex-col justify-center items-center w-full">
           <h1 className="flex flex-col justify-center items-center w-full gap-1 mb-3">
             <span>당신의 음역대는</span>

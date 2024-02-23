@@ -5,5 +5,5 @@ import com.diva.backend.recommend.service.dto.RecommendedSongsResponseDto;
 import java.util.List;
 
 public interface SongRepositoryQueryDsl {
-    List<RecommendedSongsResponseDto> getTop3SimilarSongs(int membersMaxMidi);
+    List<RecommendedSongsResponseDto> getTopSimilarSongs(int membersMaxMidi, Long genre, int count);
 }

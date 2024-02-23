@@ -29,6 +29,7 @@ public class Post extends BaseEntity {
     @Column(name = "post_id")
     private Long id;
 
+    @NotNull
     @Column(name = "content", length = 1000)
     private String content;
 
@@ -54,7 +55,7 @@ public class Post extends BaseEntity {
 
     @Builder
     protected Post(String content, Member member, PracticeResult practiceResult, Song song, List<Heart> hearts, Integer heartCount) {
-        this.content = content;
+        this.content = (content != null) ? content : "";
         this.member = member;
         this.member.addPost(this);
         this.setPracticeResult(practiceResult);
@@ -76,6 +77,6 @@ public class Post extends BaseEntity {
 
     // 게시글 수정
     public void update(String content) {
-        this.content = content;
+        this.content = (content != null) ? content : "";
     }
 }
