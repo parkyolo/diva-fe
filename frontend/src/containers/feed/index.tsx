@@ -76,7 +76,7 @@ const Feed = () => {
     const handleScroll = () => {
       if (!!viewportRef.current) {
         const { scrollHeight, scrollTop, clientHeight } = viewportRef.current;
-        if (scrollTop + clientHeight >= scrollHeight) {
+        if (scrollTop + clientHeight + 1 >= scrollHeight) {
           setFetching(true);
         }
       }
@@ -98,7 +98,7 @@ const Feed = () => {
               </Link>
             }
           />
-          <main ref={viewportRef}>
+          <main ref={viewportRef} className="pt-5 pb-8">
             {allPosts && allPosts.length ? (
               <PostContainer allPosts={allPosts} />
             ) : (

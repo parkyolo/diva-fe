@@ -23,7 +23,6 @@ const ShareContent = () => {
   useEffect(() => {
     getSharedSongs();
   }, []);
-  console.log(sharedSongs);
   return (
     <>
       {Array.isArray(sharedSongs) && sharedSongs.length > 0 ? (

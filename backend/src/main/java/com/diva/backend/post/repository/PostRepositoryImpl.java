@@ -11,6 +11,8 @@ import java.util.Optional;
 
 import static com.diva.backend.heart.entity.QHeart.heart;
 import static com.diva.backend.post.entity.QPost.post;
+import static com.diva.backend.post.entity.QPracticeResult.practiceResult;
+import static com.diva.backend.song.entity.QSong.song;
 
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryQueryDsl {
@@ -43,18 +45,29 @@ public class PostRepositoryImpl implements PostRepositoryQueryDsl {
     public List<Post> paginationNoOffset(Long postId, int pageSize) {
         JPAQueryFactory queryFactory = new JPAQueryFactory(em);
 
-        JPAQuery<Post> query = queryFactory
-                .selectFrom(post)
-                .where(post.practiceResult.isNotNull());
+        JPAQuery<Long> noOffset = queryFactory
+            .select(post.id)
+            .from(post)
+            .where(post.practiceResult.isNotNull())
+            .orderBy(post.id.desc())
+            .limit(pageSize);
 
         if (postId != null) {
-            query.where(post.id.lt(postId));
+            noOffset.where(post.id.lt(postId));
         }
 
-        return query
-                .orderBy(post.id.desc())
-                .limit(pageSize)
-                .fetch();
+        List<Long> ids = noOffset.fetch();
+
+        JPAQuery<Post> query = queryFactory
+                .selectFrom(post)
+                .leftJoin(post.member).fetchJoin()
+                .leftJoin(post.practiceResult, practiceResult).fetchJoin()
+                .leftJoin(post.hearts, heart).fetchJoin()
+                .leftJoin(post.song, song).fetchJoin()
+                .where(post.id.in(ids))
+                .orderBy(post.id.desc());
+
+        return query.fetch();
     }
 
     @Override

@@ -15,7 +15,6 @@ import { useFetch } from '@/hooks/useFetch';
 import { req } from '@/services';
 import { useAtomValue } from 'jotai';
 import { userAtom } from '@/store/user';
-import { useRouter } from 'next/navigation';
 
 const RangeCheckPage: React.FC = () => {
   const GuidePhase = 0b00;
@@ -73,12 +72,9 @@ const RangeCheckPage: React.FC = () => {
   }, [isTimeout]);
 
   // 로딩페이즈: 로딩 컴포넌트 보여주다가 /range로 리다이렉트
-  const router = useRouter();
   useEffect(() => {
     if (currentPhase === LoadingPhase) {
       const timeoutId = setTimeout(() => {
-        // router.push('/range');
-        // 성능저하 이슈 해결을 위해 새로고침해서 임시 해결
         window.location.replace('/range');
       }, 1000);
 
@@ -108,7 +104,7 @@ const RangeCheckPage: React.FC = () => {
             ></Header>
           )}
 
-          <main className="flex flex-col justify-evenly items-center">
+          <main className="flex flex-col justify-start gap-10 items-center">
             <RangeCheckGuide></RangeCheckGuide>
             <ClayButton onClick={handleStartRecording}>
               테스트 시작하기
@@ -131,7 +127,7 @@ const RangeCheckPage: React.FC = () => {
               </button>
             }
           ></Header>
-          <main className="flex flex-col justify-evenly items-center">
+          <main className="flex flex-col justify-evenly items-center py-10">
             <Timer setIsTimeout={setIsTimeout} />
 
             <PitchDetector

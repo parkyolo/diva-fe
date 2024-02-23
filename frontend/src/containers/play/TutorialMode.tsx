@@ -65,7 +65,7 @@ const TutorialMode = ({
   }, [isMrLoaded]);
 
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col relative overflow-hidden py-10">
       {audioRef.current ? (
         <>
           <PlayMonitor

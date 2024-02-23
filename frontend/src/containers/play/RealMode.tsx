@@ -122,7 +122,7 @@ const RealMode = ({
   }, []);
 
   return (
-    <main className="flex flex-col">
+    <main className="flex flex-col relative overflow-hidden py-10">
       {audioRef.current ? (
         <>
           <PlayMonitor
@@ -135,6 +135,12 @@ const RealMode = ({
             isTutorial={false}
             audio={audioRef.current}
           />
+          <button
+            onClick={handleAudioEnd}
+            className="font-samlip text-xl outline-none border shadow-[3px_-3px_10px_1px_rgba(255,255,255,0.3)] rounded-xl w-10/12 py-2 mx-auto mt-5"
+          >
+            <span>실전 모드 끝내기</span>
+          </button>
         </>
       ) : (
         <></>
